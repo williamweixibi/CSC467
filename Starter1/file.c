@@ -2,3 +2,17 @@
 int bla;
 vec3 blabla;
 bool boolenhere;
+*
++
+/
+if
+while
+==
+=
+!=
+<
+<=
+>
+>=
+&&
+||
