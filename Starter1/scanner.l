@@ -132,14 +132,12 @@ IDENTIFIER        {ALPHABETS}*({ALPHABETS}|{DIGITS})*
   yTRACE(DIV);
 }
 
+"==" {
+  yTRACE(EQUAL);
+}
+
 "=" {
-  int c2      = yyinput();
-  int curline = yyline;
-  if(c2=='='){
-    yTRACE(EQUAL);
-  }else{
-    yTRACE(ASSIGN);
-  }
+  yTRACE(ASSIGN);
 }
 
 
@@ -152,6 +150,46 @@ IDENTIFIER        {ALPHABETS}*({ALPHABETS}|{DIGITS})*
 }
 
 .           { yERROR("Unknown token"); }
+
+"lit" {
+  yTRACE(TOKEN_LIT);
+}
+
+"dp3" {
+  yTRACE(TOKEN_DP3);
+}
+
+"rsq" {
+  yTRACE(TOKEN_RSQ);
+}
+
+"&&" {
+  yTRACE(TOKEN_AND);
+}
+
+"||" {
+  yTRACE(TOKEN_OR);
+}
+
+"!=" {
+  yTRACE(TOKEN_NOT_EQ);
+}
+
+"<=" {
+  yTRACE(TOKEN_LTE);
+}
+
+"<" {
+  yTRACE(TOKEN_LT);
+}
+
+">=" {
+  yTRACE(TOKEN_GTE);
+}
+
+">" {
+  yTRACE(TOKEN_GT);
+}
 
 %%
 
