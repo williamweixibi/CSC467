@@ -112,9 +112,29 @@ IDENTIFIER        {ALPHABETS}*({ALPHABETS}|{DIGITS})*
   yTRACE(TOKEN_SCOPE_END);
 }
 
-{IDENTIFIER}     {
-          printf("%s\n",yytext);
-            }
+"true" {
+  yTRACE(TOKEN_TRUE);
+}
+
+"false" {
+  yTRACE(TOKEN_FALSE);
+}
+
+"void" {
+  yTRACE(TOKEN_VOID);
+}
+
+"const" {
+  yTRACE(TOKEN_CONST);
+}
+
+"else" {
+  yTRACE(TOKEN_ELSE); 
+}
+
+{IDENTIFIER} {
+    printf("%s\n",yytext);
+  }
 
 "+" {
   yTRACE(PLUS);
