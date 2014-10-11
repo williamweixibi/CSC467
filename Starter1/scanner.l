@@ -18,13 +18,16 @@
 #define yERROR(x)    { fprintf(errorFile, "\nLEXICAL ERROR, LINE %d: %s\n", yyline, x); errorOccurred = TRUE; yyterminate(); }
 
 int CheckInt(void);
+int checkNum(char c);
 int yyline = 1;
 
 %}
 %option noyywrap
 
 WS          [ \t]
-
+ALPHABETS   [a-zA-Z]
+DIGITS      [0-9]
+NAME        {ALPHABETS}*({ALPHABETS}|{DIGITS})*
 %%
 "/*"        {
               int c1      = 0;
@@ -37,7 +40,7 @@ WS          [ \t]
                   yyterminate();
                 }
                 if (c1 == '*' && c2 == '/'){
-                  printf("Found");
+                  printf("Found Comment");
                   break;
 				        }
                 c1 = c2;
@@ -47,6 +50,21 @@ WS          [ \t]
               }
             }
 
+"int"{WS}* {
+              printf ("Found Int -> ");
+            }
+
+{NAME}     {
+          printf("%s\n",yytext);
+}
+
 .           { yERROR("Unknown token"); }
 
 %%
+
+int checkNum(char c){
+  if(c>='0' && c<='9' )
+    return 1;
+  else
+    return 0;
+}

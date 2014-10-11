@@ -26,6 +26,8 @@
 #define MAX_TEXT       256
 #define MAX_INTEGER    32767
 
+//#define ALPHABETS [a-z]
+
 /********************************************************************** 
  * External declarations for variables declared in globalvars.c.
  **********************************************************************/
