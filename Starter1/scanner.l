@@ -107,6 +107,41 @@ IDENTIFIER        {ALPHABETS}*({ALPHABETS}|{DIGITS})*
           printf("%s\n",yytext);
             }
 
+"+" {
+  yTRACE(PLUS);
+}
+
+"-" {
+  yTRACE(MINUS);
+}
+
+"*" {
+  yTRACE(MULT);
+}
+
+"/" {
+  yTRACE(DIV);
+}
+
+"=" {
+  int c2      = yyinput();
+  int curline = yyline;
+  if(c2=='='){
+    yTRACE(EQUAL);
+  }else{
+    yTRACE(ASSIGN);
+  }
+}
+
+
+"if" {
+  yTRACE(TOKEN_IF);
+}
+
+"while" {
+  yTRACE(TOKEN_WHILE);
+}
+
 .           { yERROR("Unknown token"); }
 
 %%
