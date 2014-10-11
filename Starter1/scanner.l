@@ -101,6 +101,15 @@ IDENTIFIER        {ALPHABETS}*({ALPHABETS}|{DIGITS})*
 
 ";" {
     printf("Semi \n");
+    yTRACE(TOKEN_SEMI);
+}
+
+"{" {
+  yTRACE(TOKEN_SCOPE_START);
+}
+
+"}" {
+  yTRACE(TOKEN_SCOPE_END);
 }
 
 {IDENTIFIER}     {
