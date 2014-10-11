@@ -211,6 +211,30 @@ IDENTIFIER        {ALPHABETS}*({ALPHABETS}|{DIGITS})*
   yTRACE(TOKEN_GT);
 }
 
+"!" {
+  yTRACE(TOKEN_NOT);
+}
+
+"^" {
+  yTRACE(TOKEN_XOR);
+}
+
+"(" {
+  yTRACE(TOKEN_OPENRB);
+}
+
+")" {
+  yTRACE(TOKEN_CLOSERB);
+}
+
+"[" {
+  yTRACE(TOKEN_OPENSB);
+}
+
+"]" {
+  yTRACE(TOKEN_CLOSESB);
+}
+
 %%
 
 int checkNum(char c){
