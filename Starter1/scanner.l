@@ -37,9 +37,9 @@ WS          [ \t]
                   yyterminate();
                 }
                 if (c1 == '*' && c2 == '/'){
-		  			printf("Found");
+                  printf("Found");
                   break;
-				}
+				        }
                 c1 = c2;
                 c2 = yyinput();
                 if (c1 == '\n' && c2 != EOF)
