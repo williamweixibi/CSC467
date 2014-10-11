@@ -1,2 +1,4 @@
 /*blah*/
-int 
+int bla;
+vec3 blabla;
+bool boolenhere;

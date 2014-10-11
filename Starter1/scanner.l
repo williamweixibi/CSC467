@@ -27,7 +27,7 @@ int yyline = 1;
 WS          [ \t]
 ALPHABETS   [a-zA-Z]
 DIGITS      [0-9]
-NAME        {ALPHABETS}*({ALPHABETS}|{DIGITS})*
+IDENTIFIER        {ALPHABETS}*({ALPHABETS}|{DIGITS})*
 %%
 "/*"        {
               int c1      = 0;
@@ -40,7 +40,7 @@ NAME        {ALPHABETS}*({ALPHABETS}|{DIGITS})*
                   yyterminate();
                 }
                 if (c1 == '*' && c2 == '/'){
-                  printf("Found Comment");
+                  printf("Comment");
                   break;
 				        }
                 c1 = c2;
@@ -51,12 +51,61 @@ NAME        {ALPHABETS}*({ALPHABETS}|{DIGITS})*
             }
 
 "int"{WS}* {
-              printf ("Found Int -> ");
+              yTRACE(TOKEN_INT);
             }
 
-{NAME}     {
-          printf("%s\n",yytext);
+"float"{WS}* {
+              yTRACE(TOKEN_FLOAT);
+            }
+
+"bool"{WS}* {
+              yTRACE(TOKEN_BOOL);
+            }
+
+"vec2"{WS}* {
+            yTRACE(TOKEN_VEC2);
+            }
+
+"vec3"{WS}* {
+            yTRACE(TOKEN_VEC3);
+            }
+
+"vec4"{WS}* {
+              yTRACE(TOKEN_VEC4);
+            }
+
+
+"bvec2"{WS}* {
+            yTRACE(TOKEN_BVEC2);
+            }
+
+"bvec3"{WS}* {
+            yTRACE(TOKEN_BVEC3);
+            }
+
+"bvec4"{WS}* {
+              yTRACE(TOKEN_BVEC4);
+            }
+
+"ivec2"{WS}* {
+            yTRACE(TOKEN_IVEC2);
+            }
+
+"ivec3"{WS}* {
+            yTRACE(TOKEN_IVEC3);
+            }
+
+"ivec4"{WS}* {
+              yTRACE(TOKEN_IVEC4);
+            }
+
+";" {
+    printf("Semi \n");
 }
+
+{IDENTIFIER}     {
+          printf("%s\n",yytext);
+            }
 
 .           { yERROR("Unknown token"); }
 
