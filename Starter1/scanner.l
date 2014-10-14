@@ -40,7 +40,11 @@ IDENTIFIER        {ALPHABETS}*({ALPHABETS}|{DIGITS})*
                   yyterminate();
                 }
                 if (c1 == '*' && c2 == '/'){
-                  printf("Comment");
+                  //printf("Comment");
+                  
+	yTRACE((TOKEN_COMMENT));
+	return (TOKEN_COMMENT);
+ 
                   break;
 				        }
                 c1 = c2;
@@ -51,189 +55,237 @@ IDENTIFIER        {ALPHABETS}*({ALPHABETS}|{DIGITS})*
             }
 
 "int"{WS}* {
-              yTRACE(TOKEN_INT);
-            }
+	yTRACE((TOKEN_INT));
+	return (TOKEN_INT);
+ }
 
 "float"{WS}* {
-              yTRACE(TOKEN_FLOAT);
-            }
+	yTRACE((TOKEN_FLOAT));
+	return (TOKEN_FLOAT);
+ }
 
 "bool"{WS}* {
-              yTRACE(TOKEN_BOOL);
-            }
+	yTRACE((TOKEN_BOOL));
+	return (TOKEN_BOOL);
+ }
 
 "vec2"{WS}* {
-            yTRACE(TOKEN_VEC2);
-            }
+	yTRACE((TOKEN_VEC2));
+	return (TOKEN_VEC2);
+ }
 
 "vec3"{WS}* {
-            yTRACE(TOKEN_VEC3);
-            }
+	yTRACE((TOKEN_VEC3));
+	return (TOKEN_VEC3);
+ }
 
 "vec4"{WS}* {
-              yTRACE(TOKEN_VEC4);
-            }
-
+	yTRACE((TOKEN_VEC4));
+	return (TOKEN_VEC4);
+ }
 
 "bvec2"{WS}* {
-            yTRACE(TOKEN_BVEC2);
-            }
+	yTRACE((TOKEN_BVEC2));
+	return (TOKEN_BVEC2);
+ }
 
 "bvec3"{WS}* {
-            yTRACE(TOKEN_BVEC3);
-            }
-
+	yTRACE((TOKEN_BVEC3));
+	return (TOKEN_BVEC3);
+ }
+            
 "bvec4"{WS}* {
-              yTRACE(TOKEN_BVEC4);
-            }
+	yTRACE((TOKEN_BVEC4));
+	return (TOKEN_BVEC4);
+ }
 
 "ivec2"{WS}* {
-            yTRACE(TOKEN_IVEC2);
-            }
+	yTRACE((TOKEN_IVEC2));
+	return (TOKEN_IVEC2);
+ }
 
 "ivec3"{WS}* {
-            yTRACE(TOKEN_IVEC3);
-            }
+	yTRACE((TOKEN_IVEC3));
+	return (TOKEN_IVEC3);
+ }
 
 "ivec4"{WS}* {
-              yTRACE(TOKEN_IVEC4);
-            }
+	yTRACE((TOKEN_IVEC4));
+	return (TOKEN_IVEC4);
+ }
 
-";" {
-    printf("Semi \n");
-    yTRACE(TOKEN_SEMI);
-}
+";"{WS}* {
+	yTRACE((TOKEN_SEMI));
+	return (TOKEN_SEMI);
+ }
 
-"{" {
-  yTRACE(TOKEN_SCOPE_START);
-}
+"{"{WS}* {
+	yTRACE((TOKEN_SCOPE_START));
+	return (TOKEN_SCOPE_START);
+ }
 
-"}" {
-  yTRACE(TOKEN_SCOPE_END);
-}
+"}"{WS}* {
+	yTRACE((TOKEN_SCOPE_END));
+	return (TOKEN_SCOPE_END);
+ }
 
-"true" {
-  yTRACE(TOKEN_TRUE);
-}
+"true"{WS}* {
+	yTRACE((TOKEN_TRUE));
+	return (TOKEN_TRUE);
+ }
 
-"false" {
-  yTRACE(TOKEN_FALSE);
-}
+"false"{WS}* {
+	yTRACE((TOKEN_FALSE));
+	return (TOKEN_FALSE);
+ }
 
-"void" {
-  yTRACE(TOKEN_VOID);
-}
+"void"{WS}* {
+	yTRACE((TOKEN_VOID));
+	return (TOKEN_VOID);
+ }
 
-"const" {
-  yTRACE(TOKEN_CONST);
-}
+"const"{WS}* {
+	yTRACE((TOKEN_CONST));
+	return (TOKEN_CONST);
+ }
 
-"else" {
-  yTRACE(TOKEN_ELSE); 
-}
+"else"{WS}* {
+	yTRACE((TOKEN_ELSE));
+	return (TOKEN_ELSE);
+ }
 
 {IDENTIFIER} {
-    printf("%s\n",yytext);
+	yTRACE((TOKEN_IDENTIFIER));
+	return (TOKEN_IDENTIFIER);
+ }
+
+"+"{WS}* {
+	yTRACE((PLUS));
+	return (PLUS);
+ }
+
+"-"{WS}* {
+	yTRACE((MINUS));
+	return (MINUS);
+ }
+
+"*"{WS}* {
+	yTRACE((MULT));
+	return (MULT);
+ }
+
+"/"{WS}* {
+	yTRACE((DIV));
+	return (DIV);
+ }
+
+"=="{WS}* {
+	yTRACE((EQUAL));
+	return (EQUAL);
+ }
+
+"="{WS}* {
+	yTRACE((ASSIGN));
+	return (ASSIGN);
   }
 
-"+" {
-  yTRACE(PLUS);
-}
+"&&"{WS}* {
+	yTRACE((TOKEN_AND));
+	return (TOKEN_AND);
+ }
 
-"-" {
-  yTRACE(MINUS);
-}
+"||"{WS}* {
+	yTRACE((TOKEN_OR));
+	return (TOKEN_OR);
+ }
 
-"*" {
-  yTRACE(MULT);
-}
+"!="{WS}* {
+	yTRACE((TOKEN_NOT_EQ));
+	return (TOKEN_NOT_EQ);
+ }
 
-"/" {
-  yTRACE(DIV);
-}
+"<="{WS}* {
+	yTRACE((TOKEN_LTE));
+	return (TOKEN_LTE);
+ }
 
-"==" {
-  yTRACE(EQUAL);
-}
+"<"{WS}* {
+	yTRACE((TOKEN_LT));
+	return (TOKEN_LT);
+ }
 
-"=" {
-  yTRACE(ASSIGN);
-}
+">="{WS}* {
+	yTRACE((TOKEN_GTE));
+	return (TOKEN_GTE);
+ }
 
+">"{WS}* {
+	yTRACE((TOKEN_GT));
+	return (TOKEN_GT);
+ }
 
-"if" {
-  yTRACE(TOKEN_IF);
-}
+"!"{WS}* {
+	yTRACE((TOKEN_NOT));
+	return (TOKEN_NOT);
+ }
 
-"while" {
-  yTRACE(TOKEN_WHILE);
-}
+"^"{WS}* {
+	yTRACE((TOKEN_XOR));
+	return (TOKEN_XOR);
+ }
 
-.           { yERROR("Unknown token"); }
+"("{WS}* {
+	yTRACE((TOKEN_OPENRB));
+	return (TOKEN_OPENRB);
+ }
 
-"lit" {
-  yTRACE(TOKEN_LIT);
-}
+")"{WS}* {
+	yTRACE((TOKEN_CLOSERB));
+	return (TOKEN_CLOSERB);
+ }
 
-"dp3" {
-  yTRACE(TOKEN_DP3);
-}
+"["{WS}* { 
+	yTRACE((TOKEN_OPENSB));
+	return (TOKEN_OPENSB);
+ }
 
-"rsq" {
-  yTRACE(TOKEN_RSQ);
-}
+"]"{WS}* { 
+	yTRACE((TOKEN_CLOSESB));
+	return (TOKEN_CLOSESB);
+  }
 
-"&&" {
-  yTRACE(TOKEN_AND);
-}
+"while"{WS}* { 
+	yTRACE((TOKEN_WHILE));
+	return (TOKEN_WHILE);
+  }
 
-"||" {
-  yTRACE(TOKEN_OR);
-}
+"if"{WS}* { 
+	yTRACE((TOKEN_IF));
+	return (TOKEN_IF);
+  }
 
-"!=" {
-  yTRACE(TOKEN_NOT_EQ);
-}
+"lit"{WS}* { 
+	yTRACE((TOKEN_LIT));
+	return (TOKEN_LIT);
+  }
 
-"<=" {
-  yTRACE(TOKEN_LTE);
-}
+"dp3"{WS}* { 
+	yTRACE((TOKEN_DP3));
+	return (TOKEN_DP3);
+  }
 
-"<" {
-  yTRACE(TOKEN_LT);
-}
+"rsq"{WS}* { 
+	yTRACE((TOKEN_RSQ));
+	return (TOKEN_RSQ);
+  }
 
-">=" {
-  yTRACE(TOKEN_GTE);
-}
+"\n"{WS}* { 
+	yTRACE((TOKEN_NEWLINE));
+	return (TOKEN_NEWLINE);
+  }
 
-">" {
-  yTRACE(TOKEN_GT);
-}
+. { yERROR("Unknown token"); }
 
-"!" {
-  yTRACE(TOKEN_NOT);
-}
-
-"^" {
-  yTRACE(TOKEN_XOR);
-}
-
-"(" {
-  yTRACE(TOKEN_OPENRB);
-}
-
-")" {
-  yTRACE(TOKEN_CLOSERB);
-}
-
-"[" {
-  yTRACE(TOKEN_OPENSB);
-}
-
-"]" {
-  yTRACE(TOKEN_CLOSESB);
-}
 
 %%
 
