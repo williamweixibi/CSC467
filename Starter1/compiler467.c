@@ -175,7 +175,11 @@ void getOpts (int numargs, char **argstr) {
           optch = *(subarg++);
           while (optch) {
             switch (optch) {
-              case 'n': traceScanner   = TRUE; break;
+              case 'n':
+            	  traceScanner   = TRUE;
+            	  //traceFile = fileOpen (argstr[i], "w", DEFAULT_TRACE_FILE);
+
+              break;
               case 'p': traceParser    = TRUE; break;
               case 'x': traceExecution = TRUE; break;
               default: fprintf(errorFile, "Invalid trace option %c ignored\n", optch); break;
