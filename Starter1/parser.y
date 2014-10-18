@@ -82,7 +82,7 @@ tokens
   |      
   ;
 // TODO: replace myToken with the token the you defined.
-token
+  token
   :
   ;
 

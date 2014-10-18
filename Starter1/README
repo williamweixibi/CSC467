@@ -1,0 +1,9 @@
+Team:
+Ghulam Umar - 998513988
+Zaara Syeda - 998199765
+
+Problems:
+Identification of floats; due to the ways many ways floats can be written this was a problem. We were able to solve this with trial and error and by trying different regex rules.
+Scope of the scanner; we were also uncertain on how much work is suppose to be done by the scanner. Are expression suppose to be identified? How much error handling should be done? This was resolved by conversing with the professor.
+
+Other than these we did not have any significant problems as both team members had previous knowledge and experience with regular expressions. 
