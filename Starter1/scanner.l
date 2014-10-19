@@ -27,7 +27,7 @@ int yyline = 1;
 WS          [ \t]
 ALPHABETS   [a-zA-Z]
 DIGITS      [0-9]
-IDENTIFIER  (({ALPHABETS}*[_]|[_]*)({ALPHABETS}|{DIGITS})*([_]*({ALPHABETS}|{DIGITS})*))*
+IDENTIFIER  ({ALPHABETS}+[_]*|[_]+)(({ALPHABETS}|{DIGITS})*([_]*({ALPHABETS}|{DIGITS})*))*
 SIGN 		[-+]
 %%
 "/*"        {
@@ -256,45 +256,40 @@ SIGN 		[-+]
 	return (TOKEN_CLOSESB);
   }
 
-"while"{WS}*"\n"*"(" { 
-	if(strstr(yytext,"\n")){
-		yyline++;
-	}
+"while" { 
+
 	yTRACE((TOKEN_WHILE));
 	return (TOKEN_WHILE);
   }
 
-"if"{WS}*"\n"*"(" { 
-	if(strstr(yytext,"\n")){
-		yyline++;
-	}
+"if" { 
+
 	yTRACE((TOKEN_IF));
 	return (TOKEN_IF);
   }
 
-"lit"{WS}*"\n"*"(" { 
-	if(strstr(yytext,"\n")){
-		yyline++;
-	}
+"lit" { 
+
 	yTRACE((TOKEN_LIT));
 	return (TOKEN_LIT);
   }
 
-"dp3"{WS}*"\n"*"(" { 
-	if(strstr(yytext,"\n")){
-		yyline++;
-	}
+"dp3" { 
+
 	yTRACE((TOKEN_DP3));
 	return (TOKEN_DP3);
   }
 
-"rsq"{WS}*"\n"*"(" { 
-	if(strstr(yytext,"\n")){
-		yyline++;
-	}
+"rsq" { 
+
 	yTRACE((TOKEN_RSQ));
 	return (TOKEN_RSQ);
   }
+
+{SIGN}?"0"{DIGITS}+ {
+	yERROR("Invalid Integer");
+	
+ }
 
 {SIGN}?{DIGITS}+ {
 
@@ -305,17 +300,15 @@ SIGN 		[-+]
 		return (TOKEN_INT);
 	}
  }
- 
+
+{SIGN}?({DIGITS}+\.(\.)+{DIGITS}*|{DIGITS}*\.(\.)+{DIGITS}+) {
+	yERROR("Invalid Float, too many decimal points");
+}
+
 {SIGN}?({DIGITS}+\.{DIGITS}*|{DIGITS}*\.{DIGITS}+) {
 	yTRACE((TOKEN_FLOAT_DEC));
 	return (TOKEN_FLOAT_DEC);
  }
-
-"\n" { 
-	yyline++;
-	yTRACE((TOKEN_NEWLINE));
-	return (TOKEN_NEWLINE);
-  }
 
 {IDENTIFIER} {
 	if(strlen(yytext)>MAX_IDENTIFIER){
@@ -326,11 +319,15 @@ SIGN 		[-+]
 	}
  }
 
-
 {WS}* {
 	
 }
 
+"\n" { 
+	yyline++;
+	yTRACE((TOKEN_NEWLINE));
+	return (TOKEN_NEWLINE);
+  }
 . { yERROR("Unknown token"); }
 
 
