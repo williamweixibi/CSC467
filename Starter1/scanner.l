@@ -27,7 +27,7 @@ int yyline = 1;
 WS          [ \t]
 ALPHABETS   [a-zA-Z]
 DIGITS      [0-9]
-IDENTIFIER  {ALPHABETS}+[_]*({ALPHABETS}|{DIGITS})*
+IDENTIFIER  (({ALPHABETS}*[_]|[_]*)({ALPHABETS}|{DIGITS})*([_]*({ALPHABETS}|{DIGITS})*))*
 SIGN 		[-+]
 %%
 "/*"        {
@@ -62,16 +62,6 @@ SIGN 		[-+]
  }
 
 "float" {
-	yTRACE((TOKEN_FLOAT_DEC));
-	return (TOKEN_FLOAT_DEC);
- }
-
-{SIGN}?{DIGITS}+ {
-	yTRACE((TOKEN_INT));
-	return (TOKEN_INT);
- }
- 
-{SIGN}?({DIGITS}+\.{DIGITS}*|{DIGITS}*\.{DIGITS}+) {
 	yTRACE((TOKEN_FLOAT_DEC));
 	return (TOKEN_FLOAT_DEC);
  }
@@ -267,39 +257,75 @@ SIGN 		[-+]
   }
 
 "while"{WS}*"\n"*"(" { 
+	if(strstr(yytext,"\n")){
+		yyline++;
+	}
 	yTRACE((TOKEN_WHILE));
 	return (TOKEN_WHILE);
   }
 
 "if"{WS}*"\n"*"(" { 
+	if(strstr(yytext,"\n")){
+		yyline++;
+	}
 	yTRACE((TOKEN_IF));
 	return (TOKEN_IF);
   }
 
 "lit"{WS}*"\n"*"(" { 
+	if(strstr(yytext,"\n")){
+		yyline++;
+	}
 	yTRACE((TOKEN_LIT));
 	return (TOKEN_LIT);
   }
 
 "dp3"{WS}*"\n"*"(" { 
+	if(strstr(yytext,"\n")){
+		yyline++;
+	}
 	yTRACE((TOKEN_DP3));
 	return (TOKEN_DP3);
   }
 
 "rsq"{WS}*"\n"*"(" { 
+	if(strstr(yytext,"\n")){
+		yyline++;
+	}
 	yTRACE((TOKEN_RSQ));
 	return (TOKEN_RSQ);
   }
 
+{SIGN}?{DIGITS}+ {
+
+	if(atoi(yytext)>MAX_INTEGER){
+		yERROR("Integer size exceeded");
+	}else{
+		yTRACE((TOKEN_INT));
+		return (TOKEN_INT);
+	}
+ }
+ 
+{SIGN}?({DIGITS}+\.{DIGITS}*|{DIGITS}*\.{DIGITS}+) {
+	yTRACE((TOKEN_FLOAT_DEC));
+	return (TOKEN_FLOAT_DEC);
+ }
+
 "\n" { 
+	yyline++;
 	yTRACE((TOKEN_NEWLINE));
 	return (TOKEN_NEWLINE);
   }
 
 {IDENTIFIER} {
-	yTRACE((TOKEN_IDENTIFIER));
-	return (TOKEN_IDENTIFIER);
+	if(strlen(yytext)>MAX_IDENTIFIER){
+		yERROR("Identifer size exceeded");
+	}else{
+		yTRACE((TOKEN_IDENTIFIER));
+		return (TOKEN_IDENTIFIER);
+	}
  }
+
 
 {WS}* {
 	
