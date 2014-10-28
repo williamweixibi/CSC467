@@ -102,36 +102,36 @@ enum {
  *    2. Implement the trace parser option of the compiler
  ***********************************************************************/
 program
-  :   scope       
+  : scope {yTRACE("program -> scope\n");}        
   ;
 scope
-  : '{' declarations statements'}' 
+  : '{' declarations statements'}' {yTRACE("scope -> declarations statements\n");} 
   ;
 
 declarations
-  : 	/* empty */
-	|declarations declaration
+  : 	/* empty */ {yTRACE("declarations -> \n");}
+	|declarations declaration  {yTRACE("declarations -> declarations declaration\n");} 
   ;
 
 statements
-  : /*empty*/
-	|statements statement
+  : /*empty*/  {yTRACE("statements -> \n");}
+	|statements statement  {yTRACE("statements -> statements statement\n");}
   ;
 
 
 declaration
   : /*empty*/
-	| type ID ';' { printf("this is a decl\n");}
-	| type ID EQ expression ';'
-	| CONST type ID EQ expression ';' 
+	| type ID ';' { yTRACE("declaration -> type ID;\n");}
+	| type ID EQ expression ';'  {yTRACE("declaration -> type ID EQ expression;\n");}
+	| CONST type ID EQ expression ';'  {yTRACE("declarations -> CONSt type ID EQ expression;\n");}
   ;
 
 statement
-  : variable EQ expression ';'
-	| IF '(' expression ')' statement else_statement
-	| WHILE '(' expression ')' statement
-	| scope
-	| ';'
+  : variable EQ expression ';'  {yTRACE("statement -> variable EQ expression;\n");}
+	| IF '(' expression ')' statement else_statement  {yTRACE("statement -> If ( expression ) statement else_statement\n");}
+	| WHILE '(' expression ')' statement  {yTRACE("statement -> WHILE ( expression ) statement \n");}
+	| scope  {yTRACE("statement -> scope\n");}
+	| ';'  {yTRACE("statement -> ;\n");} 
   ;
 
 else_statement
