@@ -212,45 +212,45 @@ arguments
 	;
 
 token
-  : ID 
-  | AND
-  | OR
-  | NEQ
-  | LEQ
-  | GEQ
-  | EQ
-  | TRUE_C
-  | FALSE_C
-  | INT_C
-  | FLOAT_C
-  | CONST
-  | ELSE
-  | IF
-  | WHILE
-  | FLOAT_T
-  | INT_T
-  | BOOL_T
-  | VEC_T
-  | IVEC_T
-  | BVEC_T
-  | FUNC               
-  | '+'
-  | '-'
-  | '*'
-  | '/'
-  | '^'  
-  | '!'
-  | '='
-  | '<'
-  | '>'   
-  | ','
-  | ';'
-  | '('
-  | ')'
-  | '['
-  | ']'
-  | '{'
-  | '}'                                    
+  : ID  { yTRACE ("token -> ID\n");}
+  | AND { yTRACE ("token -> AND\n");}
+  | OR { yTRACE ("token -> OR\n");}
+  | NEQ { yTRACE ("token -> NEQ\n");}
+  | LEQ { yTRACE ("token -> LEQ\n");}
+  | GEQ { yTRACE ("token -> GEQ\n");}
+  | EQ { yTRACE ("token -> EQ\n");}
+  | TRUE_C { yTRACE ("token -> TRUE_C\n");}
+  | FALSE_C { yTRACE ("token -> FALSE_C\n");}
+  | INT_C { yTRACE ("token -> INT_C\n");}
+  | FLOAT_C { yTRACE ("token -> FLOAT_C\n");}
+  | CONST { yTRACE ("token -> CONST\n");}
+  | ELSE { yTRACE ("token -> ELSE\n");}
+  | IF { yTRACE ("token -> IF\n");}
+  | WHILE { yTRACE ("token -> WHILE\n");}
+  | FLOAT_T { yTRACE ("token -> FLOAT_T\n");}
+  | INT_T { yTRACE ("token -> INT_T\n");}
+  | BOOL_T { yTRACE ("token -> BOOL_T\n");}
+  | VEC_T { yTRACE ("token -> VEC_T\n");}
+  | IVEC_T { yTRACE ("token -> IVEC_T\n");}
+  | BVEC_T { yTRACE ("token -> BVEC_T\n");}
+  | FUNC { yTRACE ("token -> FUNC\n");}          
+  | '+' { yTRACE ("token -> +\n");}
+  | '-' { yTRACE ("token -> -\n");}
+  | '*' { yTRACE ("token -> *\n");}
+  | '/' { yTRACE ("token -> /\n");}
+  | '^' { yTRACE ("token -> ^\n");}
+  | '!' { yTRACE ("token -> !\n");}
+  | '=' { yTRACE ("token -> =\n");}
+  | '<' { yTRACE ("token -> <\n");}
+  | '>' { yTRACE ("token -> >\n");}   
+  | ',' { yTRACE ("token -> ,\n");}
+  | ';' { yTRACE ("token -> ;\n");}
+  | '(' { yTRACE ("token -> (\n");}
+  | ')' { yTRACE ("token -> )\n");}
+  | '[' { yTRACE ("token -> [\n");}
+  | ']' { yTRACE ("token -> ]\n");}
+  | '{' { yTRACE ("token -> {\n");}
+  | '}' { yTRACE ("token -> }\n");}                                 
   ;
 
 
