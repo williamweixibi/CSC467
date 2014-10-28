@@ -105,7 +105,7 @@ program
   :   scope       
   ;
 scope
-  : '{' declarations '}' 
+  : '{' declarations statements'}' 
   ;
 
 declarations
@@ -113,8 +113,30 @@ declarations
 	|declarations declaration
   ;
 
+statements
+  : /*empty*/
+	|statements statement
+  ;
+
+
 declaration
-  : type ID ';' { printf("this is a decl\n");}
+  : /*empty*/
+	| type ID ';' { printf("this is a decl\n");}
+	| type ID EQ expression ';'
+	| CONST type ID EQ expression ';' 
+  ;
+
+statement
+  : variable EQ expression ';'
+	| IF '(' expression ')' statement else_statement
+	| WHILE '(' expression ')' statement
+	| scope
+	| ';'
+  ;
+
+else_statement
+  : /*empty*/ 
+	|ELSE statement
   ;
 
 type
