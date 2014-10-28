@@ -102,11 +102,23 @@ enum {
  *    2. Implement the trace parser option of the compiler
  ***********************************************************************/
 program
-  :   tokens       
+  :   scope       
   ;
-tokens
-  :  tokens token  
-  |
+scope
+  : '{' declarations '}' 
+  ;
+
+declarations
+  : 	/* empty */
+	|declarations declaration
+  ;
+
+declaration
+  : type ID ';' { printf("this is a decl\n");}
+  ;
+
+type
+  : INT_T | BOOL_T | FLOAT_T | IVEC_T | VEC_T | BVEC_T
   ;
 token
   : ID 
