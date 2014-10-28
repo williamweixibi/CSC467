@@ -124,12 +124,12 @@ statements
 declaration
   : /*empty*/ { yTRACE("declaration -> \n");}
 	| type ID ';' { yTRACE("declaration -> type ID;\n");}
-	| type ID EQ expression ';'  {yTRACE("declaration -> type ID EQ expression;\n");}
-	| CONST type ID EQ expression ';'  {yTRACE("declarations -> CONSt type ID EQ expression;\n");}
+	| type ID '=' expression ';'  {yTRACE("declaration -> type ID = expression;\n");}
+	| CONST type ID '=' expression ';'  {yTRACE("declarations -> CONSt type ID = expression;\n");}
   ;
 
 statement
-  : variable EQ expression ';'  {yTRACE("statement -> variable EQ expression;\n");}
+  : variable '=' expression ';'  {yTRACE("statement -> variable = expression;\n");}
 	| IF '(' expression ')' statement else_statement  {yTRACE("statement -> If ( expression ) statement else_statement\n");}
 	| WHILE '(' expression ')' statement  {yTRACE("statement -> WHILE ( expression ) statement \n");}
 	| scope  {yTRACE("statement -> scope\n");}
