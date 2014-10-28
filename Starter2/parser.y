@@ -102,10 +102,10 @@ enum {
  *    2. Implement the trace parser option of the compiler
  ***********************************************************************/
 program
-  :   scope       
+  :   scope      { yTRACE ("program -> scope\n");}
   ;
 scope
-  : '{' declarations statements'}' 
+  : '{' declarations statements '}' 
   ;
 
 declarations
@@ -121,7 +121,7 @@ statements
 
 declaration
   : /*empty*/
-	| type ID ';' { printf("this is a decl\n");}
+	| type ID ';' { printf("declaration -> type ID;\n");}
 	| type ID EQ expression ';'
 	| CONST type ID EQ expression ';' 
   ;
@@ -135,61 +135,81 @@ statement
   ;
 
 else_statement
-  : /*empty*/ 
-	|ELSE statement
+  : /*empty*/ { yTRACE ("else_statement ->  \n");}
+	|ELSE statement { yTRACE ("else_statement -> ELSE statement \n");}
   ;
 
 type
-  : INT_T | BOOL_T | FLOAT_T | IVEC_T | VEC_T | BVEC_T
+  : INT_T { yTRACE ("type -> INT_T \n");}
+  | BOOL_T { yTRACE ("type -> BOOL_T \n");}
+  | FLOAT_T { yTRACE ("type -> FLOAT_T \n");}
+  | IVEC_T { yTRACE ("type -> IVEC_T \n");}
+  | VEC_T { yTRACE ("type -> VEC_T \n");}
+  | BVEC_T { yTRACE ("type -> BVEC_T \n");}
   ;
   
 expression
-	: constructor 
-	| function 
-	| INT_C
-	| FLOAT_C
-	| variable
-	| unary_opt expression
-	| expression binary_opt expression
-	| TRUE_C | FALSE_C
-	| '(' expression ')'
+	: constructor { yTRACE ("expression -> constructor \n");}
+	| function { yTRACE ("expression -> function \n");}
+	| INT_C { yTRACE ("expression -> INT_C \n");}
+	| FLOAT_C { yTRACE ("expression -> FLOAT_C \n");}
+	| variable { yTRACE ("expression -> variable \n");}
+	| unary_opt expression { yTRACE ("expression -> unary_opt expression  \n");}
+	| expression binary_opt expression { yTRACE ("expression -> expression binary_opt expression \n");}
+	| TRUE_C { yTRACE ("expression -> TRUE_C \n");}
+	| FALSE_C { yTRACE ("expression -> FALSE_C \n");}
+	| '(' expression ')' { yTRACE ("expression -> ( expression ) \n");}
 	;
   
 variable
-	: ID
-	| ID '[' INT_C ']'
+	: ID { yTRACE ("variable -> ID \n");}
+	| ID '[' INT_C ']' { yTRACE ("variable -> ID [ INT_C ] \n");}
 	;
   
 unary_opt
-	: '!'
-	| '-'
+	: '!' { yTRACE ("unary_opt -> ! \n");}
+	| '-' { yTRACE ("unary_opt -> - \n");}
 	;
   
 binary_opt 
-	: AND | OR | NEQ | LEQ | GEQ | EQ | '!''=' | '<' | '<''=' 
-	| '>' | '>''=' | '+' | '-' | '*' | '/' | '^'
+	: AND { yTRACE ("binary_opt -> AND \n");}
+	| OR { yTRACE ("binary_opt -> OR \n");}
+	| NEQ { yTRACE ("binary_opt -> NEQ \n");}
+	| LEQ { yTRACE ("binary_opt -> LEQ \n");}
+	| GEQ { yTRACE ("binary_opt -> GEQ \n");}
+	| EQ { yTRACE ("binary_opt -> EQ \n");}
+	| '!''=' { yTRACE ("binary_opt -> != \n");}
+	| '<' { yTRACE ("binary_opt -> < \n");}
+	| '<''=' { yTRACE ("binary_opt -> <= \n");}
+	| '>' { yTRACE ("binary_opt -> > \n");}
+	| '>''=' { yTRACE ("binary_opt -> >= \n");}
+	| '+' { yTRACE ("binary_opt -> + \n");}
+	| '-' { yTRACE ("binary_opt -> - \n");}
+	| '*' { yTRACE ("binary_opt -> * \n");}
+	| '/' { yTRACE ("binary_opt -> / \n");}
+	| '^' { yTRACE ("binary_opt -> ^ \n");}
 	;
 
 constructor
-	: type '(' arguments_opt ')'
+	: type '(' arguments_opt ')' { yTRACE ("constructor -> type ( arguments_opt ) \n");}
 	;
 	
 function
-	: function_name '(' arguments_opt ')'
+	: function_name '(' arguments_opt ')' { yTRACE ("function -> function_name ( arguments_opt ) \n");}
 	;
   
 function_name
-	: FUNC
+	: FUNC { yTRACE ("function_name -> FUNC \n");}
 	;
 
 arguments_opt
-	: arguments
-	| /* empty */
+	: arguments { yTRACE ("arguments_opt -> arguments \n");}
+	| /* empty */ { yTRACE ("arguments -> \n");}
 	;
 
 arguments
-	: arguments ',' expression 
-	| expression
+	: arguments ',' expression { yTRACE ("arguments -> arguments , expression\n");}
+	| expression { yTRACE ("arguments -> expression\n");}
 	;
 
 token
