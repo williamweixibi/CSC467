@@ -82,13 +82,14 @@ enum {
 %token <as_int>   INT_C
 %token <as_str>   ID
 
-%left     '|'
-%left     '&'
-%nonassoc '=' NEQ '<' LEQ '>' GEQ
+%left     OR
+%left     AND
+%left     EQ NEQ '<' LEQ '>' GEQ
 %left     '+' '-'
 %left     '*' '/'
 %right    '^'
-%nonassoc '!' UMINUS
+%left     '!' UMINUS
+%left     '[' ']' '(' ')'
 
 %start    program
 
@@ -179,11 +180,8 @@ binary_opt
 	| LEQ { yTRACE ("binary_opt -> LEQ \n");}
 	| GEQ { yTRACE ("binary_opt -> GEQ \n");}
 	| EQ { yTRACE ("binary_opt -> EQ \n");}
-	| '!''=' { yTRACE ("binary_opt -> != \n");}
 	| '<' { yTRACE ("binary_opt -> < \n");}
-	| '<''=' { yTRACE ("binary_opt -> <= \n");}
 	| '>' { yTRACE ("binary_opt -> > \n");}
-	| '>''=' { yTRACE ("binary_opt -> >= \n");}
 	| '+' { yTRACE ("binary_opt -> + \n");}
 	| '-' { yTRACE ("binary_opt -> - \n");}
 	| '*' { yTRACE ("binary_opt -> * \n");}
