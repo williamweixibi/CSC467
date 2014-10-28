@@ -120,6 +120,56 @@ declaration
 type
   : INT_T | BOOL_T | FLOAT_T | IVEC_T | VEC_T | BVEC_T
   ;
+  
+expression
+	: constructor 
+	| function 
+	| INT_C
+	| FLOAT_C
+	| variable
+	| unary_opt expression
+	| expression binary_opt expression
+	| TRUE_C | FALSE_C
+	| '(' expression ')'
+	;
+  
+variable
+	: ID
+	| ID '[' INT_C ']'
+	;
+  
+unary_opt
+	: '!'
+	| '-'
+	;
+  
+binary_opt 
+	: AND | OR | NEQ | LEQ | GEQ | EQ | '!''=' | '<' | '<''=' 
+	| '>' | '>''=' | '+' | '-' | '*' | '/' | '^'
+	;
+
+constructor
+	: type '(' arguments_opt ')'
+	;
+	
+function
+	: function_name '(' arguments_opt ')'
+	;
+  
+function_name
+	: FUNC
+	;
+
+arguments_opt
+	: arguments
+	| /* empty */
+	;
+
+arguments
+	: arguments ',' expression 
+	| expression
+	;
+
 token
   : ID 
   | AND
