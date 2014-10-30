@@ -1,7 +1,8 @@
 %{
 /***********************************************************************
  * --YOUR GROUP INFO SHOULD GO HERE--
- * 
+ * Zaara Syeda - 998199765
+ * Ghulam Umar - 998513988 
  *   Interface to the parser module for CSC467 course project.
  * 
  *   Phase 2: Implement context free grammar for source language, and
@@ -89,8 +90,7 @@ enum {
 %left     '*' '/'
 %right    '^'
 %left     '!' UMINUS
-%left     '[' ']' '(' ')'
-
+%left 	  '(' '['
 %start    program
 
 %%
@@ -156,11 +156,24 @@ expression
 	| INT_C { yTRACE ("expression -> INT_C \n");}
 	| FLOAT_C { yTRACE ("expression -> FLOAT_C \n");}
 	| variable { yTRACE ("expression -> variable \n");}
-	| unary_opt expression { yTRACE ("expression -> unary_opt expression  \n");}
-	| expression binary_opt expression { yTRACE ("expression -> expression binary_opt expression \n");}
+	| '-' expression %prec UMINUS { yTRACE ("expression -> UMINUS expression  \n");}
+	| '!' expression { yTRACE ("expression -> ! expression  \n");}
+	| expression '-' expression { yTRACE ("expression -> expression - expression \n");}
+	| expression '+' expression { yTRACE ("expression -> expression + expression \n");}
+	| expression '*' expression { yTRACE ("expression -> expression * expression \n");}
+	| expression '/' expression { yTRACE ("expression -> expression / expression \n");}
+	| expression '^' expression { yTRACE ("expression -> expression ^ expression \n");}
+	| expression '<' expression { yTRACE ("expression -> expression < expression \n");}
+	| expression '>' expression { yTRACE ("expression -> expression > expression \n");}
+	| expression AND expression { yTRACE ("expression -> expression AND expression \n");}
+	| expression OR expression { yTRACE ("expression -> expression OR expression \n");}
+	| expression NEQ expression { yTRACE ("expression -> expression NEQ expression \n");}
+	| expression LEQ expression { yTRACE ("expression -> expression LEQ expression \n");}
+	| expression GEQ expression { yTRACE ("expression -> expression GEQ expression \n");}
+	| expression EQ expression { yTRACE ("expression -> expression EQ expression \n");}	
+	| '(' expression ')' { yTRACE ("expression -> ( expression ) \n");}
 	| TRUE_C { yTRACE ("expression -> TRUE_C \n");}
 	| FALSE_C { yTRACE ("expression -> FALSE_C \n");}
-	| '(' expression ')' { yTRACE ("expression -> ( expression ) \n");}
 	;
   
 variable

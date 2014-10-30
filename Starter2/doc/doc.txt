@@ -1,0 +1,15 @@
+Zaara Syeda - 998199765
+Ghulam Umar - 998513988
+
+Approach:
+
+- We started this lab by implementing the context free grammer given in the lab spec.
+- For each production rule, we called yTRACE
+- We next resolved presedence by adding associativity and precedence rules to the bison declarations
+- We tested our lab by creating small positive and negative testcases for the common production rules
+- We tested precedence by seeing the order in which expressions were being evaluated and whether this matches up to precedence rules
+
+Problems we had:
+- Understanding how to read the final output
+- Fixing the precedence for UMINUS rule by giving it the precedence of UMINUS using %prec
+- 
