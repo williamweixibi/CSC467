@@ -12,33 +12,50 @@
 node *ast = NULL;
 
 node *ast_allocate(node_kind kind, ...) {
-  va_list args;
+	va_list args;
 
-  // make the node
-  node *ast = (node *) malloc(sizeof(node));
-  memset(ast, 0, sizeof *ast);
-  ast->kind = kind;
+	// make the node
+	node *ast = (node *) malloc(sizeof(node));
+	memset(ast, 0, sizeof *ast);
+	ast->kind = kind;
 
-  va_start(args, kind); 
+	va_start(args, kind);
 
-  switch(kind) {
-  
-  // ...
+	switch(kind) {
 
-  case BINARY_EXPRESSION_NODE:
-    ast->binary_expr.op = va_arg(args, int);
-    ast->binary_expr.left = va_arg(args, node *);
-    ast->binary_expr.right = va_arg(args, node *);
-    break;
+	// ...
 
-  // ...
+	case BINARY_EXPRESSION_NODE:
+		ast->binary_expr.op = va_arg(args, int);
+		ast->binary_expr.left = va_arg(args, node *);
+		ast->binary_expr.right = va_arg(args, node *);
+		break;
 
-  default: break;
-  }
+	case UNARY_EXPRESION_NODE:
+		ast->unary_expr.op = va_arg(args,int);
+		ast->unary_expr.right = va_arg(args,node *);
+		break;
+	case ASSIGNMENT_NODE:
+		ast->assignment.left = va_arg(args,node *);
+		ast->assignment.right = va_arg(args,node *);
+		break;
 
-  va_end(args);
+	case IF_ELSE_STATEMENT_NODE:
+		ast->if_else_statement.condition = va_arg(args, node *);
+		ast->if_else_statement.then_statement = va_arg(args, node *);
+		ast->if_else_statement.else_statement = va_arg(args, node *);
+		break;
 
-  return ast;
+
+
+	// ...
+
+	default: break;
+	}
+
+	va_end(args);
+
+	return ast;
 }
 
 void ast_free(node *ast) {

@@ -19,25 +19,26 @@ typedef struct node_ node;
 extern node *ast;
 
 typedef enum {
-  UNKNOWN               = 0,
+  UNKNOWN               ,
 
-  SCOPE_NODE            = (1 << 0),
+  SCOPE_NODE            ,
   
-  EXPRESSION_NODE       = (1 << 2),
-  UNARY_EXPRESION_NODE  = (1 << 2) | (1 << 3),
-  BINARY_EXPRESSION_NODE= (1 << 2) | (1 << 4),
-  INT_NODE              = (1 << 2) | (1 << 5), 
-  FLOAT_NODE            = (1 << 2) | (1 << 6),
-  IDENT_NODE            = (1 << 2) | (1 << 7),
-  VAR_NODE              = (1 << 2) | (1 << 8),
-  FUNCTION_NODE         = (1 << 2) | (1 << 9),
-  CONSTRUCTOR_NODE      = (1 << 2) | (1 << 10),
+  EXPRESSION_NODE       ,
+  UNARY_EXPRESION_NODE  ,
+  BINARY_EXPRESSION_NODE,
+  INT_NODE              ,
+  FLOAT_NODE            ,
+  IDENT_NODE            ,
+  VAR_NODE              ,
+  FUNCTION_NODE         ,
+  CONSTRUCTOR_NODE      ,
 
-  STATEMENT_NODE        = (1 << 1),
-  IF_STATEMENT_NODE     = (1 << 1) | (1 << 11),
-  WHILE_STATEMENT_NODE  = (1 << 1) | (1 << 12),
-  ASSIGNMENT_NODE       = (1 << 1) | (1 << 13),
-  NESTED_SCOPE_NODE     = (1 << 1) | (1 << 14),
+  STATEMENT_NODE        ,
+  IF_ELSE_STATEMENT_NODE,
+  IF_STATEMENT_NODE     ,
+  WHILE_STATEMENT_NODE  ,
+  ASSIGNMENT_NODE       ,
+  NESTED_SCOPE_NODE     ,
 
   DECLARATION_NODE      = (1 << 15)
 } node_kind;
@@ -63,6 +64,18 @@ struct node_ {
       node *left;
       node *right;
     } binary_expr;
+
+    struct {
+    	node *left;
+    	node *right;
+    }assignment;
+
+    struct {
+    	node *condition;
+    	node *then_statement;
+    	node *else_statement;
+    }if_else_statement;
+
 
     // etc.
   };
