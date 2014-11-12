@@ -18,10 +18,28 @@ struct node_;
 typedef struct node_ node;
 extern node *ast;
 
+typedef enum{
+	INT,
+	IVEC2,
+	IVEC3,
+	IVEC4,
+	BOOL,
+	BVEC2,
+	BVEC3,
+	BVEC4,
+	FLOAT,
+	VEC2,
+	VEC3,
+	VEC4
+} types;
+
 typedef enum {
   UNKNOWN               ,
 
   SCOPE_NODE            ,
+  DECLARATIONS_NODE		,
+  STATEMENTS_NODE        ,
+
   
   EXPRESSION_NODE       ,
   UNARY_EXPRESION_NODE  ,
@@ -33,17 +51,17 @@ typedef enum {
   FUNCTION_NODE         ,
   CONSTRUCTOR_NODE      ,
 
-  STATEMENT_NODE        ,
   IF_ELSE_STATEMENT_NODE,
   IF_STATEMENT_NODE     ,
   WHILE_STATEMENT_NODE  ,
   ASSIGNMENT_NODE       ,
   NESTED_SCOPE_NODE     ,
 
-  DECLARATION_NODE      ,
-
   CONSTRUCTOR_EXP_NODE  ,
 
+  DECLARATION_NODE,
+  DECLARATION_ASSIGNMENT_NODE,
+  CONST_DECLARATION_ASSIGNMENT_NODE
 
 } node_kind;
 
@@ -54,9 +72,19 @@ struct node_ {
 
   union {
     struct {
-      // declarations?
-      // statements?
+    	node *declarations;
+    	node *statements;
     } scope;
+
+    struct {
+    	node *declarations;
+    	node *declaration;
+    } declarations;
+
+    struct {
+    	node *statements;
+    	node *statement;
+    } statements;
   
     struct {
       int op;
@@ -77,10 +105,16 @@ struct node_ {
     struct {
     	node *condition;
     	node *then_statement;
+    }if_statement;
+
+    struct {
+    	node *condition;
+    	node *then_statement;
     	node *else_statement;
     }if_else_statement;
 
     struct {
+
     	node *constructor;
     }constructor_exp;
 
@@ -107,6 +141,27 @@ struct node_ {
     struct {
     	node *expression;
     }paren_exp;
+
+	struct {
+    	node *type;
+    	char *iden;
+    }declaration;
+
+    struct {
+    	node *type;
+    	char *iden;
+    	node *value;
+    }declaration_assignment;
+
+    struct {
+    	node *type;
+    	char *iden;
+    	node *value;
+    }const_declaration_assignment;
+
+    struct {
+    	int type_name;
+    }type;
 
     // etc.
   };
