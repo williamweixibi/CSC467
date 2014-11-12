@@ -64,6 +64,11 @@ node *ast_allocate(node_kind kind, ...) {
 		ast->if_else_statement.else_statement = va_arg(args, node *);
 		break;
 
+
+	case CONSTRUCTOR_EXP_NODE:
+		ast->constructor_exp.constructor = va_arg(args,node*);
+		break;
+
 	case IF_STATEMENT_NODE:
 		ast->if_statement.condition = va_arg(args,node *);
 		ast->if_statement.then_statement = va_arg(args,node *);
