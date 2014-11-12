@@ -29,6 +29,10 @@ node *ast_allocate(node_kind kind, ...) {
 		ast->scope.statements = va_arg(args, node *);
 		break;
 
+	case ENTER_SCOPE_NODE:
+		ast->enter_scope.scope = va_arg(args,node *);
+		break;
+
 	case DECLARATIONS_NODE:
 		ast->declarations.declarations=va_arg(args, node *);
 		ast->declarations.declaration = va_arg(args, node *);
@@ -82,6 +86,9 @@ node *ast_allocate(node_kind kind, ...) {
 		ast->const_declaration_assignment.value=va_arg(args,node *);
 		break;
 
+	case TYPE_NODE:
+		ast->type.type_name=va_arg(args,types);
+		break;
 	// ...
 
 	default: break;

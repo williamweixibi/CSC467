@@ -35,7 +35,7 @@ typedef enum{
 
 typedef enum {
   UNKNOWN               ,
-
+  ENTER_SCOPE_NODE		,
   SCOPE_NODE            ,
   DECLARATIONS_NODE		,
   STATEMENTS_NODE        ,
@@ -50,6 +50,7 @@ typedef enum {
   VAR_NODE              ,
   FUNCTION_NODE         ,
   CONSTRUCTOR_NODE      ,
+  TYPE_NODE				,
 
   IF_ELSE_STATEMENT_NODE,
   IF_STATEMENT_NODE     ,
@@ -72,6 +73,10 @@ struct node_ {
     	node *declarations;
     	node *statements;
     } scope;
+
+    struct {
+    	node *scope;
+    } enter_scope;
 
     struct {
     	node *declarations;
@@ -128,7 +133,7 @@ struct node_ {
     }const_declaration_assignment;
 
     struct {
-    	int type_name;
+    	types type_name;
     }type;
 
 

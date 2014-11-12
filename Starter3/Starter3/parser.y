@@ -102,7 +102,14 @@ enum {
 // type declarations
 // TODO: fill this out
 %type <as_ast> expression
-
+%type <as_ast> scope
+%type <as_ast> declarations
+%type <as_ast> statements
+%type <as_ast> declaration
+%type <as_ast> statement
+%type <as_ast> type
+%type <as_ast> variable
+%type <as_ast> program
 // expect one shift/reduce conflict, where Bison chooses to shift
 // the ELSE.
 %expect 1
@@ -120,63 +127,86 @@ enum {
  ***********************************************************************/
 program
   : scope 
-      { yTRACE("program -> scope\n") } 
+      {	$$ = ast_allocate(ENTER_SCOPE_NODE,$1);
+      	yTRACE("program -> scope\n") } 
   ;
 
 scope
   : '{' declarations statements '}'
-      { yTRACE("scope -> { declarations statements }\n") }
+      { $$ = ast_allocate(SCOPE_NODE,$2,$3);
+      yTRACE("scope -> { declarations statements }\n") }
   ;
 
 declarations
   : declarations declaration
-      { yTRACE("declarations -> declarations declaration\n") }
+      { $$ = ast_allocate(DECLARATIONS_NODE,$1,$2);
+      	yTRACE("declarations -> declarations declaration\n") }
   | 
       { yTRACE("declarations -> \n") }
   ;
 
 statements
   : statements statement
-      { yTRACE("statements -> statements statement\n") }
+      { $$ = ast_allocate(STATEMENTS_NODE,$1,$2);
+      	yTRACE("statements -> statements statement\n") }
   | 
       { yTRACE("statements -> \n") }
   ;
 
 declaration
   : type ID ';' 
-      { yTRACE("declaration -> type ID ;\n") }
+      { $$ = ast_allocate(DECLARATION_NODE,$1,$2);
+      	yTRACE("declaration -> type ID ;\n") }
+      	
   | type ID '=' expression ';'
-      { yTRACE("declaration -> type ID = expression ;\n") }
+      { $$ = ast_allocate(DECLARATION_ASSIGNMENT_NODE,$1,$2,$4);
+      	yTRACE("declaration -> type ID = expression ;\n") }
+      	
   | CONST type ID '=' expression ';'
-      { yTRACE("declaration -> CONST type ID = expression ;\n") }
+      { $$ = ast_allocate(CONST_DECLARATION_ASSIGNMENT_NODE,$2,$3,$5);
+      	yTRACE("declaration -> CONST type ID = expression ;\n") }
   ;
 
 statement
   : variable '=' expression ';'
-      { yTRACE("statement -> variable = expression ;\n") }
+      { $$ = ast_allocate(ASSIGNMENT_NODE,$1,$3);
+      	yTRACE("statement -> variable = expression ;\n") }
+      	
   | IF '(' expression ')' statement ELSE statement %prec WITH_ELSE
-      { yTRACE("statement -> IF ( expression ) statement ELSE statement \n") }
+      { $$ = ast_allocate(IF_ELSE_STATEMENT_NODE,$3,$5,$7);
+      	yTRACE("statement -> IF ( expression ) statement ELSE statement \n") }
+      
   | IF '(' expression ')' statement %prec WITHOUT_ELSE
-      { yTRACE("statement -> IF ( expression ) statement \n") }
+      { $$ = ast_allocate(IF_STATEMENT_NODE,$3,$5);
+      	yTRACE("statement -> IF ( expression ) statement \n") }
+      
   | scope 
-      { yTRACE("statement -> scope \n") }
+      { $$ = ast_allocate(ENTER_SCOPE_NODE,$1);
+      	yTRACE("statement -> scope \n") }
+      
   | ';'
       { yTRACE("statement -> ; \n") }
   ;
 
 type
   : INT_T
-      { yTRACE("type -> INT_T \n") }
+      { $$ = ast_allocate(TYPE_NODE, INT);
+      	yTRACE("type -> INT_T \n") }
   | IVEC_T
-      { yTRACE("type -> IVEC_T \n") }
+      { $$ = ast_allocate(TYPE_NODE, IVEC2);
+      	yTRACE("type -> IVEC_T \n") }
   | BOOL_T
-      { yTRACE("type -> BOOL_T \n") }
+      { $$ = ast_allocate(TYPE_NODE, BOOL);
+      	yTRACE("type -> BOOL_T \n") }
   | BVEC_T
-      { yTRACE("type -> BVEC_T \n") }
+      { $$ = ast_allocate(TYPE_NODE, BVEC2);
+      	yTRACE("type -> BVEC_T \n") }
   | FLOAT_T
-      { yTRACE("type -> FLOAT_T \n") }
+      { $$ = ast_allocate(TYPE_NODE, FLOAT);
+      	yTRACE("type -> FLOAT_T \n") }
   | VEC_T
-      { yTRACE("type -> VEC_T \n") }
+      { $$ = ast_allocate(TYPE_NODE, VEC2);
+      	yTRACE("type -> VEC_T \n") }
   ;
 
 expression
