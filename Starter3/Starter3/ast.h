@@ -40,7 +40,11 @@ typedef enum {
   ASSIGNMENT_NODE       ,
   NESTED_SCOPE_NODE     ,
 
-  DECLARATION_NODE      = (1 << 15)
+  DECLARATION_NODE      ,
+
+  CONSTRUCTOR_EXP_NODE  ,
+
+
 } node_kind;
 
 struct node_ {
@@ -76,6 +80,33 @@ struct node_ {
     	node *else_statement;
     }if_else_statement;
 
+    struct {
+    	node *constructor;
+    }constructor_exp;
+
+    struct {
+    	node *function;
+    }function_exp;
+
+    struct {
+    	int int_literal;
+    }int_literal_exp;
+
+    struct {
+    	float float_literal;
+    }float_literal_exp;
+
+    struct {
+    	node *variable;
+    }variable_exp;
+
+    struct {
+    	int boolean;
+    }boolean_exp;
+
+    struct {
+    	node *expression;
+    }paren_exp;
 
     // etc.
   };
