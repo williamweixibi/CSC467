@@ -24,6 +24,20 @@ node *ast_allocate(node_kind kind, ...) {
 	switch(kind) {
 
 	// ...
+	case SCOPE_NODE:
+		ast->scope.declarations = va_arg(args, node *);
+		ast->scope.statements = va_arg(args, node *);
+		break;
+
+	case DECLARATIONS_NODE:
+		ast->declarations.declarations=va_arg(args, node *);
+		ast->declarations.declaration = va_arg(args, node *);
+		break;
+
+	case STATEMENTS_NODE:
+		ast->statements.statements = va_arg(args,node *);
+		ast->statements.statement = va_arg(args, node *);
+		break;
 
 	case BINARY_EXPRESSION_NODE:
 		ast->binary_expr.op = va_arg(args, int);
@@ -46,7 +60,27 @@ node *ast_allocate(node_kind kind, ...) {
 		ast->if_else_statement.else_statement = va_arg(args, node *);
 		break;
 
+	case IF_STATEMENT_NODE:
+		ast->if_statement.condition = va_arg(args,node *);
+		ast->if_statement.then_statement = va_arg(args,node *);
+		break;
 
+	case DECLARATION_NODE:
+		ast->declaration.type=va_arg(args,node *);
+		ast->declaration.iden=va_arg(args,char *);
+		break;
+
+	case DECLARATION_ASSIGNMENT_NODE:
+		ast->declaration_assignment.type=va_arg(args,node *);
+		ast->declaration_assignment.iden=va_arg(args,char *);
+		ast->declaration_assignment.value=va_arg(args,node *);
+		break;
+
+	case CONST_DECLARATION_ASSIGNMENT_NODE:
+		ast->const_declaration_assignment.type=va_arg(args,node *);
+		ast->const_declaration_assignment.iden=va_arg(args,char *);
+		ast->const_declaration_assignment.value=va_arg(args,node *);
+		break;
 
 	// ...
 
