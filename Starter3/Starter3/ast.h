@@ -33,21 +33,44 @@ typedef enum{
 	VEC4
 } types;
 
+typedef enum{
+	MINUS,
+	NOT
+} unary_ops;
+
+typedef enum{
+	AND_OP,
+	OR_OP,
+	EQ_OP,
+	NEQ_OP,
+	LT_OP,
+	LEQ_OP,
+	GT_OP,
+	GEQ_OP,
+	ADD_OP,
+	SUB_OP,
+	MULT_OP,
+	DIV_OP,
+	POW_OP
+} binary_ops;
+
 typedef enum {
   UNKNOWN               ,
   ENTER_SCOPE_NODE		,
   SCOPE_NODE            ,
   DECLARATIONS_NODE		,
-  STATEMENTS_NODE        ,
+  STATEMENTS_NODE       ,
 
-  
   EXPRESSION_NODE       ,
+  PREN_EXPRESSION_NODE  ,
   UNARY_EXPRESION_NODE  ,
   BINARY_EXPRESSION_NODE,
   INT_NODE              ,
   FLOAT_NODE            ,
+  BOOL_NODE             ,
   IDENT_NODE            ,
   VAR_NODE              ,
+  ARRAY_NODE			,
   FUNCTION_NODE         ,
   CONSTRUCTOR_NODE      ,
   TYPE_NODE				,
@@ -58,9 +81,7 @@ typedef enum {
   ASSIGNMENT_NODE       ,
   NESTED_SCOPE_NODE     ,
 
-  CONSTRUCTOR_EXP_NODE  ,
-
-  DECLARATION_NODE,
+  DECLARATION_NODE      ,
   DECLARATION_ASSIGNMENT_NODE,
   CONST_DECLARATION_ASSIGNMENT_NODE
 
@@ -97,7 +118,7 @@ struct node_ {
     } unary_expr;
 
     struct {
-      int op;
+      binary_ops op;
       node *left;
       node *right;
     } binary_expr;
@@ -119,29 +140,23 @@ struct node_ {
     }if_else_statement;
 
     struct {
-
-    	node *constructor;
+    	types type;
+    	node *arguments;
     }constructor_exp;
 
     struct {
-    	node *function;
+    	char *function_name;
+    	node *arguments;
     }function_exp;
 
     struct {
-    	int int_literal;
-    }int_literal_exp;
-
-    struct {
-    	float float_literal;
-    }float_literal_exp;
-
-    struct {
-    	node *variable;
+    	char *identifier;
     }variable_exp;
 
     struct {
-    	int boolean;
-    }boolean_exp;
+    	char *identifier;
+    	int index;
+    }array_exp;
 
     struct {
     	node *expression;
@@ -168,6 +183,17 @@ struct node_ {
     	types type_name;
     }type;
 
+    struct {
+    	int right;
+    }int_literal;
+
+    struct {
+    	float right;
+    }float_literal;
+
+    struct {
+    	int right;
+    }bool_literal;
     // etc.
   };
 };
