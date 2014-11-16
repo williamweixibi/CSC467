@@ -112,6 +112,7 @@ enum {
 %type <as_ast> program
 %type <as_ast> arguments_opt
 %type <as_str> FUNC
+%type <as_ast> arguments
 
 // expect one shift/reduce conflict, where Bison chooses to shift
 // the ELSE.
@@ -306,14 +307,17 @@ variable
 
 arguments
   : arguments ',' expression
-      { yTRACE("arguments -> arguments , expression \n") }
+      { $$ = ast_allocate(ARGUMENTS_COMMA_NODE,$1,$3);
+        yTRACE("arguments -> arguments , expression \n") }
   | expression
-      { yTRACE("arguments -> expression \n") }
+      { $$ = ast_allocate(ARGUMENTS_EXPRESSION_NODE, $1);
+        yTRACE("arguments -> expression \n") }
   ;
 
 arguments_opt
   : arguments
-      { yTRACE("arguments_opt -> arguments \n") }
+      { $$ = ast_allocate(ARGUMENTS_EXPRESSION_NODE, $1);
+        yTRACE("arguments_opt -> arguments \n") }
   |
       { yTRACE("arguments_opt -> \n") }
   ;

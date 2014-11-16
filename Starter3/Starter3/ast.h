@@ -83,7 +83,10 @@ typedef enum {
 
   DECLARATION_NODE      ,
   DECLARATION_ASSIGNMENT_NODE,
-  CONST_DECLARATION_ASSIGNMENT_NODE
+  CONST_DECLARATION_ASSIGNMENT_NODE,
+
+  ARGUMENTS_COMMA_NODE   ,
+  ARGUMENTS_EXPRESSION_NODE
 
 } node_kind;
 
@@ -194,6 +197,15 @@ struct node_ {
     struct {
     	int right;
     }bool_literal;
+
+    struct {
+        node *arguments;
+        node *expression;
+    }arguments_comma;
+
+    struct {
+        node *expression;
+    }arguments_expression;
     // etc.
   };
 };

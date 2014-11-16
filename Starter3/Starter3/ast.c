@@ -125,6 +125,15 @@ node *ast_allocate(node_kind kind, ...) {
 		ast->array_exp.index = va_arg(args, int);
 		break;
 
+	case ARGUMENTS_COMMA_NODE:
+		ast->arguments_comma.arguments = va_arg(args, node *);
+		ast->arguments_comma.expression = va_arg(args, node *);
+		break;
+
+	case ARGUMENTS_EXPRESSION_NODE:
+		ast->arguments_expression.expression = va_arg(args, node *);
+		break;
+
 	default: break;
 	}
 
