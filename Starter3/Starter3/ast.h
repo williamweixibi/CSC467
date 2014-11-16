@@ -121,7 +121,7 @@ struct node_ {
     } unary_expr;
 
     struct {
-      binary_ops op;
+      int op; //binary_ops enum
       node *left;
       node *right;
     } binary_expr;
@@ -143,7 +143,7 @@ struct node_ {
     }if_else_statement;
 
     struct {
-    	types type;
+    	int type; // types enum
     	node *arguments;
     }constructor_exp;
 
@@ -183,7 +183,7 @@ struct node_ {
     }const_declaration_assignment;
 
     struct {
-    	types type_name;
+    	int type_name;
     }type;
 
     struct {
@@ -191,7 +191,7 @@ struct node_ {
     }int_literal;
 
     struct {
-    	float right;
+    	double right;
     }float_literal;
 
     struct {

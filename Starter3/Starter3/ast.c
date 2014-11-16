@@ -48,7 +48,7 @@ node *ast_allocate(node_kind kind, ...) {
 		break;
 
 	case BINARY_EXPRESSION_NODE:
-		ast->binary_expr.op = va_arg(args, binary_ops);
+		ast->binary_expr.op = va_arg(args, int);
 		ast->binary_expr.left = va_arg(args, node *);
 		ast->binary_expr.right = va_arg(args, node *);
 		break;
@@ -69,12 +69,12 @@ node *ast_allocate(node_kind kind, ...) {
 		break;
 
 	case CONSTRUCTOR_NODE:
-		ast->constructor_exp.type = va_arg(args,types);
+		ast->constructor_exp.type = va_arg(args,int);
 		ast->constructor_exp.arguments = va_arg(args,node*);
 		break;
 
 	case FUNCTION_NODE:
-		ast->constructor_exp.type = va_arg(args,types);
+		ast->constructor_exp.type = va_arg(args,int);
 		ast->constructor_exp.arguments = va_arg(args,node*);
 		break;
 
@@ -101,7 +101,7 @@ node *ast_allocate(node_kind kind, ...) {
 		break;
 
 	case TYPE_NODE:
-		ast->type.type_name=va_arg(args,types);
+		ast->type.type_name=va_arg(args,int);
 		break;
 
 	case INT_NODE:
@@ -109,7 +109,7 @@ node *ast_allocate(node_kind kind, ...) {
 		break;
 
 	case FLOAT_NODE:
-		ast->float_literal.right = va_arg(args,float);
+		ast->float_literal.right = va_arg(args,double);
 		break;
 
 	case BOOL_NODE:
