@@ -164,36 +164,52 @@ void ast_print(node * ast) {
 			break;
 		case 3:
 			printf("%d\n", kind);
+			ast_print(ast->declarations.declarations);
+			ast_print(ast->declarations.declaration);
 			break;
 		case 4:
 			printf("%d\n", kind);
+			ast_print(ast->statements.statements);
+			ast_print(ast->statements.statement);
 			break;
 		case 5:
 			printf("%d\n", kind);
+			// No EXPRESSION_NODE
 			break;
 		case 6:
 			printf("%d\n", kind);
+			ast_print(ast->paren_exp.expression);
 			break;
 		case 7:
 			printf("%d\n", kind);
+			printf("Operator: %d", ast->unary_expr.op);
+			ast_print(ast->unary_expr.right);
 			break;
 		case 8:
 			printf("%d\n", kind);
+			printf("Operator: %d", ast->binary_expr.op);
+			ast_print(ast->binary_expr.left);
+			ast_print(ast->binary_expr.right);
 			break;
 		case 9:
 			printf("%d\n", kind);
+			printf("Integer: %d",ast->int_literal.right);
 			break;
 		case 10:
 			printf("%d\n", kind);
+			printf("Float: %d", ast->float_literal.right);
 			break;
 		case 11:
 			printf("%d\n", kind);
+			printf("Bool: %d", ast->bool_literal.right);
 			break;
 		case 12:
 			printf("%d\n", kind);
+			// No IDENT_NODE
 			break;
 		case 13:
 			printf("%d\n", kind);
+			printf("Identifier: %s", ast->variable_exp.identifier);
 			break;
 		case 14:
 			printf("%d\n", kind);
