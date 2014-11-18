@@ -200,42 +200,59 @@ void ast_print(node * ast) {
 			break;
 		case 15:
 			printf("%d\n", kind);
+			ast_print(ast->function_exp.arguments);
 			break;
 		case 16:
 			printf("%d\n", kind);
+			ast_print(ast->constructor_exp.arguments);
 			break;
 		case 17:
 			printf("%d\n", kind);
 			break;
 		case 18:
 			printf("%d\n", kind);
+			ast_print(ast->if_else_statement.condition);
+			ast_print(ast->if_else_statement.else_statement);
+			ast_print(ast->if_else_statement.then_statement);
 			break;
 		case 19:
 			printf("%d\n", kind);
+			ast_print(ast->if_statement.condition);
+			ast_print(ast->if_statement.then_statement);
 			break;
 		case 20:
-			printf("%d\n", kind);
+			printf("No node for %d\n", kind);
 			break;
 		case 21:
 			printf("%d\n", kind);
+			ast_print(ast->assignment.left);
+			ast_print(ast->assignment.right);
 			break;
 		case 22:
-			printf("%d\n", kind);
+			printf("No node for %d\n", kind);
 			break;
 		case 23:
 			printf("%d\n", kind);
+			ast_print(ast->declaration.type);
 			break;
 		case 24:
 			printf("%d\n", kind);
+			ast_print(ast->declaration_assignment.type);
+			ast_print(ast->declaration_assignment.value);
 			break;
 		case 25:
 			printf("%d\n", kind);
+			ast_print(ast->const_declaration_assignment.type);
+			ast_print(ast->const_declaration_assignment.value);
 			break;
 		case 26:
 			printf("%d\n", kind);
+			ast_print(ast->arguments_comma.arguments);
+			ast_print(ast->arguments_comma.expression);
 			break;
 		case 27:
 			printf("%d\n", kind);
+			ast_print(ast->arguments_expression.expression);
 			break;
 
 	}
