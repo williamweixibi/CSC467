@@ -148,4 +148,96 @@ void ast_free(node *ast) {
 
 void ast_print(node * ast) {
 
+	int kind;
+
+	kind = ast->kind;
+
+	switch(kind){
+		case 1:
+			printf("%d\n", kind);
+			ast_print(ast->enter_scope.scope);
+			break;
+		case 2:
+			printf("%d\n", kind);
+			ast_print(ast->scope.declarations);
+			ast_print(ast->scope.statements);
+			break;
+		case 3:
+			printf("%d\n", kind);
+			break;
+		case 4:
+			printf("%d\n", kind);
+			break;
+		case 5:
+			printf("%d\n", kind);
+			break;
+		case 6:
+			printf("%d\n", kind);
+			break;
+		case 7:
+			printf("%d\n", kind);
+			break;
+		case 8:
+			printf("%d\n", kind);
+			break;
+		case 9:
+			printf("%d\n", kind);
+			break;
+		case 10:
+			printf("%d\n", kind);
+			break;
+		case 11:
+			printf("%d\n", kind);
+			break;
+		case 12:
+			printf("%d\n", kind);
+			break;
+		case 13:
+			printf("%d\n", kind);
+			break;
+		case 14:
+			printf("%d\n", kind);
+			break;
+		case 15:
+			printf("%d\n", kind);
+			break;
+		case 16:
+			printf("%d\n", kind);
+			break;
+		case 17:
+			printf("%d\n", kind);
+			break;
+		case 18:
+			printf("%d\n", kind);
+			break;
+		case 19:
+			printf("%d\n", kind);
+			break;
+		case 20:
+			printf("%d\n", kind);
+			break;
+		case 21:
+			printf("%d\n", kind);
+			break;
+		case 22:
+			printf("%d\n", kind);
+			break;
+		case 23:
+			printf("%d\n", kind);
+			break;
+		case 24:
+			printf("%d\n", kind);
+			break;
+		case 25:
+			printf("%d\n", kind);
+			break;
+		case 26:
+			printf("%d\n", kind);
+			break;
+		case 27:
+			printf("%d\n", kind);
+			break;
+
+	}
+
 }
