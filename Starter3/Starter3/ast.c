@@ -151,7 +151,6 @@ node *ast_allocate(node_kind kind, ...) {
 
 		ast->variable_exp.identifier = (char *)malloc(sizeof(char)*(strlen(tmp)+1));
 		strcpy(ast->variable_exp.identifier,tmp);
-		printf("variable %s\n", ast->variable_exp.identifier);
 		break;
 
 	case ARRAY_NODE:

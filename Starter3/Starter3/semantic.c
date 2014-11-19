@@ -140,7 +140,6 @@ int semantic_check( node *ast) {
 
 			//arithmetic operators add and sub
 			if(ast->binary_expr.op==ADD_OP || ast->binary_expr.op==SUB_OP){
-				printf("checkign add %d %d \n", left_exp, right_exp);
 				if(left_exp==INT && right_exp==INT){
 					return INT;
 				}else if(left_exp==FLOAT && right_exp==FLOAT){
@@ -166,8 +165,6 @@ int semantic_check( node *ast) {
 				}else if(left_exp!=right_exp){
 					printf("ERROR BINARY_EXPRESSION_NODE operands should be of same base type\n");
 					return -1;
-				}else{
-					printf("nothing fit\n");
 				}
 			}
 
@@ -240,7 +237,6 @@ int semantic_check( node *ast) {
 			break;
 		case 13:
 			//printf("VAR_NODE %d\n", kind);
-			printf("Identifier: %s\n", ast->variable_exp.identifier);
 
 			return  getType(ast->variable_exp.identifier);
 			break;
@@ -303,8 +299,6 @@ int semantic_check( node *ast) {
 
 			left_exp = getType(name);
 			right_exp = semantic_check(ast->assignment.right);
-
-			printf("%d %d\n", left_exp,right_exp);
 
 			if(left_exp==right_exp){
 				return left_exp;

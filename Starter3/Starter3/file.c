@@ -1,11 +1,7 @@
 {
-	bool c;
 	int d;
+	ivec2 c;
 
-	int x;
-	x = c&&d;
-
-	vec4 c;
-	
-	c = lit(b);
+	ivec2 x;
+	x = d+c;
 }

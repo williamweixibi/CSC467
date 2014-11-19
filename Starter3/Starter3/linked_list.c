@@ -93,12 +93,10 @@ int getType(char * name)
      {
           if(strcmp(temp->name,name)==0)
           {
-         	 printf(" %s and %s \n", temp->name, name);
         	  return temp->type;
           }
           else
           {
-         	 printf("not equal %s and %s \n", temp->name, name);
                listVar=temp;
                temp=temp->next;
           }
