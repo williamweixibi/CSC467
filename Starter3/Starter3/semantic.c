@@ -47,12 +47,25 @@ int semantic_check( node *ast) {
 			//printf("UNARY_EXPRESION_NODE %d\n", kind);
 			//printf("Operator: %d\n", ast->unary_expr.op);
 
+			right_exp = semantic_check(ast->unary_expr.right);
+
 			switch ( ast->unary_expr.op){
 			case MINUS:
-				return semantic_check(ast->unary_expr.right);
+				if(right_exp == BOOL || right_exp==BVEC2|| right_exp==BVEC3|| right_exp==BVEC4){
+					printf("ERROR UNARY_EXPRESION_NODE, operand should be arithmetic\n");
+					return -1;
+				}else{
+					return right_exp;
+				}
 				break;
 			case NOT:
-				return BOOL;
+				if(right_exp!=BOOL || right_exp!=BVEC2 || right_exp!=BVEC3 || right_exp!=BVEC4){
+					printf("ERROR UNARY_EXPRESION_NODE, operand to NOT should be logical\n");
+					return -1;
+
+				}else{
+					return right_exp;
+				}
 				break;
 			}
 
