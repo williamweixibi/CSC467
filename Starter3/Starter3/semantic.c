@@ -62,13 +62,160 @@ int semantic_check( node *ast) {
 			left_exp = semantic_check(ast->binary_expr.left);
 			right_exp = semantic_check(ast->binary_expr.right);
 
+			//Logical operators
 
-			if(left_exp==right_exp){
-				return left_exp;
-			}else{
-				printf("ERROR BINARY_EXPRESSION_NODE\n");
-				return -1;
+			if(ast->binary_expr.op==AND_OP || ast->binary_expr.op==OR_OP){
+				if(left_exp==BOOL && right_exp==BOOL){
+					return BOOL;
+				}else if(left_exp==BVEC2 && right_exp==BVEC2){
+					return BVEC2;
+				}else if(left_exp==BVEC3 && right_exp==BVEC3){
+					return BVEC3;
+				}else if(left_exp==BVEC4 && right_exp==BVEC4){
+					return BVEC4;
+				}else if(left_exp == INT || left_exp == IVEC2 || left_exp == IVEC3 || left_exp == IVEC4){
+					printf("ERROR BINARY_EXPRESSION_NODE logical operators should have boolean operands\n");
+					return -1;
+				}else if(left_exp == FLOAT || left_exp == VEC2 || left_exp == VEC3 || left_exp == VEC4){
+					printf("ERROR BINARY_EXPRESSION_NODE logical operators should have boolean operands\n");
+					return -1;
+				}else if(right_exp == FLOAT || right_exp == VEC2 || right_exp == VEC3 || right_exp == VEC4){
+					printf("ERROR BINARY_EXPRESSION_NODE logical operators should have boolean operands\n");
+					return -1;
+				}else if(right_exp == INT || right_exp == IVEC2 || right_exp == IVEC3 || right_exp == IVEC4){
+					printf("ERROR BINARY_EXPRESSION_NODE logical operators should have boolean operands\n");
+					return -1;
+				}
+				else if(left_exp != right_exp){
+					printf("ERROR BINARY_EXPRESSION_NODE operands should be of same base type\n");
+					return -1;
+				}
 			}
+
+			//comparison operators
+
+			if(ast->binary_expr.op==LT_OP ||ast->binary_expr.op==LEQ_OP || ast->binary_expr.op==GT_OP || ast->binary_expr.op==GEQ_OP){
+				if(left_exp==INT && right_exp==INT){
+					return INT;
+				}else if(left_exp==FLOAT && right_exp == FLOAT){
+					return FLOAT;
+				}else if(left_exp==BOOL || right_exp==BOOL){
+					printf("ERROR BINARY_EXPRESSION_NODE comparison operators should have artimetic operands\n");
+					return -1;
+				}else if(left_exp== IVEC2 || left_exp==IVEC3 || left_exp==IVEC4){
+					printf("ERROR BINARY_EXPRESSION_NODE operands must be scalars\n");
+					return -1;
+				}else if(left_exp== VEC2 || left_exp==VEC3 || left_exp==VEC4){
+					printf("ERROR BINARY_EXPRESSION_NODE operands must be scalars\n");
+					return -1;
+				}else if(left_exp== BVEC2 || left_exp==BVEC3 || left_exp==BVEC4){
+					printf("ERROR BINARY_EXPRESSION_NODE operands must be scalars\n");
+					return -1;
+				}else if(right_exp== IVEC2 || right_exp==IVEC3 || right_exp==IVEC4){
+					printf("ERROR BINARY_EXPRESSION_NODE operands must be scalars\n");
+					return -1;
+				}else if(right_exp== VEC2 || right_exp==VEC3 || right_exp==VEC4){
+					printf("ERROR BINARY_EXPRESSION_NODE operands must be scalars\n");
+					return -1;
+				}else if(right_exp== BVEC2 || right_exp==BVEC3 || right_exp==BVEC4){
+					printf("ERROR BINARY_EXPRESSION_NODE operands must be scalars\n");
+					return -1;
+				}else if(left_exp!=right_exp){
+					printf("ERROR BINARY_EXPRESSION_NODE operands should be of same base type\n");
+					return -1;
+				}
+			}
+			//comparison operators
+			if(ast->binary_expr.op==EQ_OP || ast->binary_expr.op==NEQ_OP){
+				if(left_exp==right_exp){
+					if(left_exp==BOOL || left_exp == BVEC2 || left_exp == BVEC3 || left_exp == BVEC4){
+						printf("ERROR BINARY_EXPRESSION_NODE comparison operators should have artimetic operands\n");
+					}
+				}else{
+					printf("ERROR BINARY_EXPRESSION_NODE operands should be of same base type\n");
+					return -1;
+				}
+			}
+
+			//arithmetic operators add and sub
+			if(ast->binary_expr.op==ADD_OP || ast->binary_expr.op==SUB_OP){
+				printf("checkign add %d %d \n", left_exp, right_exp);
+				if(left_exp==INT && right_exp==INT){
+					return INT;
+				}else if(left_exp==FLOAT && right_exp==FLOAT){
+					return FLOAT;
+				}else if(left_exp==IVEC2 && right_exp==IVEC2){
+					return IVEC2;
+				}else if(left_exp==IVEC3 && right_exp==IVEC3){
+					return IVEC3;
+				}else if(left_exp==IVEC4 && right_exp==IVEC4){
+					return IVEC4;
+				}else if(left_exp==VEC2 && right_exp==VEC2){
+					return VEC2;
+				}else if(left_exp==VEC3 && right_exp==VEC3){
+					return VEC3;
+				}else if(left_exp==VEC4 && right_exp==VEC4){
+					return VEC4;
+				}else if(left_exp==BOOL || left_exp == BVEC2 || left_exp == BVEC3 || left_exp == BVEC4){
+					printf("ERROR BINARY_EXPRESSION_NODE arithmetic operators should have arithmetic operands\n");
+					return -1;
+				}else if(right_exp==BOOL || right_exp == BVEC2 || right_exp == BVEC3 || right_exp == BVEC4){
+					printf("ERROR BINARY_EXPRESSION_NODE arithmetic operators should have arithmetic operands\n");
+					return -1;
+				}else if(left_exp!=right_exp){
+					printf("ERROR BINARY_EXPRESSION_NODE operands should be of same base type\n");
+					return -1;
+				}else{
+					printf("nothing fit\n");
+				}
+			}
+
+			//arithmetic operator mult
+			if(ast->binary_expr.op==MULT_OP){
+				if(left_exp == INT && (right_exp==INT || right_exp==IVEC2 || right_exp==IVEC3 || right_exp==IVEC4)){
+					return right_exp;
+				}else if(right_exp == INT && (left_exp==INT || left_exp==IVEC2 || left_exp==IVEC3 || left_exp==IVEC4)){
+					return left_exp;
+				}else if(left_exp == FLOAT && (right_exp==FLOAT || right_exp==VEC2 || right_exp==VEC3 || right_exp==VEC4)){
+					return right_exp;
+				}else if(right_exp == FLOAT && (left_exp==FLOAT || left_exp==VEC2 || left_exp==VEC3 || left_exp==VEC4)){
+					return left_exp;
+				}else if(left_exp == BOOL || left_exp == BVEC2 || left_exp == BVEC3 || left_exp == BVEC4){
+					printf("ERROR BINARY_EXPRESSION_NODE arithmetic operators should have arithmetic operands\n");
+					return -1;
+				}else if(right_exp==BOOL || right_exp == BVEC2 || right_exp == BVEC3 || right_exp == BVEC4){
+					printf("ERROR BINARY_EXPRESSION_NODE arithmetic operators should have arithmetic operands\n");
+					return -1;
+				}else if(left_exp==right_exp){
+					return left_exp;
+				}else if(left_exp!=right_exp){
+					printf("ERROR BINARY_EXPRESSION_NODE operands should be of same base type\n");
+					return -1;
+				}
+			}
+
+			//arithmetic operator /,^
+			if(ast->binary_expr.op==DIV_OP || ast->binary_expr.op==POW_OP){
+				if(left_exp==INT && right_exp==INT){
+					return INT;
+				}else if(left_exp==FLOAT && right_exp==FLOAT){
+					return FLOAT;
+				}else if(left_exp == BOOL || left_exp == BVEC2 || left_exp == BVEC3 || left_exp == BVEC4){
+					printf("ERROR BINARY_EXPRESSION_NODE arithmetic operators should have arithmetic operands\n");
+					return -1;
+				}else if(right_exp==BOOL || right_exp == BVEC2 || right_exp == BVEC3 || right_exp == BVEC4){
+					printf("ERROR BINARY_EXPRESSION_NODE arithmetic operators should have arithmetic operands\n");
+					return -1;
+				}else if(left_exp!=right_exp){
+					printf("ERROR BINARY_EXPRESSION_NODE operands should be of same base type\n");
+					return -1;
+				}else{
+					printf("ERROR BINARY_EXPRESSION_NODE operands can only be scalars\n");
+					return -1;
+				}
+
+			}
+
 
 			break;
 		case 9:
@@ -92,7 +239,7 @@ int semantic_check( node *ast) {
 			break;
 		case 13:
 			//printf("VAR_NODE %d\n", kind);
-			//printf("Identifier: %s\n", ast->variable_exp.identifier);
+			printf("Identifier: %s\n", ast->variable_exp.identifier);
 
 			return  getType(ast->variable_exp.identifier);
 			break;

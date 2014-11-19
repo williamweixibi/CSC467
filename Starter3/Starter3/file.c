@@ -1,7 +1,8 @@
 {
-	float b = 3.3;
-	int a = 3;
-	
-	int c;
+	bool c;
+	int d;
+
+	int x;
+	x = c&&d;
 
 }
