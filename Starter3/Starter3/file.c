@@ -1,7 +1,7 @@
 {
-	int d;
+	bool d;
 	int a;
-	if(d=1){
+	if(d){
 		a=1;
 	}
 }

@@ -301,7 +301,11 @@ int semantic_check( node *ast) {
 			break;
 		case 19:
 			//printf("IF_STATEMENT_NODE %d\n", kind);
-			semantic_check(ast->if_statement.condition);
+			left_exp = semantic_check(ast->if_else_statement.condition);
+			if(left_exp!=BOOL){
+				printf("Expression must evaluate to bool\n");
+				return -1;
+			}
 			semantic_check(ast->if_statement.then_statement);
 			break;
 		case 20:
