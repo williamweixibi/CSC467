@@ -1,7 +1,9 @@
 {
-	vec4 asjkdhf;
-	vec4 b;
-	vec2 b;
+	bool c;
+	int d;
+
+	int x;
+	x = c&&d;
 
 	vec4 c;
 	

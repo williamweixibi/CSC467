@@ -146,7 +146,12 @@ node *ast_allocate(node_kind kind, ...) {
 		break;
 
 	case VAR_NODE:
-		ast->variable_exp.identifier = va_arg(args, char *);
+		char * tmp;
+		tmp = va_arg(args, char *);
+
+		ast->variable_exp.identifier = (char *)malloc(sizeof(char)*(strlen(tmp)+1));
+		strcpy(ast->variable_exp.identifier,tmp);
+		printf("variable %s\n", ast->variable_exp.identifier);
 		break;
 
 	case ARRAY_NODE:

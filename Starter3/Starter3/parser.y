@@ -293,8 +293,8 @@ expression
   | '(' expression ')'
       { $$ = ast_allocate(PREN_EXPRESSION_NODE,$2);
       	yTRACE("expression -> ( expression ) \n") }
-  | variable { }
-    {  $$ = ast_allocate(VAR_NODE,$1); // NOT SURE!!!
+  | variable
+    {  //$$ = ast_allocate(VAR_NODE,$1); // NOT SURE!!!
     	yTRACE("expression -> variable \n") }
   ;
 
