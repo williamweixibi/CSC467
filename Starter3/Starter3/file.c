@@ -1,7 +1,7 @@
 {
 	int d;
-	ivec2 c;
-
-	ivec2 x;
-	x = d+c;
+	int a;
+	if(d=1){
+		a=1;
+	}
 }
