@@ -10,10 +10,13 @@
 
 #define DEBUG_PRINT_TREE 0
 
+static int scope_count = 0;
+
 node *ast = NULL;
 
 node *ast_allocate(node_kind kind, ...) {
 	va_list args;
+	int val=0;
 
 	// make the node
 	node *ast = (node *) malloc(sizeof(node));
@@ -21,17 +24,21 @@ node *ast_allocate(node_kind kind, ...) {
 	ast->kind = kind;
 
 	va_start(args, kind);
+	//printf("allocate\n");
 
 	switch(kind) {
 
 	// ...
 	case SCOPE_NODE:
+		//printf("allocate\n");
 		ast->scope.declarations = va_arg(args, node *);
 		ast->scope.statements = va_arg(args, node *);
 		break;
 
 	case ENTER_SCOPE_NODE:
+		scope_count++;
 		ast->enter_scope.scope = va_arg(args,node *);
+		scope_count--;
 		break;
 
 	case DECLARATIONS_NODE:
@@ -87,12 +94,22 @@ node *ast_allocate(node_kind kind, ...) {
 	case DECLARATION_NODE:
 		ast->declaration.type=va_arg(args,node *);
 		ast->declaration.iden=va_arg(args,char *);
+		/*if(ast->declaration.type==INT){
+			insert(ast->declaration.iden,val, scope_count, INT, 0);
+		}*/
 		break;
 
 	case DECLARATION_ASSIGNMENT_NODE:
+
+
 		ast->declaration_assignment.type=va_arg(args,node *);
 		ast->declaration_assignment.iden=va_arg(args,char *);
 		ast->declaration_assignment.value=va_arg(args,node *);
+
+		if(ast->declaration_assignment.value->kind == INT_NODE){
+			printf("evaluated: %d\n", ast->declaration_assignment.value->int_literal.right);
+		}
+
 		break;
 
 	case CONST_DECLARATION_ASSIGNMENT_NODE:
@@ -205,7 +222,7 @@ void ast_print(node * ast) {
 			break;
 		case 10:
 			printf("FLOAT_NODE %d\n", kind);
-			printf("Float: %d", ast->float_literal.right);
+			printf("Float: %f", ast->float_literal.right);
 			break;
 		case 11:
 			printf("BOOL_NODE %d\n", kind);
