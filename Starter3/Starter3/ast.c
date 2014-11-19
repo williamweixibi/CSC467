@@ -22,6 +22,7 @@ node *ast_allocate(node_kind kind, ...) {
 	node *ast = (node *) malloc(sizeof(node));
 	memset(ast, 0, sizeof *ast);
 	ast->kind = kind;
+	int tmp;
 
 	va_start(args, kind);
 	//printf("allocate\n");
@@ -84,8 +85,8 @@ node *ast_allocate(node_kind kind, ...) {
 		break;
 
 	case FUNCTION_NODE:
-		ast->constructor_exp.type = va_arg(args,int);
-		ast->constructor_exp.arguments = va_arg(args,node*);
+		ast->function_exp.function_name = va_arg(args,int);
+		ast->function_exp.arguments = va_arg(args,node*);
 		break;
 
 	case IF_STATEMENT_NODE:

@@ -200,19 +200,19 @@ type
       { $$ = ast_allocate(TYPE_NODE, INT);
       	yTRACE("type -> INT_T \n") }
   | IVEC_T
-      { $$ = ast_allocate(TYPE_NODE, IVEC2);
+      { $$ = ast_allocate(TYPE_NODE, $1-1+IVEC2);
       	yTRACE("type -> IVEC_T \n") }
   | BOOL_T
       { $$ = ast_allocate(TYPE_NODE, BOOL);
       	yTRACE("type -> BOOL_T \n") }
   | BVEC_T
-      { $$ = ast_allocate(TYPE_NODE, BVEC2);
+      { $$ = ast_allocate(TYPE_NODE, $1-1+BVEC2);
       	yTRACE("type -> BVEC_T \n") }
   | FLOAT_T
       { $$ = ast_allocate(TYPE_NODE, FLOAT);
       	yTRACE("type -> FLOAT_T \n") }
   | VEC_T
-      { $$ = ast_allocate(TYPE_NODE, VEC2);
+      { $$ = ast_allocate(TYPE_NODE, $1-1+VEC2);
       	yTRACE("type -> VEC_T \n") }
   ;
 

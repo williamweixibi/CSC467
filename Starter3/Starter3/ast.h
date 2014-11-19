@@ -22,18 +22,19 @@ typedef struct node_ node;
 extern node *ast;
 
 typedef enum{
-	INT,
+	INT,//0
 	IVEC2,
 	IVEC3,
 	IVEC4,
 	BOOL,
-	BVEC2,
+	BVEC2,//5
 	BVEC3,
 	BVEC4,
 	FLOAT,
-	VEC2,
+	VEC2,//9
 	VEC3,
-	VEC4
+	VEC4,//11
+	FUNCTION
 }types;
 
 typedef enum{
@@ -152,7 +153,7 @@ struct node_ {
     }constructor_exp;
 
     struct {
-    	char *function_name;
+    	int function_name;
     	node *arguments;
     }function_exp;
 

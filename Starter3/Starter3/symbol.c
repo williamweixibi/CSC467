@@ -87,10 +87,29 @@ void build_table(node * ast) {
 		case 15:
 			//printf("FUNCTION_NODE %d\n", kind);
 			build_table(ast->function_exp.arguments);
+
+			if(ast->function_exp.function_name == 2){
+				insert("rsq",
+						FUNCTION,
+						0,
+						scope_count);
+			}else if(ast->function_exp.function_name == 0){ //0
+				insert("dp3",
+						FUNCTION,
+						0,
+						scope_count);
+			}else if (ast->function_exp.function_name == 1){ //1
+				insert("lit",
+						FUNCTION,
+						0,
+						scope_count);
+			}
 			break;
 		case 16:
 			//printf("CONSTRUCTOR_NODE %d\n", kind);
 			build_table(ast->constructor_exp.arguments);
+
+
 			break;
 		case 17:
 			//printf("TYPE_NODE %d\n", kind);

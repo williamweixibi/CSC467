@@ -7,6 +7,7 @@ int semantic_check( node *ast) {
 		return -1;
 
 	int kind;
+	int type;
 	int right_exp, left_exp;
 	char * name;
 
@@ -92,7 +93,7 @@ int semantic_check( node *ast) {
 			break;
 		case 13:
 			//printf("VAR_NODE %d\n", kind);
-			//printf("Identifier: %s\n", ast->variable_exp.identifier);
+			printf("Identifier: %s\n", ast->variable_exp.identifier);
 
 			return  getType(ast->variable_exp.identifier);
 			break;
@@ -101,8 +102,27 @@ int semantic_check( node *ast) {
 			break;
 		case 15:
 			//printf("FUNCTION_NODE %d\n", kind);
-			semantic_check(ast->function_exp.arguments);
+			type = semantic_check(ast->function_exp.arguments);
 			//TODO: get type from function name
+
+			if(ast->function_exp.function_name == 2){ //rsq
+				return FLOAT;
+
+			}else if(ast->function_exp.function_name == 0){ //dp3
+				if(type==VEC4 || type == VEC3){
+					return FLOAT;
+				}
+				if(type==IVEC4 || type == IVEC3){
+					return INT;
+				}
+
+			}else if (ast->function_exp.function_name == 1){ //lit
+				return VEC4;
+			}
+
+			printf("ERROR FUNCTION_NODE\n");
+			return -1;
+
 			break;
 		case 16:
 			//printf("CONSTRUCTOR_NODE %d\n", kind);
@@ -134,9 +154,10 @@ int semantic_check( node *ast) {
 			// set type of symbol in local var
 			name = ast->assignment.left->variable_exp.identifier;
 
-
 			left_exp = getType(name);
 			right_exp = semantic_check(ast->assignment.right);
+
+			printf("%d %d\n", left_exp,right_exp);
 
 			if(left_exp==right_exp){
 				return left_exp;
@@ -182,15 +203,23 @@ int semantic_check( node *ast) {
 			break;
 		case 26:
 			//printf("ARGUMENTS_COMMA_NODE %d\n", kind);
-			semantic_check(ast->arguments_comma.arguments);
-			semantic_check(ast->arguments_comma.expression);
+			right_exp = semantic_check(ast->arguments_comma.arguments);
+			left_exp = semantic_check(ast->arguments_comma.expression);
+
+			if(right_exp==left_exp){
+				return right_exp;
+			}else{
+				printf("ERROR ARGUMENTS_COMMA_NODE");
+				return -1;
+			}
 			break;
 		case 27:
 			//printf("ARGUMENTS_EXPRESSION_NODE %d\n", kind);
-			semantic_check(ast->arguments_expression.expression);
+			return semantic_check(ast->arguments_expression.expression);
 			break;
 		default:
 			//printf("DEFAULT!!\n");
+			return -1;
 			break;
 
 	}
