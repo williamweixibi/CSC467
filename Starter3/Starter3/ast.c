@@ -161,7 +161,6 @@ void ast_print(node * ast) {
 			printf("Incrementing scope\n");
 			printf("ENTER_SCOPE_NODE %d\n", kind);
 			ast_print(ast->enter_scope.scope);
-			insert_at_begning(5);
 			printf("decrementing scope\n");
 			break;
 		case 2:
