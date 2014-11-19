@@ -90,9 +90,11 @@ int main (int argc, char *argv[]) {
   }
 
   build_table(ast);
-  display();
+  //display();
 
-  semantic_check(ast);
+  if(semantic_check(ast)==-1){
+	  //printf("ERROR\n");
+  }
 
 /* Phase 3: Call the AST dumping routine if requested */
   if (dumpAST)

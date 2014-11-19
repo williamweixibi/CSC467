@@ -6,12 +6,15 @@
 #include "symbol.h"
 #include "linked_list.h"
 
+int assingmentType;
+
 void build_table(node * ast) {
 
 	if(ast==NULL)
 		return;
 
 	int kind;
+	char * name;
 
 	kind = ast->kind;
 
@@ -110,6 +113,9 @@ void build_table(node * ast) {
 		case 21:
 			//printf("ASSIGNMENT_NODE %d\n", kind);
 			build_table(ast->assignment.left);
+			// set type of symbol in local var
+			name = ast->assignment.left->variable_exp.identifier;
+
 			build_table(ast->assignment.right);
 			break;
 		case 22:

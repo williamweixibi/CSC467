@@ -1,13 +1,7 @@
 {
-	float b = 3;
-	{
+	float b = 3.3;
 	int a = 3;
-		{
-			int c = 4;
-		}
-	}
+	
+	int c;
 
-	{
-		int x = 5;
-	}
 }

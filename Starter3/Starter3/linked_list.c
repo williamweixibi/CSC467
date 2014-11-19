@@ -85,6 +85,27 @@ void insert_at_middle(int value, int loc)
      }
 }
 
+int getType(char * name)
+{
+     struct listNode *temp,*listVar;
+     temp=listHead;
+     while(temp!=NULL)
+     {
+          if(strcmp(temp->name,name)==0)
+          {
+        	  return temp->type;
+          }
+          else
+          {
+               listVar=temp;
+               temp=temp->next;
+          }
+     }
+
+     return -1;
+
+}
+
 int delete_from_middle(int value)
 {
      struct listNode *temp,*listVar;
