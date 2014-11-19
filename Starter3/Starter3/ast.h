@@ -5,7 +5,7 @@
 #include <stdarg.h>
 
 #include "linked_list.h"
-
+extern unsigned int scope_count;
 
 // Dummy node just so everything compiles, create your own node/nodes
 //

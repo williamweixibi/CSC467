@@ -6,18 +6,13 @@
 #include <stdio.h>
 #include <string.h>
 
-typedef union value{
-	float f;
-	int i;
-}value_t;
 
 typedef struct listNode
 {
     int data;
     char *name;
-    int val;
-    int assigned;
     unsigned int scope;
+    int isConst;
     int type;
 
     struct listNode *next;
@@ -25,7 +20,7 @@ typedef struct listNode
 
 
 void insert_at_begning(int value);
-void insert(char *, int, unsigned int, int, int);
+void insert(char *, int, int, unsigned int);
 void insert_at_end(int value);
 void insert_at_middle(int value, int loc);
 int delete_from_middle(int value);

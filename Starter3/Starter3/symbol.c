@@ -2,141 +2,164 @@
 #include <stdlib.h>
 #include <stdio.h>
 
+#include "ast.h"
 #include "symbol.h"
 #include "linked_list.h"
 
+void build_table(node * ast) {
 
+	if(ast==NULL)
+		return;
 
-/*
-void insert_at_begning(int value)
-{
-     listVar=(struct listNode *)malloc(sizeof (struct listNode));
-     listVar->data=value;
-     if(listHead==NULL)
-     {
-         listHead=listVar;
-         listHead->next=NULL;
-     }
-     else
-     {
-         listVar->next=listHead;
-         listHead=listVar;
-     }
+	int kind;
+
+	kind = ast->kind;
+
+	switch(kind){
+		case 1:
+			scope_count++;
+			//printf("ENTER_SCOPE_NODE %d\n", kind);
+			build_table(ast->enter_scope.scope);
+			scope_count--;
+			break;
+		case 2:
+
+			//printf("SCOPE_NODE %d\n", kind);
+			build_table(ast->scope.declarations);
+			build_table(ast->scope.statements);
+
+			break;
+		case 3:
+			//printf("DECLARATIONS_NODE %d\n", kind);
+			build_table(ast->declarations.declarations);
+			build_table(ast->declarations.declaration);
+			break;
+		case 4:
+			//printf("STATEMENTS_NODE %d\n", kind);
+			build_table(ast->statements.statements);
+			build_table(ast->statements.statement);
+			break;
+		case 5:
+			//printf("EXPRESSION_NODE No node %d\n", kind);
+			// No EXPRESSION_NODE
+			break;
+		case 6:
+			//printf("PREN_EXPRESSION_NODE %d\n", kind);
+			build_table(ast->paren_exp.expression);
+			break;
+		case 7:
+			//printf("UNARY_EXPRESION_NODE %d\n", kind);
+			//printf("Operator: %d\n", ast->unary_expr.op);
+			build_table(ast->unary_expr.right);
+			break;
+		case 8:
+			//printf("BINARY_EXPRESSION_NODE %d\n", kind);
+			//printf("Operator: %d\n", ast->binary_expr.op);
+			build_table(ast->binary_expr.left);
+			build_table(ast->binary_expr.right);
+			break;
+		case 9:
+			//printf("INT_NODE %d\n", kind);
+			//printf("Integer: %d\n",ast->int_literal.right);
+			break;
+		case 10:
+			//printf("FLOAT_NODE %d\n", kind);
+			//printf("Float: %f", ast->float_literal.right);
+			break;
+		case 11:
+			//printf("BOOL_NODE %d\n", kind);
+			//printf("Bool: %d", ast->bool_literal.right);
+			break;
+		case 12:
+			//printf("IDENT_NODE No node %d\n", kind);
+			// No IDENT_NODE
+			break;
+		case 13:
+			//printf("VAR_NODE %d\n", kind);
+			//printf("Identifier: %s\n", ast->variable_exp.identifier);
+			break;
+		case 14:
+			//printf("ARRAY_NODE %d\n", kind);
+			break;
+		case 15:
+			//printf("FUNCTION_NODE %d\n", kind);
+			build_table(ast->function_exp.arguments);
+			break;
+		case 16:
+			//printf("CONSTRUCTOR_NODE %d\n", kind);
+			build_table(ast->constructor_exp.arguments);
+			break;
+		case 17:
+			//printf("TYPE_NODE %d\n", kind);
+			break;
+		case 18:
+			//printf("IF_ELSE_STATEMENT_NODE %d\n", kind);
+			build_table(ast->if_else_statement.condition);
+			build_table(ast->if_else_statement.else_statement);
+			build_table(ast->if_else_statement.then_statement);
+			break;
+		case 19:
+			//printf("IF_STATEMENT_NODE %d\n", kind);
+			build_table(ast->if_statement.condition);
+			build_table(ast->if_statement.then_statement);
+			break;
+		case 20:
+			//printf("WHILE_STATEMENT_NODE No node %d\n", kind);
+			//No WHILE_STATEMENT_NODE
+			break;
+		case 21:
+			//printf("ASSIGNMENT_NODE %d\n", kind);
+			build_table(ast->assignment.left);
+			build_table(ast->assignment.right);
+			break;
+		case 22:
+			//printf("NESTED_SCOPE_NODE No node for %d\n", kind);
+			// No NESTED_SCOPE_NODE
+			break;
+		case 23:
+			//printf("DECLARATION_NODE %d\n", kind);
+			build_table(ast->declaration.type);
+
+			insert(ast->declaration.iden,
+					ast->declaration.type->type.type_name,
+					0,
+					scope_count);
+
+			break;
+		case 24:
+			//printf("DECLARATION_ASSIGNMENT_NODE %d\n", kind);
+			build_table(ast->declaration_assignment.type);
+			build_table(ast->declaration_assignment.value);
+
+			insert(ast->declaration_assignment.iden,
+					ast->declaration_assignment.type->type.type_name,
+					0,
+					scope_count);
+
+			break;
+		case 25:
+			//printf("CONST_DECLARATION_ASSIGNMENT_NODE %d\n", kind);
+			build_table(ast->const_declaration_assignment.type);
+			build_table(ast->const_declaration_assignment.value);
+
+			insert(ast->const_declaration_assignment.iden,
+					ast->const_declaration_assignment.type->type.type_name,
+					1,
+					scope_count);
+			break;
+		case 26:
+			//printf("ARGUMENTS_COMMA_NODE %d\n", kind);
+			build_table(ast->arguments_comma.arguments);
+			build_table(ast->arguments_comma.expression);
+			break;
+		case 27:
+			//printf("ARGUMENTS_EXPRESSION_NODE %d\n", kind);
+			build_table(ast->arguments_expression.expression);
+			break;
+		default:
+			//printf("DEFAULT!!\n");
+			break;
+
+	}
+
 }
-
-void insert_at_end(int value)
-{
-      struct listNode *temp;
-      temp=listHead;
-      listVar=(struct listNode *)malloc(sizeof (struct listNode));
-      listVar->data=value;
-      if(listHead==NULL)
-      {
-          listHead=listVar;
-          listHead->next=NULL;
-      }
-      else
-      {
-          while(temp->next!=NULL)
-          {
-               temp=temp->next;
-          }
-          listVar->next=NULL;
-          temp->next=listVar;
-      }
-}
-
-void insert_at_middle(int value, int loc)
-{
-     struct listNode *listVar2,*temp;
-     listVar=(struct listNode *)malloc(sizeof (struct listNode));
-     listVar->data=value;
-     temp=listHead;
-
-     if(listHead==NULL)
-     {
-          listHead=listVar;
-          listHead->next=NULL;
-     }
-     else
-     {
-          while(temp->data!=loc)
-          {
-                temp=temp->next;
-          }
-          listVar2=temp->next;
-          temp->next=listVar;
-          listVar->next=listVar2;
-     }
-}
-
-int delete_from_middle(int value)
-{
-     struct listNode *temp,*listVar;
-     temp=listHead;
-     while(temp!=NULL)
-     {
-          if(temp->data == value)
-          {
-                if(temp==listHead)
-                {
-                     listHead=temp->next;
-                     free(temp);
-                     return 0;
-                }
-                else
-                {
-                     listVar->next=temp->next;
-                     free(temp);
-                     return 0;
-                }
-          }
-          else
-          {
-               listVar=temp;
-               temp=temp->next;
-          }
-     }
-printf("data deleted from list is %d",value);
-}
-
-int delete_from_end()
-{
-     struct listNode *temp;
-     temp=listHead;
-     while(temp->next != NULL)
-     {
-          listVar=temp;
-          temp=temp->next;
-     }
-     if(temp ==listHead)
-     {
-          listHead=temp->next;
-          free(temp);
-          return 0;
-     }
-     printf("data deleted from list is %d",temp->data);
-     listVar->next=NULL;
-     free(temp);
-     return 0;
-}
-
-void display()
-{
-     listTrav=listHead;
-     if(listTrav==NULL)
-     {
-          printf("\nList is Empty");
-     }
-     else
-     {
-          printf("\nElements in the List: ");
-          while(listTrav!=NULL)
-          {
-               printf(" -> %d ",listTrav->data);
-               listTrav=listTrav->next;
-          }
-      printf("\n");
-      }
-}
-*/

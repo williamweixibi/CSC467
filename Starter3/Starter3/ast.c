@@ -10,7 +10,7 @@
 
 #define DEBUG_PRINT_TREE 0
 
-static int scope_count = 0;
+unsigned int scope_count = 0;
 
 node *ast = NULL;
 
@@ -36,9 +36,11 @@ node *ast_allocate(node_kind kind, ...) {
 		break;
 
 	case ENTER_SCOPE_NODE:
+
 		scope_count++;
 		ast->enter_scope.scope = va_arg(args,node *);
 		scope_count--;
+
 		break;
 
 	case DECLARATIONS_NODE:
@@ -94,21 +96,23 @@ node *ast_allocate(node_kind kind, ...) {
 	case DECLARATION_NODE:
 		ast->declaration.type=va_arg(args,node *);
 		ast->declaration.iden=va_arg(args,char *);
-		/*if(ast->declaration.type==INT){
-			insert(ast->declaration.iden,val, scope_count, INT, 0);
-		}*/
+
+		/*insert(ast->declaration_assignment.iden,
+				ast->declaration_assignment.type->type.type_name,
+				0,
+				scope_count);*/
 		break;
 
 	case DECLARATION_ASSIGNMENT_NODE:
-
 
 		ast->declaration_assignment.type=va_arg(args,node *);
 		ast->declaration_assignment.iden=va_arg(args,char *);
 		ast->declaration_assignment.value=va_arg(args,node *);
 
-		if(ast->declaration_assignment.value->kind == INT_NODE){
-			printf("evaluated: %d\n", ast->declaration_assignment.value->int_literal.right);
-		}
+		/*insert(ast->declaration_assignment.iden,
+				ast->declaration_assignment.type->type.type_name,
+				0,
+				scope_count);*/
 
 		break;
 
@@ -116,6 +120,12 @@ node *ast_allocate(node_kind kind, ...) {
 		ast->const_declaration_assignment.type=va_arg(args,node *);
 		ast->const_declaration_assignment.iden=va_arg(args,char *);
 		ast->const_declaration_assignment.value=va_arg(args,node *);
+
+		/*insert(ast->declaration_assignment.iden,
+				ast->declaration_assignment.type->type.type_name,
+				1,
+				scope_count);*/
+
 		break;
 
 	case TYPE_NODE:
@@ -175,10 +185,10 @@ void ast_print(node * ast) {
 
 	switch(kind){
 		case 1:
-			printf("Incrementing scope\n");
+
 			printf("ENTER_SCOPE_NODE %d\n", kind);
 			ast_print(ast->enter_scope.scope);
-			printf("decrementing scope\n");
+
 			break;
 		case 2:
 

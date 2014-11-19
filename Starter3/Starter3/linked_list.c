@@ -2,15 +2,14 @@
 
 listNode_t *listHead ,*listVar,*listTrav;
 
-void insert(char * name, int val, unsigned int scope, int type, int assign)
+void insert(char * name, int type, int isConst, unsigned int scope)
 {
      listVar=(struct listNode *)malloc(sizeof (struct listNode));
-     strcpy(listVar->name, name);
+     listVar->name = (char *)malloc(sizeof(char)*(strlen(name)+1));
+     strcpy(listVar->name,name);
  	 listVar->type = type;
  	 listVar->scope = scope;
-     if(assign==1){
-    	 listVar->val = val;
-     }
+ 	 listVar->isConst = isConst;
 
      if(listHead==NULL)
      {
@@ -149,7 +148,7 @@ void display()
           printf("\nElements in the List: ");
           while(listTrav!=NULL)
           {
-               printf(" -> %d ",listTrav->data);
+               printf(" -> %s, %d, %d ",listTrav->name, listTrav->type, listTrav->scope);
                listTrav=listTrav->next;
           }
       printf("\n");
