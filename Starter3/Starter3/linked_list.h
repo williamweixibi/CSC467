@@ -16,6 +16,7 @@ typedef struct listNode
     int data;
     char *name;
     value_t val;
+    int assigned;
     unsigned int scope;
     int type;
 
@@ -24,7 +25,7 @@ typedef struct listNode
 
 
 void insert_at_begning(int value);
-void insert(char *, value_t, unsigned int, int);
+void insert(char *, value_t, unsigned int, int, int);
 void insert_at_end(int value);
 void insert_at_middle(int value, int loc);
 int delete_from_middle(int value);
