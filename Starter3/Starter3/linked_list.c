@@ -1,62 +1,56 @@
-#include<stdio.h>
-//#include<conio.h>
-#include<stdlib.h>
+#include "linked_list.h"
 
-struct node
-{
-    int data;
-    struct node *next;
-}*head,*var,*trav;
+listNode_t *listHead ,*listVar,*listTrav;
 
 void insert_at_begning(int value)
 {
-     var=(struct node *)malloc(sizeof (struct node));
-     var->data=value;
-     if(head==NULL)
+     listVar=(struct listNode *)malloc(sizeof (struct listNode));
+     listVar->data=value;
+     if(listHead==NULL)
      {
-         head=var;
-         head->next=NULL;
+         listHead=listVar;
+         listHead->next=NULL;
      }
      else
      {
-         var->next=head;
-         head=var;
+         listVar->next=listHead;
+         listHead=listVar;
      }
 }
 
 void insert_at_end(int value)
 {
-      struct node *temp; 
-      temp=head;
-      var=(struct node *)malloc(sizeof (struct node));
-      var->data=value;
-      if(head==NULL)
+      struct listNode *temp;
+      temp=listHead;
+      listVar=(struct listNode *)malloc(sizeof (struct listNode));
+      listVar->data=value;
+      if(listHead==NULL)
       {
-          head=var;
-          head->next=NULL;
+          listHead=listVar;
+          listHead->next=NULL;
       }
       else
       {
           while(temp->next!=NULL)
-          {     
+          {
                temp=temp->next;
           }
-          var->next=NULL;
-          temp->next=var;
+          listVar->next=NULL;
+          temp->next=listVar;
       }
 }
 
 void insert_at_middle(int value, int loc)
 {
-     struct node *var2,*temp;
-     var=(struct node *)malloc(sizeof (struct node));
-     var->data=value;
-     temp=head;
+     struct listNode *listVar2,*temp;
+     listVar=(struct listNode *)malloc(sizeof (struct listNode));
+     listVar->data=value;
+     temp=listHead;
 
-     if(head==NULL)
+     if(listHead==NULL)
      {
-          head=var;
-          head->next=NULL;
+          listHead=listVar;
+          listHead->next=NULL;
      }
      else
      {
@@ -64,36 +58,36 @@ void insert_at_middle(int value, int loc)
           {
                 temp=temp->next;
           }
-          var2=temp->next;
-          temp->next=var;
-          var->next=var2;
+          listVar2=temp->next;
+          temp->next=listVar;
+          listVar->next=listVar2;
      }
 }
 
 int delete_from_middle(int value)
 {
-     struct node *temp,*var;
-     temp=head;
+     struct listNode *temp,*listVar;
+     temp=listHead;
      while(temp!=NULL)
      {
           if(temp->data == value)
           {
-                if(temp==head)
+                if(temp==listHead)
                 {
-                     head=temp->next;
+                     listHead=temp->next;
                      free(temp);
                      return 0;
                 }
                 else
                 {
-                     var->next=temp->next;
+                     listVar->next=temp->next;
                      free(temp);
                      return 0;
                 }
           }
           else
           {
-               var=temp;
+               listVar=temp;
                temp=temp->next;
           }
      }
@@ -102,40 +96,41 @@ printf("data deleted from list is %d",value);
 
 int delete_from_end()
 {
-     struct node *temp;
-     temp=head;
+     struct listNode *temp;
+     temp=listHead;
      while(temp->next != NULL)
      {
-          var=temp;
+          listVar=temp;
           temp=temp->next;
      }
-     if(temp ==head)
+     if(temp ==listHead)
      {
-          head=temp->next; 
+          listHead=temp->next;
           free(temp);
           return 0;
      }
      printf("data deleted from list is %d",temp->data);
-     var->next=NULL;
+     listVar->next=NULL;
      free(temp);
      return 0;
 }
 
 void display()
 {
-     trav=head;
-     if(trav==NULL)
+     listTrav=listHead;
+     if(listTrav==NULL)
      {
           printf("\nList is Empty");
      }
      else
      {
           printf("\nElements in the List: ");
-          while(trav!=NULL)
+          while(listTrav!=NULL)
           {
-               printf(" -> %d ",trav->data);
-               trav=trav->next;
+               printf(" -> %d ",listTrav->data);
+               listTrav=listTrav->next;
           }
       printf("\n");
       }
 }
+

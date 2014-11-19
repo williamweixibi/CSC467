@@ -146,7 +146,8 @@ declarations
       { $$ = ast_allocate(DECLARATIONS_NODE,$1,$2);
       	yTRACE("declarations -> declarations declaration\n") }
   | 
-      { yTRACE("declarations -> \n") }
+      { $$=NULL;
+      	yTRACE("declarations -> \n") }
   ;
 
 statements
@@ -154,7 +155,8 @@ statements
       { $$ = ast_allocate(STATEMENTS_NODE,$1,$2);
       	yTRACE("statements -> statements statement\n") }
   | 
-      { yTRACE("statements -> \n") }
+      {  $$=NULL;
+      	yTRACE("statements -> \n") }
   ;
 
 declaration
@@ -189,7 +191,8 @@ statement
       	yTRACE("statement -> scope \n") }
       
   | ';'
-      { yTRACE("statement -> ; \n") }
+      {  $$=NULL;
+      	yTRACE("statement -> ; \n") }
   ;
 
 type
@@ -319,7 +322,8 @@ arguments_opt
       { $$ = ast_allocate(ARGUMENTS_EXPRESSION_NODE, $1);
         yTRACE("arguments_opt -> arguments \n") }
   |
-      { yTRACE("arguments_opt -> \n") }
+      {  $$=NULL;
+      	yTRACE("arguments_opt -> \n") }
   ;
 
 %%

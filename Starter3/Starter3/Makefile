@@ -31,6 +31,7 @@ LEXFLAGS=-l
 YACC    =bison
 YFLAGS  =-dtvy
 
+RM      = rm -f
 ###########################################################################
 #	Some define files that make up the compiler source.
 #	Add more object files here for the subsequent modules of 
@@ -39,7 +40,7 @@ YFLAGS  =-dtvy
 #LEXER_OBJ =handlex.o
 LEXER_OBJ =scanner.o
 PARSER_OBJ=parser.o
-AST_OBJ   =ast.o semantic.o symbol.o
+AST_OBJ   =linked_list.o ast.o semantic.o symbol.o
 #CODE_OBJ  =codegen.o  
 OBJs      =compiler467.o globalvars.o $(LEXER_OBJ) \
            $(PARSER_OBJ) $(AST_OBJ)   

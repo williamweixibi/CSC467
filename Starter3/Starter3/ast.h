@@ -4,6 +4,9 @@
 
 #include <stdarg.h>
 
+#include "linked_list.h"
+
+
 // Dummy node just so everything compiles, create your own node/nodes
 //
 // The code provided below is an example ONLY. You can use/modify it,
@@ -31,7 +34,7 @@ typedef enum{
 	VEC2,
 	VEC3,
 	VEC4
-} types;
+}types;
 
 typedef enum{
 	MINUS,

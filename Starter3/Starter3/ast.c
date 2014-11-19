@@ -7,6 +7,7 @@
 #include "common.h"
 #include "parser.tab.h"
 
+
 #define DEBUG_PRINT_TREE 0
 
 node *ast = NULL;
@@ -157,13 +158,18 @@ void ast_print(node * ast) {
 
 	switch(kind){
 		case 1:
+			printf("Incrementing scope\n");
 			printf("ENTER_SCOPE_NODE %d\n", kind);
 			ast_print(ast->enter_scope.scope);
+			insert_at_begning(5);
+			printf("decrementing scope\n");
 			break;
 		case 2:
+
 			printf("SCOPE_NODE %d\n", kind);
 			ast_print(ast->scope.declarations);
 			ast_print(ast->scope.statements);
+
 			break;
 		case 3:
 			printf("DECLARATIONS_NODE %d\n", kind);
