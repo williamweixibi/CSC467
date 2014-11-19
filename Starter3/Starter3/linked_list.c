@@ -2,10 +2,14 @@
 
 listNode_t *listHead ,*listVar,*listTrav;
 
-void insert(char * name, value_t val, unsigned int scope, int type)
+void insert(char * name, value_t val, unsigned int scope, int type, int assign)
 {
      listVar=(struct listNode *)malloc(sizeof (struct listNode));
      strcpy(listVar->name, name);
+     listVar->val = val;
+     listVar->scope = scope;
+     listVar->type = type;
+
      if(listHead==NULL)
      {
          listHead=listVar;
