@@ -9,7 +9,6 @@
 typedef union value{
 	float f;
 	int i;
-	char s[1024];
 }value_t;
 
 typedef struct listNode
