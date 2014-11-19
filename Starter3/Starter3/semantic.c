@@ -10,7 +10,7 @@ int semantic_check( node *ast) {
 	int type;
 	int right_exp, left_exp;
 	char * name;
-
+	int index;
 	kind = ast->kind;
 
 	switch(kind){
@@ -255,6 +255,70 @@ int semantic_check( node *ast) {
 			break;
 		case 14:
 			//printf("ARRAY_NODE %d\n", kind);
+			name = ast->array_exp.identifier;
+			type = getType(name);
+
+			index = ast->array_exp.index;
+			switch(type){
+			case IVEC2:
+				if(index>=2){
+					printf("ERROR index too high\n");
+					return -1;
+				}
+				break;
+			case IVEC3:
+				if(index>=3){
+					printf("ERROR index too high\n");
+					return -1;
+				}
+				break;
+			case IVEC4:
+				if(index>=4){
+					printf("ERROR index too high\n");
+					return -1;
+				}
+				break;
+			case BVEC2:
+				if(index>=2){
+					printf("ERROR index too high\n");
+					return -1;
+				}
+				break;
+			case BVEC3:
+				if(index>=3){
+					printf("ERROR index too high\n");
+					return -1;
+				}
+				break;
+			case BVEC4:
+				if(index>=4){
+					printf("ERROR index too high\n");
+					return -1;
+				}
+				break;
+			case VEC2:
+				if(index>=2){
+					printf("ERROR index too high\n");
+					return -1;
+				}
+				break;
+			case VEC3:
+				if(index>=3){
+					printf("ERROR index too high\n");
+					return -1;
+				}
+				break;
+			case VEC4:
+				if(index>=4){
+					printf("ERROR index too high\n");
+					return -1;
+				}
+				break;
+			default:
+				printf("ERROR not vec type, only vec types may be indexed\n");
+				return -1;
+			}
+
 			break;
 		case 15:
 			//printf("FUNCTION_NODE %d\n", kind);
@@ -323,8 +387,29 @@ int semantic_check( node *ast) {
 
 			if(left_exp==right_exp){
 				return left_exp;
-			}else{
-				printf("ERROR ASSIGNMENT_NODE\n");
+			}
+
+			if(left_exp==IVEC2 || left_exp==IVEC3 || left_exp==IVEC4){
+				if(right_exp==INT){
+					return INT;
+				}
+			}
+
+			if(left_exp==BVEC2 || left_exp==BVEC3 || left_exp==BVEC4){
+				if(right_exp==BOOL){
+					return BOOL;
+				}
+			}
+
+			if(left_exp==VEC2 || left_exp==VEC3 || left_exp==VEC4){
+				if(right_exp==FLOAT){
+					return FLOAT;
+				}
+			}
+
+
+			if(left_exp!=right_exp){
+				printf("ERROR ASSIGNMENT_NODE %d %d\n",left_exp,right_exp);
 				return -1;
 			}
 
