@@ -6,9 +6,11 @@ void insert(char * name, value_t val, unsigned int scope, int type, int assign)
 {
      listVar=(struct listNode *)malloc(sizeof (struct listNode));
      strcpy(listVar->name, name);
-     listVar->val = val;
-     listVar->scope = scope;
-     listVar->type = type;
+ 	 listVar->type = type;
+ 	 listVar->scope = scope;
+     if(assign==1){
+    	 listVar->val = val;
+     }
 
      if(listHead==NULL)
      {
