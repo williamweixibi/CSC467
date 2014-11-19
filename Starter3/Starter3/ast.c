@@ -10,6 +10,8 @@
 
 #define DEBUG_PRINT_TREE 0
 
+static int scope_count = 0;
+
 node *ast = NULL;
 
 node *ast_allocate(node_kind kind, ...) {
@@ -31,7 +33,9 @@ node *ast_allocate(node_kind kind, ...) {
 		break;
 
 	case ENTER_SCOPE_NODE:
+		scope_count++;
 		ast->enter_scope.scope = va_arg(args,node *);
+		scope_count--;
 		break;
 
 	case DECLARATIONS_NODE:
@@ -87,6 +91,7 @@ node *ast_allocate(node_kind kind, ...) {
 	case DECLARATION_NODE:
 		ast->declaration.type=va_arg(args,node *);
 		ast->declaration.iden=va_arg(args,char *);
+		insert(ast->declaration.iden);
 		break;
 
 	case DECLARATION_ASSIGNMENT_NODE:
