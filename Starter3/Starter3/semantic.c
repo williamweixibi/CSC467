@@ -1,6 +1,8 @@
 
 #include "semantic.h"
 
+int scopeCount=0;
+
 int semantic_check( node *ast) {
 
 	if(ast==NULL)
@@ -12,12 +14,14 @@ int semantic_check( node *ast) {
 	char * name;
 	int index;
 	kind = ast->kind;
+	int isDecl=0;
 
 	switch(kind){
 		case 1:
+			scopeCount++;
 			//printf("ENTER_SCOPE_NODE %d\n", kind);
 			semantic_check(ast->enter_scope.scope);
-
+			scopeCount--;
 			break;
 		case 2:
 			//printf("SCOPE_NODE %d\n", kind);
@@ -249,9 +253,15 @@ int semantic_check( node *ast) {
 			// No IDENT_NODE
 			break;
 		case 13:
+			int type;
+			type = checkDeclaredInScope(ast->variable_exp.identifier,scopeCount);
 			//printf("VAR_NODE %d\n", kind);
-
-			return  getType(ast->variable_exp.identifier);
+			if(type==-1){
+				printf("ERROR: Variable not declared in scope before it is used\n");
+				return -1;
+			}else{
+				return type;
+			}
 			break;
 		case 14:
 			//printf("ARRAY_NODE %d\n", kind);
@@ -409,7 +419,7 @@ int semantic_check( node *ast) {
 
 
 			if(left_exp!=right_exp){
-				printf("ERROR ASSIGNMENT_NODE %d %d\n",left_exp,right_exp);
+				printf("ERROR ASSIGNMENT_NODE must be of same type %d %d\n",left_exp,right_exp);
 				return -1;
 			}
 
@@ -420,7 +430,15 @@ int semantic_check( node *ast) {
 			break;
 		case 23:
 			//printf("DECLARATION_NODE %d\n", kind);
-			return semantic_check(ast->declaration.type);
+			//printf("checking for %s in scope %d \n", ast->declaration.iden, scopeCount);
+			/*isDecl=checkExists(ast->declaration.iden,scopeCount);
+			printf("isDecl %d \n", isDecl);
+			if(isDecl!=-1){
+				printf("Error: Variable cannot be redeclared\n");
+				return -1;
+			}else{*/
+				return semantic_check(ast->declaration.type);
+			//}
 			break;
 		case 24:
 			//printf("DECLARATION_ASSIGNMENT_NODE %d\n", kind);
@@ -430,7 +448,7 @@ int semantic_check( node *ast) {
 			if(left_exp==right_exp){
 				return left_exp;
 			}else{
-				printf("ERROR DECLARATION_ASSIGNMENT_NODE\n");
+				printf("ERROR DECLARATION_ASSIGNMENT_NODE must of be same type\n");
 				return -1;
 			}
 
@@ -456,7 +474,27 @@ int semantic_check( node *ast) {
 
 			if(left_exp==right_exp){
 				return left_exp;
-			}else{
+			}
+
+			if(left_exp==IVEC2 || left_exp==IVEC3 || left_exp==IVEC4){
+				if(right_exp==INT){
+					return INT;
+				}
+			}
+
+			if(left_exp==BVEC2 || left_exp==BVEC3 || left_exp==BVEC4){
+				if(right_exp==BOOL){
+					return BOOL;
+				}
+			}
+
+			if(left_exp==VEC2 || left_exp==VEC3 || left_exp==VEC4){
+				if(right_exp==FLOAT){
+					return FLOAT;
+				}
+			}
+
+			if(left_exp!=right_exp){
 				printf("ERROR types must match for assignement\n");
 				return -1;
 			}
