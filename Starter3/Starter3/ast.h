@@ -59,7 +59,7 @@ typedef enum{
 } binary_ops;
 
 typedef enum {
-/*0*/  UNKNOWN               ,
+/*0*/  UNKNOWN          ,
   ENTER_SCOPE_NODE		,
   SCOPE_NODE            ,
   DECLARATIONS_NODE		,

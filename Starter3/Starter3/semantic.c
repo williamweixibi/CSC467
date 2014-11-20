@@ -440,10 +440,24 @@ int semantic_check( node *ast) {
 			left_exp = semantic_check(ast->const_declaration_assignment.type);
 			right_exp = semantic_check(ast->const_declaration_assignment.value);
 
+			if(ast->const_declaration_assignment.value->kind == VAR_NODE){
+				type = getConst(ast->const_declaration_assignment.value->variable_exp.identifier);
+			}
+
+			if(ast->const_declaration_assignment.value->kind == INT_NODE ||
+					ast->const_declaration_assignment.value->kind == BOOL_NODE ||
+					ast->const_declaration_assignment.value->kind == FLOAT_NODE ||
+					type == 1) {
+				;
+			}else{
+				printf("ERROR const var must be initialized with a literal value or uniform variable\n");
+				return -1;
+			}
+
 			if(left_exp==right_exp){
 				return left_exp;
 			}else{
-				printf("ERROR CONST_DECLARATION_ASSIGNMENT_NODE\n");
+				printf("ERROR types must match for assignement\n");
 				return -1;
 			}
 

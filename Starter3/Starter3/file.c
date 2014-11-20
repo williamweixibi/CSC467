@@ -1,8 +1,6 @@
 {
-	ivec2 a;
-	ivec2 b;
+	const int a = true;
+	int c = 6;
+	const int b = c;
 	
-	b = 2;
-
-	a[1] = b;
 }

@@ -106,6 +106,27 @@ int getType(char * name)
 
 }
 
+int getConst(char * name)
+{
+     struct listNode *temp,*listVar;
+     temp=listHead;
+     while(temp!=NULL)
+     {
+          if(strcmp(temp->name,name)==0)
+          {
+        	  return temp->isConst;
+          }
+          else
+          {
+               listVar=temp;
+               temp=temp->next;
+          }
+     }
+
+     return -1;
+
+}
+
 int delete_from_middle(int value)
 {
      struct listNode *temp,*listVar;
