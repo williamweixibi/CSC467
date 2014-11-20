@@ -107,8 +107,8 @@ void build_table(node * ast) {
 			break;
 		case 16:
 			//printf("CONSTRUCTOR_NODE %d\n", kind);
+			build_table(ast->constructor_exp.type);
 			build_table(ast->constructor_exp.arguments);
-
 
 			break;
 		case 17:

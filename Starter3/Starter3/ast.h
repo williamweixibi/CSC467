@@ -148,7 +148,7 @@ struct node_ {
     }if_else_statement;
 
     struct {
-    	int type; // types enum
+    	node * type; // types enum
     	node *arguments;
     }constructor_exp;
 

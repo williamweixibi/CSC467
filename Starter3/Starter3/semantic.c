@@ -1,6 +1,65 @@
 
 #include "semantic.h"
 
+int checkDepth( node *ast) {
+
+	if(ast==NULL)
+		return 0;
+
+	int kind, depth = 0;
+	kind = ast->kind;
+
+	switch(kind){
+	case EXPRESSION_NODE:
+		return 1;
+		break;
+	case PREN_EXPRESSION_NODE:
+		return 1;
+		break;
+	case UNARY_EXPRESION_NODE:
+		return 1;
+		break;
+	case BINARY_EXPRESSION_NODE:
+		return 1;
+		break;
+	case INT_NODE:
+		return 1;
+		break;
+	case FLOAT_NODE:
+		return 1;
+		break;
+	case BOOL_NODE:
+		return 1;
+		break;
+	case IDENT_NODE:
+		return 1;
+		break;
+	case VAR_NODE:
+		return 1;
+		break;
+	case ARRAY_NODE:
+		return 1;
+		break;
+	case FUNCTION_NODE:
+		return 1;
+		break;
+	case CONSTRUCTOR_NODE:
+		return 1;
+		break;
+	case ARGUMENTS_COMMA_NODE:
+		return 1 + checkDepth(ast->arguments_comma.arguments);
+		break;
+	case ARGUMENTS_EXPRESSION_NODE:
+		return checkDepth(ast->arguments_expression.expression);
+		break;
+	default :
+		printf("check depth failed: %d\n", kind);
+		break;
+	}
+
+	return 0;
+}
+
 int semantic_check( node *ast) {
 
 	if(ast==NULL)
@@ -8,6 +67,7 @@ int semantic_check( node *ast) {
 
 	int kind;
 	int type;
+	int depth;
 	int right_exp, left_exp;
 	char * name;
 	int index;
@@ -346,8 +406,105 @@ int semantic_check( node *ast) {
 			break;
 		case 16:
 			//printf("CONSTRUCTOR_NODE %d\n", kind);
-			semantic_check(ast->constructor_exp.arguments);
-			//TODO: get type from function name
+			left_exp = semantic_check(ast->constructor_exp.type);
+			right_exp = semantic_check(ast->constructor_exp.arguments);
+
+			depth = checkDepth(ast->constructor_exp.arguments);
+
+
+			//TODO : TYPE CHECKING
+			switch(left_exp){
+			case IVEC2:
+				if(depth>2){
+					printf("ERROR too many arguments\n");
+					return -1;
+				}
+				break;
+			case IVEC3:
+				if(depth>3){
+					printf("ERROR too many arguments\n");
+					return -1;
+				}
+				break;
+			case IVEC4:
+				if(depth>4){
+					printf("ERROR too many arguments\n");
+					return -1;
+				}
+				break;
+			case BVEC2:
+				if(depth>2){
+					printf("ERROR too many arguments\n");
+					return -1;
+				}
+				break;
+			case BVEC3:
+				if(depth>3){
+					printf("ERROR too many arguments\n");
+					return -1;
+				}
+				break;
+			case BVEC4:
+				if(depth>4){
+					printf("ERROR too many arguments\n");
+					return -1;
+				}
+				break;
+			case VEC2:
+				if(depth>2){
+					printf("ERROR too many arguments\n");
+					return -1;
+				}
+				break;
+			case VEC3:
+				if(depth>3){
+					printf("ERROR too many arguments\n");
+					return -1;
+				}
+				break;
+			case VEC4:
+				if(depth>4){
+					printf("ERROR too many arguments\n");
+					return -1;
+				}
+			default:
+				if(depth>1){
+					printf("ERROR too many arguments\n");
+					return -1;
+				}
+
+				if(left_exp==right_exp){
+					return left_exp;
+				}
+
+				if(left_exp==IVEC2 || left_exp==IVEC3 || left_exp==IVEC4){
+					if(right_exp==INT){
+						return INT;
+					}
+				}
+
+				if(left_exp==BVEC2 || left_exp==BVEC3 || left_exp==BVEC4){
+					if(right_exp==BOOL){
+						return BOOL;
+					}
+				}
+
+				if(left_exp==VEC2 || left_exp==VEC3 || left_exp==VEC4){
+					if(right_exp==FLOAT){
+						return FLOAT;
+					}
+				}
+
+
+				if(left_exp!=right_exp){
+					printf("ERROR ASSIGNMENT_NODE %d %d\n",left_exp,right_exp);
+					return -1;
+				}
+				break;
+			}
+
+
+
 			break;
 		case 17:
 			//printf("TYPE_NODE %d\n", kind);

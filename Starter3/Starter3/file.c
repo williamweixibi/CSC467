@@ -1,6 +1,4 @@
 {
-	const int a = true;
-	int c = 6;
-	const int b = c;
-	
+	ivec4 a;
+	a = ivec4(4,5,2,3,34);	
 }
