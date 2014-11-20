@@ -422,98 +422,84 @@ int semantic_check( node *ast) {
 
 			depth = checkDepth(ast->constructor_exp.arguments);
 
-
-			//TODO : TYPE CHECKING
 			switch(left_exp){
 			case IVEC2:
 				if(depth>2){
 					printf("ERROR too many arguments\n");
-					return -1;
 				}
 				break;
 			case IVEC3:
 				if(depth>3){
 					printf("ERROR too many arguments\n");
-					return -1;
 				}
 				break;
 			case IVEC4:
 				if(depth>4){
 					printf("ERROR too many arguments\n");
-					return -1;
 				}
 				break;
 			case BVEC2:
 				if(depth>2){
 					printf("ERROR too many arguments\n");
-					return -1;
 				}
 				break;
 			case BVEC3:
 				if(depth>3){
 					printf("ERROR too many arguments\n");
-					return -1;
 				}
 				break;
 			case BVEC4:
 				if(depth>4){
 					printf("ERROR too many arguments\n");
-					return -1;
 				}
 				break;
 			case VEC2:
 				if(depth>2){
 					printf("ERROR too many arguments\n");
-					return -1;
 				}
 				break;
 			case VEC3:
 				if(depth>3){
 					printf("ERROR too many arguments\n");
-					return -1;
 				}
 				break;
 			case VEC4:
 				if(depth>4){
 					printf("ERROR too many arguments\n");
-					return -1;
 				}
 			default:
 				if(depth>1){
 					printf("ERROR too many arguments\n");
-					return -1;
 				}
-
-				if(left_exp==right_exp){
-					return left_exp;
-				}
-
-				if(left_exp==IVEC2 || left_exp==IVEC3 || left_exp==IVEC4){
-					if(right_exp==INT){
-						return INT;
-					}
-				}
-
-				if(left_exp==BVEC2 || left_exp==BVEC3 || left_exp==BVEC4){
-					if(right_exp==BOOL){
-						return BOOL;
-					}
-				}
-
-				if(left_exp==VEC2 || left_exp==VEC3 || left_exp==VEC4){
-					if(right_exp==FLOAT){
-						return FLOAT;
-					}
-				}
-
-
-				if(left_exp!=right_exp){
-					printf("ERROR ASSIGNMENT_NODE %d %d\n",left_exp,right_exp);
-					return -1;
-				}
-				break;
 			}
 
+			if(left_exp==right_exp){
+				return left_exp;
+			}
+
+			if(left_exp==IVEC2 || left_exp==IVEC3 || left_exp==IVEC4){
+				if(right_exp==INT){
+					return INT;
+				}
+			}
+
+			if(left_exp==BVEC2 || left_exp==BVEC3 || left_exp==BVEC4){
+				if(right_exp==BOOL){
+					return BOOL;
+				}
+			}
+
+			if(left_exp==VEC2 || left_exp==VEC3 || left_exp==VEC4){
+				if(right_exp==FLOAT){
+					return FLOAT;
+				}
+			}
+
+			if(left_exp!=right_exp){
+				printf("ERROR types mismatch. %d %d\n",left_exp,right_exp);
+				return -1;
+			}
+			break;
 
 
 			break;
@@ -617,13 +603,13 @@ int semantic_check( node *ast) {
 			right_exp = semantic_check(ast->const_declaration_assignment.value);
 
 			if(ast->const_declaration_assignment.value->kind == VAR_NODE){
-				type = getConst(ast->const_declaration_assignment.value->variable_exp.identifier);
+				type = getState(ast->const_declaration_assignment.value->variable_exp.identifier);
 			}
 
 			if(ast->const_declaration_assignment.value->kind == INT_NODE ||
 					ast->const_declaration_assignment.value->kind == BOOL_NODE ||
 					ast->const_declaration_assignment.value->kind == FLOAT_NODE ||
-					type == 1) {
+					type == CONST) {
 				;
 			}else{
 				printf("ERROR const var must be initialized with a literal value or uniform variable\n");

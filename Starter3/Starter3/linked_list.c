@@ -2,14 +2,14 @@
 
 listNode_t *listHead ,*listVar,*listTrav;
 
-void insert(char * name, int type, int isConst, unsigned int scope)
+void insert(char * name, int type, int state, unsigned int scope)
 {
      listVar=(struct listNode *)malloc(sizeof (struct listNode));
      listVar->name = (char *)malloc(sizeof(char)*(strlen(name)+1));
      strcpy(listVar->name,name);
  	 listVar->type = type;
  	 listVar->scope = scope;
- 	 listVar->isConst = isConst;
+ 	 listVar->state = state;
 
      if(listHead==NULL)
      {
@@ -145,7 +145,7 @@ int checkExists(char *name, int scope){
     return -1;
 }
 
-int getConst(char * name)
+int getState(char * name)
 {
      struct listNode *temp,*listVar;
      temp=listHead;
@@ -153,7 +153,7 @@ int getConst(char * name)
      {
           if(strcmp(temp->name,name)==0)
           {
-        	  return temp->isConst;
+        	  return temp->state;
           }
           else
           {

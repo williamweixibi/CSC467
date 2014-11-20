@@ -6,6 +6,7 @@
 
 
 void build_table(node * ast);
+void insert_predef();
 
 #endif
 

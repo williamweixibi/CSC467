@@ -6,13 +6,20 @@
 #include <stdio.h>
 #include <string.h>
 
+typedef enum {
+	NONCONST,
+	CONST,
+	RESULT,
+	ATTRIBUTE,
+	UNIFORM
+}status ;
 
 typedef struct listNode
 {
     int data;
     char *name;
     unsigned int scope;
-    int isConst;
+    int state;
     int type;
 
     struct listNode *next;
@@ -24,7 +31,7 @@ void insert(char *, int, int, unsigned int);
 int getType(char *);
 int checkDeclaredInScope(char*,int);
 int checkExists(char *name, int scope);
-int getConst(char *);
+int getState(char *);
 void insert_at_end(int value);
 void insert_at_middle(int value, int loc);
 int delete_from_middle(int value);

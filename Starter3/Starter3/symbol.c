@@ -8,6 +8,27 @@
 
 int assingmentType;
 
+//void insert(char * name, int type, int isConst, unsigned int scope)
+void insert_predef(){
+	insert("gl_FragColor", VEC4, RESULT, 0);
+	insert("gl_FragDepth", BOOL, RESULT, 0);
+	insert("gl_FragCoord", VEC4, RESULT, 0);
+
+	insert("gl_TexCoord", VEC4, ATTRIBUTE, 0);
+	insert("gl_Color", VEC4, ATTRIBUTE, 0);
+	insert("gl_Secondary", VEC4, ATTRIBUTE, 0);
+	insert("gl_FogFragCoord", VEC4, ATTRIBUTE, 0);
+
+	insert("gl_Light_Half", VEC4, UNIFORM, 0);
+	insert("gl_Light_Ambient", VEC4, UNIFORM, 0);
+	insert("gl_Material_Shininess", VEC4, UNIFORM, 0);
+
+	insert("env1", VEC4, UNIFORM, 0);
+	insert("env2", VEC4, UNIFORM, 0);
+	insert("env3", VEC4, UNIFORM, 0);
+
+}
+
 void build_table(node * ast) {
 
 	if(ast==NULL)
