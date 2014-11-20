@@ -106,6 +106,45 @@ int getType(char * name)
 
 }
 
+int checkDeclaredInScope(char *name, int scope){
+    struct listNode *temp,*listVar;
+    temp=listHead;
+    while(temp!=NULL)
+    {
+         if(strcmp(temp->name,name)==0 && scope>=temp->scope)
+         {
+       	  return temp->type;
+         }
+         else
+         {
+              listVar=temp;
+              temp=temp->next;
+         }
+    }
+
+    return -1;
+}
+
+int checkExists(char *name, int scope){
+    struct listNode *temp,*listVar;
+    temp=listHead;
+    while(temp!=NULL)
+    {
+         if(strcmp(temp->name,name)==0 && (temp->scope==scope))
+         {
+        	 printf("found %s with scope %d \n", name, scope);
+        	 return temp->type;
+         }
+         else
+         {
+              listVar=temp;
+              temp=temp->next;
+         }
+    }
+    printf("%s not found \n");
+    return -1;
+}
+
 int getConst(char * name)
 {
      struct listNode *temp,*listVar;
@@ -178,12 +217,13 @@ int delete_from_end()
      return 0;
 }
 
+
 void display()
 {
      listTrav=listHead;
      if(listTrav==NULL)
      {
-          printf("\nList is Empty");
+          printf("\nList is Empty\n");
      }
      else
      {

@@ -22,6 +22,8 @@ typedef struct listNode
 void insert_at_begning(int value);
 void insert(char *, int, int, unsigned int);
 int getType(char *);
+int checkDeclaredInScope(char*,int);
+int checkExists(char *name, int scope);
 int getConst(char *);
 void insert_at_end(int value);
 void insert_at_middle(int value, int loc);
