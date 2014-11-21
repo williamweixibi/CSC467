@@ -34,6 +34,7 @@ node *ast_allocate(node_kind kind, ...) {
 		//printf("allocate\n");
 		ast->scope.declarations = va_arg(args, node *);
 		ast->scope.statements = va_arg(args, node *);
+		ast->scope.line = va_arg(args, int);
 		break;
 
 	case ENTER_SCOPE_NODE:
@@ -41,27 +42,31 @@ node *ast_allocate(node_kind kind, ...) {
 		scope_count++;
 		ast->enter_scope.scope = va_arg(args,node *);
 		scope_count--;
-
+		ast->enter_scope.line = va_arg(args, int);
 		break;
 
 	case DECLARATIONS_NODE:
 		ast->declarations.declarations=va_arg(args, node *);
 		ast->declarations.declaration = va_arg(args, node *);
+		ast->declarations.line = va_arg(args,int);
 		break;
 
 	case STATEMENTS_NODE:
 		ast->statements.statements = va_arg(args,node *);
 		ast->statements.statement = va_arg(args, node *);
+		ast->statements.line = va_arg(args, int);
 		break;
 
 	case PREN_EXPRESSION_NODE:
 		ast->paren_exp.expression = va_arg(args, node*);
+		ast->paren_exp.line = va_arg(args, int);
 		break;
 
 	case BINARY_EXPRESSION_NODE:
 		ast->binary_expr.op = va_arg(args, int);
 		ast->binary_expr.left = va_arg(args, node *);
 		ast->binary_expr.right = va_arg(args, node *);
+		ast->binary_expr.line = va_arg(args, int);
 		break;
 
 	case UNARY_EXPRESION_NODE:

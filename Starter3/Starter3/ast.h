@@ -104,112 +104,135 @@ struct node_ {
     struct {
     	node *declarations;
     	node *statements;
+      int line;
     } scope;
 
     struct {
     	node *scope;
+      int line;
     } enter_scope;
 
     struct {
     	node *declarations;
     	node *declaration;
+      int line;
     } declarations;
 
     struct {
     	node *statements;
     	node *statement;
+      int line;
     } statements;
   
     struct {
       int op;
       node *right;
+      int line;
     } unary_expr;
 
     struct {
       int op; //binary_ops enum
       node *left;
       node *right;
+      int line;
     } binary_expr;
 
     struct {
     	node *left;
     	node *right;
+      int line;
     }assignment;
 
     struct {
     	node *condition;
     	node *then_statement;
+      int line;
     }if_statement;
 
     struct {
     	node *condition;
     	node *then_statement;
     	node *else_statement;
+      int line;
     }if_else_statement;
 
     struct {
     	node * type; // types enum
     	node *arguments;
+      int line;
     }constructor_exp;
 
     struct {
     	int function_name;
     	node *arguments;
+      int line;
     }function_exp;
 
     struct {
     	char *identifier;
+      int line;
     }variable_exp;
 
     struct {
     	char *identifier;
     	int index;
+      int line;
     }array_exp;
 
     struct {
     	node *expression;
+      int line;
     }paren_exp;
 
 	struct {
     	node *type;
     	char *iden;
+      int line;
     }declaration;
 
     struct {
     	node *type;
     	char *iden;
     	node *value;
+      int line;
     }declaration_assignment;
 
     struct {
     	node *type;
     	char *iden;
     	node *value;
+      int line;
     }const_declaration_assignment;
 
     struct {
     	int type_name;
+      int line;
     }type;
 
     struct {
     	int right;
+      int line;
     }int_literal;
 
     struct {
     	double right;
+      int line;
     }float_literal;
 
     struct {
     	int right;
+      int line;
     }bool_literal;
 
     struct {
         node *arguments;
         node *expression;
+        int line;
     }arguments_comma;
 
     struct {
         node *expression;
+        int line;
     }arguments_expression;
     // etc.
   };
