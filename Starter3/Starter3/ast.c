@@ -125,6 +125,7 @@ node *ast_allocate(node_kind kind, ...) {
 				ast->declaration_assignment.type->type.type_name,
 				0,
 				scope_count);*/
+		ast->declaration_assignment.line = va_arg(args, int);
 
 		break;
 
@@ -137,23 +138,28 @@ node *ast_allocate(node_kind kind, ...) {
 				ast->declaration_assignment.type->type.type_name,
 				1,
 				scope_count);*/
+		ast->const_declaration_assignment.line = va_arg(args, int);
 
 		break;
 
 	case TYPE_NODE:
 		ast->type.type_name=va_arg(args,int);
+		ast->type.line = va_arg(args, int);
 		break;
 
 	case INT_NODE:
 		ast->int_literal.right = va_arg(args,int);
+		ast->int_literal.line = va_arg(args, int);
 		break;
 
 	case FLOAT_NODE:
 		ast->float_literal.right = va_arg(args,double);
+		ast->float_literal.line = va_arg(args, int);
 		break;
 
 	case BOOL_NODE:
 		ast->bool_literal.right = va_arg(args,int);
+		ast->bool_literal.line = va_arg(args, int);
 		break;
 
 	case VAR_NODE:
@@ -162,20 +168,24 @@ node *ast_allocate(node_kind kind, ...) {
 
 		ast->variable_exp.identifier = (char *)malloc(sizeof(char)*(strlen(tmp)+1));
 		strcpy(ast->variable_exp.identifier,tmp);
+		ast->variable_exp.line = va_arg(args, int);
 		break;
 
 	case ARRAY_NODE:
 		ast->array_exp.identifier = va_arg(args, char *);
 		ast->array_exp.index = va_arg(args, int);
+		ast->array_exp.line = va_arg(args, int);
 		break;
 
 	case ARGUMENTS_COMMA_NODE:
 		ast->arguments_comma.arguments = va_arg(args, node *);
 		ast->arguments_comma.expression = va_arg(args, node *);
+		ast->arguments_comma.line = va_arg(args, int);
 		break;
 
 	case ARGUMENTS_EXPRESSION_NODE:
 		ast->arguments_expression.expression = va_arg(args, node *);
+		ast->arguments_expression.line = va_arg(args, int);
 		break;
 
 	default: break;
