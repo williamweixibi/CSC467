@@ -126,14 +126,14 @@ int checkDeclaredInScope(char *name, int scope){
     return -1;
 }
 
-int checkExists(char *name, int scope){
+int checkExists(char *name, int scope, int line){
     struct listNode *temp,*listVar;
     temp=listHead;
     while(temp!=NULL)
     {
-         if(strcmp(temp->name,name)==0 && (temp->scope==scope))
+         if(strcmp(temp->name,name)==0 && (temp->scope==scope) && (line!=temp->lineNum))
          {
-        	 printf("found %s with scope %d \n", name, scope);
+      //  	 printf("found %s with scope %d \n", name, scope);
         	 return temp->type;
          }
          else
@@ -142,7 +142,7 @@ int checkExists(char *name, int scope){
               temp=temp->next;
          }
     }
-    printf("%s not found \n");
+    //printf("%s not found \n");
     return -1;
 }
 
