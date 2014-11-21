@@ -462,14 +462,14 @@ void ast_print(node * ast) {
 
 			break;
 		case 3:
-			printf("DECLARAIONS ");
+			printf("( DECLARAIONS ");
 			//printf("DECLARATIONS_NODE %d\n", kind);
 			ast_print(ast->declarations.declarations);
 			ast_print(ast->declarations.declaration);
 			printf( ")\n");
 			break;
 		case 4:
-			printf("STATEMENTS ");
+			printf("( STATEMENTS ");
 			//printf("STATEMENTS_NODE %d\n", kind);
 			ast_print(ast->statements.statements);
 			ast_print(ast->statements.statement);
@@ -484,7 +484,7 @@ void ast_print(node * ast) {
 			ast_print(ast->paren_exp.expression);
 			break;
 		case 7:
-			printf("(UNARY %s ",getOp(ast->unary_expr.op));
+			printf("( UNARY %s ",getOp(ast->unary_expr.op));
 			
 			//printf("UNARY_EXPRESION_NODE %d\n", kind);
 			//printf("Operator: %d\n", ast->unary_expr.op);
@@ -492,7 +492,7 @@ void ast_print(node * ast) {
 			printf(" )\n");
 			break;
 		case 8:
-			printf("BINARY %s ", getOp(ast->binary_expr.op));
+			printf("( BINARY %s ", getOp(ast->binary_expr.op));
 			//printf("BINARY_EXPRESSION_NODE %d\n", kind);
 			//printf("Operator: %d\n", ast->binary_expr.op);
 			
@@ -526,13 +526,13 @@ void ast_print(node * ast) {
 			//printf("ARRAY_NODE %d\n", kind);
 			break;
 		case 15:
-			printf("\n(CALL ");
+			printf("\n( CALL ");
 			if(ast->function_exp.function_name==0){
-				printf("dp3 ");
+				printf( "dp3 ");
 			}else if(ast->function_exp.function_name==1){
-				printf("lit ");
+				printf( "lit ");
 			}else if(ast->function_exp.function_name==2){
-				printf("rsq");
+				printf( "rsq");
 			}
 			//printf("FUNCTION_NODE %d\n", kind);
 			ast_print(ast->function_exp.arguments);
@@ -540,7 +540,7 @@ void ast_print(node * ast) {
 			break;
 		case 16:
 			//printf("CONSTRUCTOR_NODE %d\n", kind);
-			printf("\nCALL ");
+			printf("\n( CALL ");
 			ast_print(ast->constructor_exp.type);
 			ast_print(ast->constructor_exp.arguments);
 			printf(" )\n");
@@ -552,7 +552,7 @@ void ast_print(node * ast) {
 			//printf("TYPE_NODE %d\n", kind);
 			break;
 		case 18:
-			printf("\n(IF ");
+			printf("\n( IF ");
 			//printf("IF_ELSE_STATEMENT_NODE %d\n", kind);
 			ast_print(ast->if_else_statement.condition);
 			ast_print(ast->if_else_statement.else_statement);
@@ -560,7 +560,7 @@ void ast_print(node * ast) {
 			printf(" )\n");
 			break;
 		case 19:
-			printf("\n(IF ");
+			printf("\n( IF ");
 			//printf("IF_STATEMENT_NODE %d\n", kind);
 			ast_print(ast->if_statement.condition);
 			ast_print(ast->if_statement.then_statement);
@@ -571,7 +571,7 @@ void ast_print(node * ast) {
 			//No WHILE_STATEMENT_NODE
 			break;
 		case 21:
-			printf("\n(ASSIGN ");
+			printf("\n( ASSIGN ");
 		//	printf("ASSIGNMENT_NODE %d\n", kind);
 			ast_print(ast->assignment.left);
 			ast_print(ast->assignment.right);
@@ -583,12 +583,12 @@ void ast_print(node * ast) {
 			break;
 		case 23:
 			//TODO: add type
-			printf("\n(DECLARATION %s ",ast->declaration.iden);
+			printf("\n( DECLARATION %s ",ast->declaration.iden);
 			ast_print(ast->declaration.type);
 			printf(" )\n");
 			break;
 		case 24:
-			printf("\n(DECLARATION %s ", ast->declaration_assignment.iden);
+			printf("\n( DECLARATION %s ", ast->declaration_assignment.iden);
 			ast_print(ast->declaration_assignment.type);
 			ast_print(ast->declaration_assignment.value);
 			printf(" )\n");
