@@ -198,6 +198,7 @@ node *ast_allocate(node_kind kind, ...) {
 
 void ast_free(node *ast) {
 
+
 }
 
 void ast_print(node * ast) {
@@ -212,125 +213,161 @@ void ast_print(node * ast) {
 	switch(kind){
 		case 1:
 
-			printf("ENTER_SCOPE_NODE %d\n", kind);
+			//printf("ENTER_SCOPE_NODE %d\n", kind);
+			printf("\nSCOPE ( ");
 			ast_print(ast->enter_scope.scope);
+			printf(" )\n");
 
 			break;
 		case 2:
-
-			printf("SCOPE_NODE %d\n", kind);
+			//printf("SCOPE ( ");
+			//printf("SCOPE_NODE %d\n", kind);
 			ast_print(ast->scope.declarations);
 			ast_print(ast->scope.statements);
 
 			break;
 		case 3:
-			printf("DECLARATIONS_NODE %d\n", kind);
+			printf("DECLARAIONS ");
+			//printf("DECLARATIONS_NODE %d\n", kind);
 			ast_print(ast->declarations.declarations);
 			ast_print(ast->declarations.declaration);
+			printf( ")\n");
 			break;
 		case 4:
-			printf("STATEMENTS_NODE %d\n", kind);
+			printf("STATEMENTS ");
+			//printf("STATEMENTS_NODE %d\n", kind);
 			ast_print(ast->statements.statements);
 			ast_print(ast->statements.statement);
+			printf(" )\n");
 			break;
 		case 5:
-			printf("EXPRESSION_NODE No node %d\n", kind);
+			//printf("EXPRESSION_NODE No node %d\n", kind);
 			// No EXPRESSION_NODE
 			break;
 		case 6:
-			printf("PREN_EXPRESSION_NODE %d\n", kind);
+			//printf("PREN_EXPRESSION_NODE %d\n", kind);
 			ast_print(ast->paren_exp.expression);
 			break;
 		case 7:
-			printf("UNARY_EXPRESION_NODE %d\n", kind);
-			printf("Operator: %d\n", ast->unary_expr.op);
+			printf("(UNARY %d ",ast->unary_expr.op);
+			//printf("UNARY_EXPRESION_NODE %d\n", kind);
+			//printf("Operator: %d\n", ast->unary_expr.op);
 			ast_print(ast->unary_expr.right);
+			printf(" )\n");
 			break;
 		case 8:
-			printf("BINARY_EXPRESSION_NODE %d\n", kind);
-			printf("Operator: %d\n", ast->binary_expr.op);
+			printf("BINARY %d ", ast->binary_expr.op);
+			//printf("BINARY_EXPRESSION_NODE %d\n", kind);
+			//printf("Operator: %d\n", ast->binary_expr.op);
+			
 			ast_print(ast->binary_expr.left);
 			ast_print(ast->binary_expr.right);
+			printf(" )\n");
 			break;
 		case 9:
-			printf("INT_NODE %d\n", kind);
-			printf("Integer: %d\n",ast->int_literal.right);
+			printf("%d ", ast->int_literal.right);
+			//printf("Integer: %d\n",ast->int_literal.right);
 			break;
 		case 10:
-			printf("FLOAT_NODE %d\n", kind);
-			printf("Float: %f", ast->float_literal.right);
+			printf("%f ", ast->float_literal.right);
+			//printf("FLOAT_NODE %d\n", kind);
+			//printf("Float: %f", ast->float_literal.right);
 			break;
 		case 11:
-			printf("BOOL_NODE %d\n", kind);
-			printf("Bool: %d", ast->bool_literal.right);
+			printf("%s ",ast->bool_literal.right? "true" : "false");
+			//printf("Bool: %d", ast->bool_literal.right);
 			break;
 		case 12:
-			printf("IDENT_NODE No node %d\n", kind);
+			//printf("IDENT_NODE No node %d\n", kind);
 			// No IDENT_NODE
 			break;
 		case 13:
-			printf("VAR_NODE %d\n", kind);
-			printf("Identifier: %s\n", ast->variable_exp.identifier);
+			//printf("VAR_NODE %d\n", kind);
+			printf("%s ", ast->variable_exp.identifier);
 			break;
 		case 14:
-			printf("ARRAY_NODE %d\n", kind);
+			//printf("ARRAY_NODE %d\n", kind);
 			break;
 		case 15:
-			printf("FUNCTION_NODE %d\n", kind);
+			printf("\n(CALL ");
+			if(ast->function_exp.function_name==0){
+				printf("dp3 ");
+			}else if(ast->function_exp.function_name==1){
+				printf("lit ");
+			}else if(ast->function_exp.function_name==2){
+				printf("rsq");
+			}
+			//printf("FUNCTION_NODE %d\n", kind);
 			ast_print(ast->function_exp.arguments);
+			printf(" )\n");
 			break;
 		case 16:
-			printf("CONSTRUCTOR_NODE %d\n", kind);
+			//printf("CONSTRUCTOR_NODE %d\n", kind);
+			printf("\nCALL ");
 			ast_print(ast->constructor_exp.arguments);
+			printf(" )\n");
 			break;
 		case 17:
-			printf("TYPE_NODE %d\n", kind);
+			//TODO: add getType
+			//str_type = getType(type_name);
+			//printf("%s ", str_type);
+			//printf("TYPE_NODE %d\n", kind);
 			break;
 		case 18:
-			printf("IF_ELSE_STATEMENT_NODE %d\n", kind);
+			printf("\n(IF ");
+			//printf("IF_ELSE_STATEMENT_NODE %d\n", kind);
 			ast_print(ast->if_else_statement.condition);
 			ast_print(ast->if_else_statement.else_statement);
 			ast_print(ast->if_else_statement.then_statement);
+			printf(" )\n");
 			break;
 		case 19:
-			printf("IF_STATEMENT_NODE %d\n", kind);
+			printf("\n(IF ");
+			//printf("IF_STATEMENT_NODE %d\n", kind);
 			ast_print(ast->if_statement.condition);
 			ast_print(ast->if_statement.then_statement);
+			printf(" )\n");
 			break;
 		case 20:
-			printf("WHILE_STATEMENT_NODE No node %d\n", kind);
+			//printf("WHILE_STATEMENT_NODE No node %d\n", kind);
 			//No WHILE_STATEMENT_NODE
 			break;
 		case 21:
-			printf("ASSIGNMENT_NODE %d\n", kind);
+			printf("\n(ASSIGN ");
+		//	printf("ASSIGNMENT_NODE %d\n", kind);
 			ast_print(ast->assignment.left);
 			ast_print(ast->assignment.right);
+			printf(" )\n");
 			break;
 		case 22:
 			printf("NESTED_SCOPE_NODE No node for %d\n", kind);
 			// No NESTED_SCOPE_NODE
 			break;
 		case 23:
-			printf("DECLARATION_NODE %d\n", kind);
+			//TODO: add type
+			printf("\n(DECLARATION %s ",ast->declaration.iden);
 			ast_print(ast->declaration.type);
+			printf(" )\n");
 			break;
 		case 24:
-			printf("DECLARATION_ASSIGNMENT_NODE %d\n", kind);
+			printf("\n(DECLARATION %s ", ast->declaration_assignment.iden);
 			ast_print(ast->declaration_assignment.type);
 			ast_print(ast->declaration_assignment.value);
+			printf(" )\n");
 			break;
 		case 25:
-			printf("CONST_DECLARATION_ASSIGNMENT_NODE %d\n", kind);
+			printf("\n( CONST DECLARATION %s ", ast->const_declaration_assignment.iden);
 			ast_print(ast->const_declaration_assignment.type);
 			ast_print(ast->const_declaration_assignment.value);
+			printf(" )\n");
 			break;
 		case 26:
-			printf("ARGUMENTS_COMMA_NODE %d\n", kind);
+			//printf("ARGUMENTS_COMMA_NODE %d\n", kind);
 			ast_print(ast->arguments_comma.arguments);
 			ast_print(ast->arguments_comma.expression);
 			break;
 		case 27:
-			printf("ARGUMENTS_EXPRESSION_NODE %d\n", kind);
+			//printf("ARGUMENTS_EXPRESSION_NODE %d\n", kind);
 			ast_print(ast->arguments_expression.expression);
 			break;
 		default:
