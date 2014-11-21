@@ -402,7 +402,6 @@ char *getType(int type){
 		return "FUNCTION";
 		break;
 	}
->>>>>>> a32a3d783579d5efebcb3bcb303d4cd8bff0e2f2
 }
 
 void ast_print(node * ast) {
