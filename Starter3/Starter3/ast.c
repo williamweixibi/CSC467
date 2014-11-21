@@ -508,6 +508,7 @@ void ast_print(node * ast) {
 		case 16:
 			//printf("CONSTRUCTOR_NODE %d\n", kind);
 			printf("\nCALL ");
+			ast_print(ast->constructor_exp.type);
 			ast_print(ast->constructor_exp.arguments);
 			printf(" )\n");
 			break;
