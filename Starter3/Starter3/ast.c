@@ -360,7 +360,7 @@ void ast_free(node *ast) {
 
 }
 
-char *getType(int type){
+char *convertType(int type){
 	switch(type){
 	case	INT:
 		return "INT";
@@ -487,6 +487,7 @@ void ast_print(node * ast) {
 			break;
 		case 13:
 			//printf("VAR_NODE %d\n", kind);
+			printf("%s ", convertType(getType(ast->variable_exp.identifier)));
 			printf("%s ", ast->variable_exp.identifier);
 			break;
 		case 14:
@@ -514,7 +515,7 @@ void ast_print(node * ast) {
 			break;
 		case 17:
 			//TODO: add getType
-			str_type = getType(ast->type.type_name);
+			str_type = convertType(ast->type.type_name);
 			printf("%s ", str_type);
 			//printf("TYPE_NODE %d\n", kind);
 			break;
