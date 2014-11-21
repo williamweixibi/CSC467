@@ -2,7 +2,7 @@
 
 listNode_t *listHead ,*listVar,*listTrav;
 
-void insert(char * name, int type, int state, unsigned int scope)
+void insert(char * name, int type, int state, int line, unsigned int scope)
 {
      listVar=(struct listNode *)malloc(sizeof (struct listNode));
      listVar->name = (char *)malloc(sizeof(char)*(strlen(name)+1));
@@ -10,6 +10,7 @@ void insert(char * name, int type, int state, unsigned int scope)
  	 listVar->type = type;
  	 listVar->scope = scope;
  	 listVar->state = state;
+ 	 listVar->lineNum = line;
 
      if(listHead==NULL)
      {

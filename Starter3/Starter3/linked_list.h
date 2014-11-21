@@ -21,13 +21,14 @@ typedef struct listNode
     unsigned int scope;
     int state;
     int type;
+    int lineNum;
 
     struct listNode *next;
 } listNode_t;
 
 
 void insert_at_begning(int value);
-void insert(char *, int, int, unsigned int);
+void insert(char *, int, int, int, unsigned int);
 int getType(char *);
 int checkDeclaredInScope(char*,int);
 int checkExists(char *name, int scope);
