@@ -163,11 +163,7 @@ node *ast_allocate(node_kind kind, ...) {
 		break;
 
 	case VAR_NODE:
-		char * tmp;
-		tmp = va_arg(args, char *);
-
-		ast->variable_exp.identifier = (char *)malloc(sizeof(char)*(strlen(tmp)+1));
-		strcpy(ast->variable_exp.identifier,tmp);
+		ast->variable_exp.identifier = va_arg(args, char *);
 		ast->variable_exp.line = va_arg(args, int);
 		break;
 
@@ -197,6 +193,170 @@ node *ast_allocate(node_kind kind, ...) {
 }
 
 void ast_free(node *ast) {
+	int val=0;
+
+	if(ast==NULL)
+		return;
+
+	int kind = ast->kind;
+
+	switch(kind) {
+
+	// ...
+	case SCOPE_NODE:
+		//printf("allocate\n");
+		ast_free(ast->scope.declarations);
+		ast_free(ast->scope.statements);
+		free(ast); ast=NULL;
+		break;
+
+	case ENTER_SCOPE_NODE:
+		ast_free(ast->enter_scope.scope);
+		free(ast); ast=NULL;
+		break;
+
+	case DECLARATIONS_NODE:
+		ast_free(ast->declarations.declarations);
+		ast_free(ast->declarations.declaration);
+		free(ast); ast=NULL;
+		break;
+
+	case STATEMENTS_NODE:
+		ast_free(ast->statements.statements);
+		ast_free(ast->statements.statement);
+		free(ast); ast=NULL;
+		break;
+
+	case PREN_EXPRESSION_NODE:
+		ast_free(ast->paren_exp.expression);
+		free(ast); ast=NULL;
+		break;
+
+	case BINARY_EXPRESSION_NODE:
+		//ast_free(ast->binary_expr.op);
+		ast_free(ast->binary_expr.left);
+		ast_free(ast->binary_expr.right);
+		free(ast); ast=NULL;
+		break;
+
+	case UNARY_EXPRESION_NODE:
+		//ast_free(ast->unary_expr.op);
+		ast_free(ast->unary_expr.right);
+		free(ast); ast=NULL;
+		break;
+	case ASSIGNMENT_NODE:
+		ast_free(ast->assignment.left);
+		ast_free(ast->assignment.right);
+		free(ast); ast=NULL;
+		break;
+
+	case IF_ELSE_STATEMENT_NODE:
+		ast_free(ast->if_else_statement.condition);
+		ast_free(ast->if_else_statement.then_statement);
+		ast_free(ast->if_else_statement.else_statement);
+		free(ast); ast=NULL;
+		break;
+
+	case CONSTRUCTOR_NODE:
+		//ast_free(ast->constructor_exp.type);
+		ast_free(ast->constructor_exp.arguments);
+		free(ast); ast=NULL;
+		break;
+
+	case FUNCTION_NODE:
+		//ast_free(ast->function_exp.function_name);
+		ast_free(ast->function_exp.arguments);
+		free(ast); ast=NULL;
+		break;
+
+	case IF_STATEMENT_NODE:
+		ast_free(ast->if_statement.condition);
+		ast_free(ast->if_statement.then_statement);
+		free(ast); ast=NULL;
+		break;
+
+	case DECLARATION_NODE:
+		ast_free(ast->declaration.type);
+		//ast_free(ast->declaration.iden);
+		free(ast); ast=NULL;
+		/*insert(ast->declaration_assignment.iden,
+				ast->declaration_assignment.type->type.type_name,
+				0,
+				scope_count);*/
+		break;
+
+	case DECLARATION_ASSIGNMENT_NODE:
+
+		ast_free(ast->declaration_assignment.type);
+		//ast_free(ast->declaration_assignment.iden);
+		ast_free(ast->declaration_assignment.value);
+
+		/*insert(ast->declaration_assignment.iden,
+				ast->declaration_assignment.type->type.type_name,
+				0,
+				scope_count);*/
+		free(ast); ast=NULL;
+
+		break;
+
+	case CONST_DECLARATION_ASSIGNMENT_NODE:
+		ast_free(ast->const_declaration_assignment.type);
+		//ast_free(ast->const_declaration_assignment.iden);
+		ast_free(ast->const_declaration_assignment.value);
+
+		/*insert(ast->declaration_assignment.iden,
+				ast->declaration_assignment.type->type.type_name,
+				1,
+				scope_count);*/
+		free(ast); ast=NULL;
+
+		break;
+
+	case TYPE_NODE:
+		//ast_free(ast->type.type_name);
+		free(ast); ast=NULL;
+		break;
+
+	case INT_NODE:
+		//ast_free(ast->int_literal.right);
+		free(ast); ast=NULL;
+		break;
+
+	case FLOAT_NODE:
+		//ast_free(ast->float_literal.right);
+		free(ast); ast=NULL;
+		break;
+
+	case BOOL_NODE:
+		//ast_free(ast->bool_literal.right);
+		free(ast); ast=NULL;
+		break;
+
+	case VAR_NODE:
+
+		free(ast->variable_exp.identifier);
+		free(ast); ast=NULL;
+		break;
+
+	case ARRAY_NODE:
+		free(ast->array_exp.identifier);
+		//ast_free(ast->array_exp.index = va_arg(args, int);
+		free(ast); ast=NULL;
+		break;
+
+	case ARGUMENTS_COMMA_NODE:
+		ast_free(ast->arguments_comma.arguments);
+		ast_free(ast->arguments_comma.expression);
+		free(ast); ast=NULL;
+		break;
+
+	case ARGUMENTS_EXPRESSION_NODE:
+		ast_free(ast->arguments_expression.expression);
+		free(ast); ast=NULL;
+		break;
+
+	default: break;
+	}
 
 }
 

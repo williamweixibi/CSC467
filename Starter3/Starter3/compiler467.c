@@ -91,7 +91,7 @@ int main (int argc, char *argv[]) {
 
   build_table(ast);
   insert_predef();
-  display();
+  //display();
 
   if(semantic_check(ast)==-1){
 	  //printf("ERROR\n");
