@@ -10,22 +10,22 @@ int assingmentType;
 
 //void insert(char * name, int type, int isConst, unsigned int scope)
 void insert_predef(){
-	insert("gl_FragColor", VEC4, RESULT, 0);
-	insert("gl_FragDepth", BOOL, RESULT, 0);
-	insert("gl_FragCoord", VEC4, RESULT, 0);
+	insert("gl_FragColor", VEC4, RESULT, 0,0);
+	insert("gl_FragDepth", BOOL, RESULT, 0,0);
+	insert("gl_FragCoord", VEC4, RESULT, 0,0);
 
-	insert("gl_TexCoord", VEC4, ATTRIBUTE, 0);
-	insert("gl_Color", VEC4, ATTRIBUTE, 0);
-	insert("gl_Secondary", VEC4, ATTRIBUTE, 0);
-	insert("gl_FogFragCoord", VEC4, ATTRIBUTE, 0);
+	insert("gl_TexCoord", VEC4, ATTRIBUTE, 0,0);
+	insert("gl_Color", VEC4, ATTRIBUTE, 0,0);
+	insert("gl_Secondary", VEC4, ATTRIBUTE, 0,0);
+	insert("gl_FogFragCoord", VEC4, ATTRIBUTE, 0,0);
 
-	insert("gl_Light_Half", VEC4, UNIFORM, 0);
-	insert("gl_Light_Ambient", VEC4, UNIFORM, 0);
-	insert("gl_Material_Shininess", VEC4, UNIFORM, 0);
+	insert("gl_Light_Half", VEC4, UNIFORM, 0,0);
+	insert("gl_Light_Ambient", VEC4, UNIFORM, 0,0);
+	insert("gl_Material_Shininess", VEC4, UNIFORM, 0,0);
 
-	insert("env1", VEC4, UNIFORM, 0);
-	insert("env2", VEC4, UNIFORM, 0);
-	insert("env3", VEC4, UNIFORM, 0);
+	insert("env1", VEC4, UNIFORM, 0,0);
+	insert("env2", VEC4, UNIFORM, 0,0);
+	insert("env3", VEC4, UNIFORM, 0,0);
 
 }
 
@@ -112,17 +112,20 @@ void build_table(node * ast) {
 			if(ast->function_exp.function_name == 2){
 				insert("rsq",
 						FUNCTION,
-						0,
+						NONCONST,
+						ast->function_exp.line,
 						scope_count);
 			}else if(ast->function_exp.function_name == 0){ //0
 				insert("dp3",
 						FUNCTION,
-						0,
+						NONCONST,
+						ast->function_exp.line,
 						scope_count);
 			}else if (ast->function_exp.function_name == 1){ //1
 				insert("lit",
 						FUNCTION,
-						0,
+						NONCONST,
+						ast->function_exp.line,
 						scope_count);
 			}
 			break;
@@ -168,7 +171,8 @@ void build_table(node * ast) {
 
 			insert(ast->declaration.iden,
 					ast->declaration.type->type.type_name,
-					0,
+					NONCONST,
+					ast->declaration.line,
 					scope_count);
 
 			break;
@@ -179,7 +183,8 @@ void build_table(node * ast) {
 
 			insert(ast->declaration_assignment.iden,
 					ast->declaration_assignment.type->type.type_name,
-					0,
+					NONCONST,
+					ast->declaration_assignment.line,
 					scope_count);
 
 			break;
@@ -190,7 +195,8 @@ void build_table(node * ast) {
 
 			insert(ast->const_declaration_assignment.iden,
 					ast->const_declaration_assignment.type->type.type_name,
-					1,
+					CONST_S,
+					ast->const_declaration_assignment.line,
 					scope_count);
 			break;
 		case 26:
