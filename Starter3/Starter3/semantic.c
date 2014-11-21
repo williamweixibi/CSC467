@@ -539,6 +539,23 @@ int semantic_check( node *ast) {
 			left_exp = getType(name);
 			right_exp = semantic_check(ast->assignment.right);
 
+			if(ast->assignment.left->kind == VAR_NODE){
+				type = getState(ast->assignment.left->variable_exp.identifier);
+				if(type == ATTRIBUTE || type == UNIFORM){
+					printf("ERROR Cannot assign to pre defined read-only type\n");
+					return -1;
+				}
+			}
+
+			if(ast->assignment.right->kind == VAR_NODE){
+				type = getState(ast->assignment.right->variable_exp.identifier);
+
+				if(type == RESULT){
+					printf("ERROR Cannot Read from RESULT modified pre-defined variable.\n");
+					return -1;
+				}
+			}
+
 			if(left_exp==right_exp){
 				return left_exp;
 			}
@@ -589,6 +606,22 @@ int semantic_check( node *ast) {
 			left_exp = semantic_check(ast->declaration_assignment.type);
 			right_exp = semantic_check(ast->declaration_assignment.value);
 
+			if(ast->const_declaration_assignment.type->kind == VAR_NODE){
+				type = getState(ast->const_declaration_assignment.type->variable_exp.identifier);
+				if(type == ATTRIBUTE || type == UNIFORM){
+					printf("ERROR Cannot assign to pre defined read-only type\n");
+					return -1;
+				}
+			}
+
+			if(ast->const_declaration_assignment.value->kind == VAR_NODE){
+				type = getState(ast->const_declaration_assignment.value->variable_exp.identifier);
+
+				if(type == RESULT){
+					printf("ERROR Cannot Read from RESULT modified pre-defined variable.\n");
+					return -1;
+				}
+			}
 
 			if(left_exp==right_exp){
 				return left_exp;
@@ -629,11 +662,21 @@ int semantic_check( node *ast) {
 			left_exp = semantic_check(ast->const_declaration_assignment.type);
 			right_exp = semantic_check(ast->const_declaration_assignment.value);
 
-			if(ast->const_declaration_assignment.value->kind == VAR_NODE){
+			if(ast->const_declaration_assignment.type->kind == VAR_NODE){
+				type = getState(ast->const_declaration_assignment.type->variable_exp.identifier);
+				if(type == ATTRIBUTE || type == UNIFORM){
+					printf("ERROR Cannot assign to pre defined read-only type\n");
+					return -1;
+				}
 			}
 
 			if(ast->const_declaration_assignment.value->kind == VAR_NODE){
 				type = getState(ast->const_declaration_assignment.value->variable_exp.identifier);
+
+				if(type == RESULT){
+					printf("ERROR Cannot Read from RESULT modified pre-defined variable.\n");
+					return -1;
+				}
 			}
 
 			if(ast->const_declaration_assignment.value->kind == INT_NODE ||
