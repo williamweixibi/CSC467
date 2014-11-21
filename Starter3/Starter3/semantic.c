@@ -589,11 +589,38 @@ int semantic_check( node *ast) {
 			left_exp = semantic_check(ast->declaration_assignment.type);
 			right_exp = semantic_check(ast->declaration_assignment.value);
 
+
 			if(left_exp==right_exp){
 				return left_exp;
-			}else{
-				printf("ERROR DECLARATION_ASSIGNMENT_NODE must of be same type\n");
+			}
+
+			if(left_exp==IVEC2 || left_exp==IVEC3 || left_exp==IVEC4){
+				if(right_exp==INT){
+					return INT;
+				}
+			}
+
+			if(left_exp==BVEC2 || left_exp==BVEC3 || left_exp==BVEC4){
+				if(right_exp==BOOL){
+					return BOOL;
+				}
+			}
+
+			if(left_exp==VEC2 || left_exp==VEC3 || left_exp==VEC4){
+				if(right_exp==FLOAT){
+					return FLOAT;
+				}
+			}
+
+
+			if(left_exp!=right_exp){
+				printf("ERROR ASSIGNMENT_NODE must be of same type %d %d\n",left_exp,right_exp);
 				return -1;
+			}
+
+			if(left_exp!=right_exp){
+				printf("ERROR DECLARATION_ASSIGNMENT_NODE must of be same type\n");
+			return -1;
 			}
 
 			break;
@@ -603,13 +630,16 @@ int semantic_check( node *ast) {
 			right_exp = semantic_check(ast->const_declaration_assignment.value);
 
 			if(ast->const_declaration_assignment.value->kind == VAR_NODE){
+			}
+
+			if(ast->const_declaration_assignment.value->kind == VAR_NODE){
 				type = getState(ast->const_declaration_assignment.value->variable_exp.identifier);
 			}
 
 			if(ast->const_declaration_assignment.value->kind == INT_NODE ||
 					ast->const_declaration_assignment.value->kind == BOOL_NODE ||
 					ast->const_declaration_assignment.value->kind == FLOAT_NODE ||
-					type == CONST) {
+					type == CONST_S || type == UNIFORM ) {
 				;
 			}else{
 				printf("ERROR const var must be initialized with a literal value or uniform variable\n");

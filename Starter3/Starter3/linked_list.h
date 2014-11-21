@@ -8,11 +8,11 @@
 
 typedef enum {
 	NONCONST,
-	CONST,
+	CONST_S,
 	RESULT,
 	ATTRIBUTE,
-	UNIFORM
-}status ;
+	UNIFORM,
+}state ;
 
 typedef struct listNode
 {
