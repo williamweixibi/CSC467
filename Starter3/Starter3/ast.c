@@ -72,37 +72,43 @@ node *ast_allocate(node_kind kind, ...) {
 	case UNARY_EXPRESION_NODE:
 		ast->unary_expr.op = va_arg(args,int);
 		ast->unary_expr.right = va_arg(args,node *);
+		ast->unary_expr.line = va_arg(args, int);
 		break;
 	case ASSIGNMENT_NODE:
 		ast->assignment.left = va_arg(args,node *);
 		ast->assignment.right = va_arg(args,node *);
+		ast->assignment.line = va_arg(args, int);
 		break;
 
 	case IF_ELSE_STATEMENT_NODE:
 		ast->if_else_statement.condition = va_arg(args, node *);
 		ast->if_else_statement.then_statement = va_arg(args, node *);
 		ast->if_else_statement.else_statement = va_arg(args, node *);
+		ast->if_else_statement.line = va_arg(args, int);
 		break;
 
 	case CONSTRUCTOR_NODE:
 		ast->constructor_exp.type = va_arg(args,node *);
 		ast->constructor_exp.arguments = va_arg(args,node*);
+		ast->constructor_exp.line = va_arg(args, int);
 		break;
 
 	case FUNCTION_NODE:
 		ast->function_exp.function_name = va_arg(args,int);
 		ast->function_exp.arguments = va_arg(args,node*);
+		ast->function_exp.line = va_arg(args, int);
 		break;
 
 	case IF_STATEMENT_NODE:
 		ast->if_statement.condition = va_arg(args,node *);
 		ast->if_statement.then_statement = va_arg(args,node *);
+		ast->if_statement.line = va_arg(args, int);
 		break;
 
 	case DECLARATION_NODE:
 		ast->declaration.type=va_arg(args,node *);
 		ast->declaration.iden=va_arg(args,char *);
-
+		ast->declaration.line = va_arg(args, int);
 		/*insert(ast->declaration_assignment.iden,
 				ast->declaration_assignment.type->type.type_name,
 				0,
