@@ -591,21 +591,25 @@ int semantic_check( node *ast) {
 			break;
 		case 23:
 			//printf("DECLARATION_NODE %d\n", kind);
-			//printf("checking for %s in scope %d \n", ast->declaration.iden, scopeCount);
-			/*isDecl=checkExists(ast->declaration.iden,scopeCount);
-			printf("isDecl %d \n", isDecl);
+			isDecl=checkExists(ast->declaration.iden,scopeCount, ast->declaration.line);
 			if(isDecl!=-1){
 				printf("Error: Variable cannot be redeclared\n");
 				return -1;
-			}else{*/
+			}else{
 				return semantic_check(ast->declaration.type);
-			//}
+			}
 			break;
 		case 24:
 			//printf("DECLARATION_ASSIGNMENT_NODE %d\n", kind);
 			left_exp = semantic_check(ast->declaration_assignment.type);
 			right_exp = semantic_check(ast->declaration_assignment.value);
 
+			isDecl=checkExists(ast->declaration_assignment.iden,scopeCount, ast->declaration_assignment.line);
+			if(isDecl!=-1){
+				printf("Error: Variable cannot be redeclared\n");
+				return -1;
+			}
+			
 			if(ast->const_declaration_assignment.type->kind == VAR_NODE){
 				type = getState(ast->const_declaration_assignment.type->variable_exp.identifier);
 				if(type == ATTRIBUTE || type == UNIFORM){
