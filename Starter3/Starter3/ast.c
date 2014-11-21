@@ -360,6 +360,37 @@ void ast_free(node *ast) {
 
 }
 
+char *getOp(int op){
+	switch(op){
+	case AND_OP:
+		return "AND_OP";
+	case OR_OP:
+		return "OR_OP";
+	case EQ_OP:
+		return "EQ_OP";
+	case NEQ_OP:
+		return "NEQ_OP";
+	case LT_OP:
+		return "LT_OP";
+	case LEQ_OP:
+		return "LEQ_OP";
+	case GT_OP:
+		return "GT_OP";
+	case GEQ_OP:
+		return "GEQ_OP";
+	case ADD_OP:
+		return "ADD_OP";
+	case SUB_OP:
+		return "SUB_OP";
+	case MULT_OP:
+		return "MULT_OP";
+	case DIV_OP:
+		return "DIV_OP";
+	case POW_OP:
+		return "POW_OP";
+	}	
+}
+
 char *getType(int type){
 	switch(type){
 	case	INT:
@@ -453,14 +484,15 @@ void ast_print(node * ast) {
 			ast_print(ast->paren_exp.expression);
 			break;
 		case 7:
-			printf("(UNARY %d ",ast->unary_expr.op);
+			printf("(UNARY %s ",getOp(ast->unary_expr.op));
+			
 			//printf("UNARY_EXPRESION_NODE %d\n", kind);
 			//printf("Operator: %d\n", ast->unary_expr.op);
 			ast_print(ast->unary_expr.right);
 			printf(" )\n");
 			break;
 		case 8:
-			printf("BINARY %d ", ast->binary_expr.op);
+			printf("BINARY %s ", getOp(ast->binary_expr.op));
 			//printf("BINARY_EXPRESSION_NODE %d\n", kind);
 			//printf("Operator: %d\n", ast->binary_expr.op);
 			
