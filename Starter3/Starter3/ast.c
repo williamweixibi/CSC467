@@ -360,6 +360,50 @@ void ast_free(node *ast) {
 
 }
 
+char *getType(int type){
+	switch(type){
+	case	INT:
+		return "INT";
+		break;
+	case 	IVEC2:
+		return "IVEC2";
+		break;
+	case 	IVEC3:
+		return "IVEC3";
+		break;
+	case 	IVEC4:
+		return "IVEC4";
+		break;
+	case 	BOOL:
+		return "BOOL";
+		break;
+	case 	BVEC2:
+		return "BVEC2";
+		break;
+	case 	BVEC3:
+		return "BVEC3";
+		break;
+	case 	BVEC4:
+		return "BVEC4";
+		break;
+	case 	FLOAT:
+		return "FLOAT";
+		break;
+	case 	VEC2:
+		return "VEC2";
+		break;
+	case 	VEC3:
+		return "VEC3";
+		break;
+	case 	VEC4:
+		return "VEC4";
+		break;
+	case 	FUNCTION:
+		return "FUNCTION";
+		break;
+	}
+}
+
 void ast_print(node * ast) {
 
 	if(ast==NULL)
