@@ -410,6 +410,7 @@ void ast_print(node * ast) {
 		return;
 
 	int kind;
+	char *str_type;
 
 	kind = ast->kind;
 
@@ -512,8 +513,8 @@ void ast_print(node * ast) {
 			break;
 		case 17:
 			//TODO: add getType
-			//str_type = getType(type_name);
-			//printf("%s ", str_type);
+			str_type = getType(ast->type.type_name);
+			printf("%s ", str_type);
 			//printf("TYPE_NODE %d\n", kind);
 			break;
 		case 18:
