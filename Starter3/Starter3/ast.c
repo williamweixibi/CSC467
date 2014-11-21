@@ -449,7 +449,7 @@ void ast_print(node * ast) {
 		case 1:
 
 			//printf("ENTER_SCOPE_NODE %d\n", kind);
-			printf("\nSCOPE ( ");
+			printf("\n( SCOPE ");
 			ast_print(ast->enter_scope.scope);
 			printf(" )\n");
 
@@ -462,14 +462,14 @@ void ast_print(node * ast) {
 
 			break;
 		case 3:
-			printf("DECLARAIONS ");
+			printf("( DECLARATIONS ");
 			//printf("DECLARATIONS_NODE %d\n", kind);
 			ast_print(ast->declarations.declarations);
 			ast_print(ast->declarations.declaration);
 			printf( ")\n");
 			break;
 		case 4:
-			printf("STATEMENTS ");
+			printf("( STATEMENTS ");
 			//printf("STATEMENTS_NODE %d\n", kind);
 			ast_print(ast->statements.statements);
 			ast_print(ast->statements.statement);
@@ -492,7 +492,7 @@ void ast_print(node * ast) {
 			printf(" )\n");
 			break;
 		case 8:
-			printf("BINARY %s ", getOp(ast->binary_expr.op));
+			printf("(BINARY %s ", getOp(ast->binary_expr.op));
 			//printf("BINARY_EXPRESSION_NODE %d\n", kind);
 			//printf("Operator: %d\n", ast->binary_expr.op);
 			
@@ -540,7 +540,7 @@ void ast_print(node * ast) {
 			break;
 		case 16:
 			//printf("CONSTRUCTOR_NODE %d\n", kind);
-			printf("\nCALL ");
+			printf("\n(CALL ");
 			ast_print(ast->constructor_exp.type);
 			ast_print(ast->constructor_exp.arguments);
 			printf(" )\n");
