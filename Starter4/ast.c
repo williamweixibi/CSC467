@@ -6,6 +6,7 @@
 #include "ast.h"
 #include "common.h"
 #include "parser.tab.h"
+#include "codegen.h"
 
 
 #define DEBUG_PRINT_TREE 0
@@ -524,6 +525,7 @@ void ast_print(node * ast) {
 			break;
 		case 14:
 			//printf("ARRAY_NODE %d\n", kind);
+			printf("%s ", convertType(getType(ast->variable_exp.identifier)));
 			break;
 		case 15:
 			printf("\n( CALL ");

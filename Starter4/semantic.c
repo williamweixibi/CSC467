@@ -66,8 +66,10 @@ int scopeCount=0;
 
 int semantic_check( node *ast) {
 
-	if(ast==NULL)
-		return -1;
+	if(ast==NULL){
+		//printf("ERROR empty tree\n");
+		return 0;
+	}
 
 	int kind;
 	int type;
@@ -359,54 +361,64 @@ int semantic_check( node *ast) {
 					printf("ERROR index too high line: %d\n",ast->array_exp.line);
 					return -1;
 				}
+
+				return INT;
 				break;
 			case IVEC3:
 				if(index>=3){
 					printf("ERROR index too high line: %d\n",ast->array_exp.line);
 					return -1;
 				}
+				return INT;
 				break;
 			case IVEC4:
 				if(index>=4){
 					printf("ERROR index too high line: %d\n",ast->array_exp.line);
 					return -1;
 				}
+				return INT;
 				break;
 			case BVEC2:
 				if(index>=2){
 					printf("ERROR index too high line: %d\n",ast->array_exp.line);
 					return -1;
 				}
+				return BOOL;
 				break;
 			case BVEC3:
 				if(index>=3){
 					printf("ERROR index too high line: %d\n",ast->array_exp.line);
 					return -1;
 				}
+				return BOOL;
 				break;
 			case BVEC4:
 				if(index>=4){
 					printf("ERROR index too high line: %d\n",ast->array_exp.line);
 					return -1;
 				}
+				return BOOL;
 				break;
 			case VEC2:
 				if(index>=2){
 					printf("ERROR index too high line: %d\n",ast->array_exp.line);
 					return -1;
 				}
+				return FLOAT;
 				break;
 			case VEC3:
 				if(index>=3){
 					printf("ERROR index too high line: %d\n",ast->array_exp.line);
 					return -1;
 				}
+				return FLOAT;
 				break;
 			case VEC4:
 				if(index>=4){
 					printf("ERROR index too high line: %d\n",ast->array_exp.line);
 					return -1;
 				}
+				return FLOAT;
 				break;
 			default:
 				printf("ERROR not vec type, only vec types may be indexed line: %d\n",ast->array_exp.line);
@@ -495,10 +507,12 @@ int semantic_check( node *ast) {
 				if(depth>4){
 					printf("ERROR too many arguments line: %d\n", ast->constructor_exp.line);
 				}
+				break;
 			default:
 				if(depth>1){
-					printf("ERROR too many arguments line: %d\n", ast->constructor_exp.line);
+					printf("here ERROR too many arguments line: %d \n ", ast->constructor_exp.line);
 				}
+				break;
 			}
 
 			if(left_exp==right_exp){
@@ -618,7 +632,7 @@ int semantic_check( node *ast) {
 
 
 			if(left_exp!=right_exp){
-				printf("ERROR ASSIGNMENT_NODE must be of same type line: %d \n",ast->assignment.line);
+				printf("ERROR ASSIGNMENT_NODE  must be of same type line: %d \n",ast->assignment.line);
 				return -1;
 			}
 
@@ -693,7 +707,7 @@ int semantic_check( node *ast) {
 
 
 			if(left_exp!=right_exp){
-				printf("ERROR ASSIGNMENT_NODE must be of same type line: %d\n", ast->declaration_assignment.line);
+				printf("ERROR ASSIGNMENT_NODE 2 must be of same type line: %d\n", ast->declaration_assignment.line);
 				return -1;
 			}
 
@@ -731,10 +745,12 @@ int semantic_check( node *ast) {
 			if(ast->const_declaration_assignment.value->kind == INT_NODE ||
 					ast->const_declaration_assignment.value->kind == BOOL_NODE ||
 					ast->const_declaration_assignment.value->kind == FLOAT_NODE ||
+					ast->const_declaration_assignment.value->kind == ARRAY_NODE ||
+					ast->const_declaration_assignment.value->kind == CONSTRUCTOR_NODE ||
 					type == CONST_S || type == UNIFORM ) {
 				;
 			}else{
-				printf("ERROR const var must be initialized with a literal value or uniform variable line:%d\n",ast->const_declaration_assignment.line);
+				printf("ERROR const var must be initialized with a literal value or uniform variable line:%d \n",ast->const_declaration_assignment.line);
 				return -1;
 			}
 
@@ -786,7 +802,7 @@ int semantic_check( node *ast) {
 			return semantic_check(ast->arguments_expression.expression);
 			break;
 		default:
-			//printf("DEFAULT!!\n");
+			printf("DEFAULT!!\n");
 			return -1;
 			break;
 
