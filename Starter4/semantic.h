@@ -6,5 +6,6 @@
 
 
 int semantic_check( node *ast);
+int checkDepth( node *ast);
 
 #endif

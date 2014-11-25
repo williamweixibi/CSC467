@@ -51,14 +51,14 @@ OBJs      =compiler467.o globalvars.o $(LEXER_OBJ) \
 .PHONY: all clean man
 all: compiler467
 clean:
-	@$(RM) compiler467 $(OBJs) lex.yy.c parser.tab.h parser.c y.output
+	@$(RM) compiler467 $(OBJs) $(CODE_OBJ) lex.yy.c parser.tab.h parser.c y.output
 man:
 	@nroff -man compiler467.man | less
 
 ###########################################################################
 #	Dependencies for the compiler
 ###########################################################################
-compiler467: ${OBJs}
+compiler467: ${OBJs} ${CODE_OBJ}
 ${OBJs}:     common.h 
 lex.yy.c:    scanner.l
 	$(LEX) $(LEXFLAGS) $<

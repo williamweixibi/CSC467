@@ -61,7 +61,7 @@ int checkDepth( node *ast) {
 	return 0;
 }
 
-int scopeCount=0;
+static int scopeCount=0;
 
 
 int semantic_check( node *ast) {

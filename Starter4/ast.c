@@ -6,7 +6,6 @@
 #include "ast.h"
 #include "common.h"
 #include "parser.tab.h"
-#include "codegen.h"
 
 
 #define DEBUG_PRINT_TREE 0

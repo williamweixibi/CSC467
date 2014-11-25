@@ -26,7 +26,7 @@
 #include "ast.h"
 #include "symbol.h"
 #include "semantic.h"
-//#include "codegen.h"
+#include "codegen.h"
 
 /***********************************************************************
  * Default values for various files. Note assumption that default files
@@ -96,6 +96,7 @@ int main (int argc, char *argv[]) {
   if(semantic_check(ast)==-1){
 	  //printf();
 	  fprintf(stderr, "SYMANTIC CHECK FAILED\n");
+	  errorOccurred = 1;
   }
 
 /* Phase 3: Call the AST dumping routine if requested */
@@ -106,7 +107,7 @@ int main (int argc, char *argv[]) {
   if (errorOccurred)
     fprintf(outputFile,"Failed to compile\n");
   else 
-   // genCode(ast);
+    genCode(ast);
     ;
 /***********************************************************************
  * Post Compilation Cleanup
