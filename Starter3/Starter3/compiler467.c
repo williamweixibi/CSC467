@@ -94,7 +94,8 @@ int main (int argc, char *argv[]) {
   //display();
 
   if(semantic_check(ast)==-1){
-	  //printf("ERROR\n");
+	  //printf();
+	  fprintf(stderr, "SYMANTIC CHECK FAILED\n");
   }
 
 /* Phase 3: Call the AST dumping routine if requested */

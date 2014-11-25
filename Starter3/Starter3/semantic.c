@@ -54,6 +54,7 @@ int checkDepth( node *ast) {
 		break;
 	default :
 		printf("check depth failed: %d\n", kind);
+		return -1;
 		break;
 	}
 
@@ -71,6 +72,7 @@ int semantic_check( node *ast) {
 	int kind;
 	int type;
 	int depth;
+	int tmp;
 	int right_exp, left_exp;
 	char * name;
 	int index;
@@ -81,24 +83,39 @@ int semantic_check( node *ast) {
 		case 1:
 			scopeCount++;
 			//printf("ENTER_SCOPE_NODE %d\n", kind);
-			semantic_check(ast->enter_scope.scope);
+			right_exp = semantic_check(ast->enter_scope.scope);
 			scopeCount--;
+			return right_exp;
 			break;
 		case 2:
 			//printf("SCOPE_NODE %d\n", kind);
-			semantic_check(ast->scope.declarations);
-			semantic_check(ast->scope.statements);
+			right_exp = semantic_check(ast->scope.declarations);
+			left_exp = semantic_check(ast->scope.statements);
 
+			if(right_exp==-1 || left_exp == -1)
+				return -1;
+
+			return 0;
 			break;
 		case 3:
 			//printf("DECLARATIONS_NODE %d\n", kind);
-			semantic_check(ast->declarations.declarations);
-			return semantic_check(ast->declarations.declaration);
+			right_exp = semantic_check(ast->declarations.declarations);
+			left_exp = semantic_check(ast->declarations.declaration);
+
+			if(right_exp==-1 || left_exp == -1)
+				return -1;
+
+			return left_exp;
 			break;
 		case 4:
 			//printf("STATEMENTS_NODE %d\n", kind);
-			semantic_check(ast->statements.statements);
-			return semantic_check(ast->statements.statement);
+			right_exp = semantic_check(ast->statements.statements);
+			left_exp = semantic_check(ast->statements.statement);
+
+			if(right_exp==-1 || left_exp == -1)
+				return -1;
+
+			return left_exp;
 			break;
 		case 5:
 			//printf("EXPRESSION_NODE No node %d\n", kind);
@@ -113,6 +130,9 @@ int semantic_check( node *ast) {
 			//printf("Operator: %d\n", ast->unary_expr.op);
 
 			right_exp = semantic_check(ast->unary_expr.right);
+
+			if(right_exp==-1)
+				return -1;
 
 			switch ( ast->unary_expr.op){
 			case MINUS:
@@ -140,6 +160,9 @@ int semantic_check( node *ast) {
 			//printf("Operator: %d\n", ast->binary_expr.op);
 			left_exp = semantic_check(ast->binary_expr.left);
 			right_exp = semantic_check(ast->binary_expr.right);
+
+			if(right_exp==-1 || left_exp == -1)
+				return -1;
 
 			//Logical operators
 
@@ -394,6 +417,8 @@ int semantic_check( node *ast) {
 		case 15:
 			//printf("FUNCTION_NODE %d\n", kind);
 			type = semantic_check(ast->function_exp.arguments);
+			if(type==-1)
+				return -1;
 			//TODO: get type from function name
 
 			if(ast->function_exp.function_name == 2){ //rsq
@@ -419,6 +444,9 @@ int semantic_check( node *ast) {
 			//printf("CONSTRUCTOR_NODE %d\n", kind);
 			left_exp = semantic_check(ast->constructor_exp.type);
 			right_exp = semantic_check(ast->constructor_exp.arguments);
+
+			if(right_exp==-1 || left_exp == -1)
+				return -1;
 
 			depth = checkDepth(ast->constructor_exp.arguments);
 
@@ -510,6 +538,10 @@ int semantic_check( node *ast) {
 		case 18:
 			//printf("IF_ELSE_STATEMENT_NODE %d\n", kind);
 			left_exp = semantic_check(ast->if_else_statement.condition);
+
+			if(left_exp == -1)
+				return -1;
+
 			if(left_exp!=BOOL){
 				printf("ERROR: Expression must evaluate to bool line: %d\n", ast->if_else_statement.line);
 				return -1;
@@ -520,6 +552,9 @@ int semantic_check( node *ast) {
 		case 19:
 			//printf("IF_STATEMENT_NODE %d\n", kind);
 			left_exp = semantic_check(ast->if_else_statement.condition);
+			if(left_exp == -1)
+				return -1;
+
 			if(left_exp!=BOOL){
 				printf("ERROR: Expression must evaluate to bool line: %d\n", ast->if_else_statement.line);
 				return -1;
@@ -532,12 +567,15 @@ int semantic_check( node *ast) {
 			break;
 		case 21:
 			//printf("ASSIGNMENT_NODE %d\n", kind);
-			semantic_check(ast->assignment.left);
+			tmp = semantic_check(ast->assignment.left);
 			// set type of symbol in local var
 			name = ast->assignment.left->variable_exp.identifier;
 
 			left_exp = getType(name);
 			right_exp = semantic_check(ast->assignment.right);
+
+			if(right_exp==-1 || left_exp == -1 || tmp ==-1)
+				return -1;
 
 			if(ast->assignment.left->kind == VAR_NODE){
 				type = getState(ast->assignment.left->variable_exp.identifier);
@@ -604,6 +642,8 @@ int semantic_check( node *ast) {
 			left_exp = semantic_check(ast->declaration_assignment.type);
 			right_exp = semantic_check(ast->declaration_assignment.value);
 
+			if(right_exp==-1 || left_exp == -1)
+				return -1;
 
 			isDecl=checkExists(ast->declaration_assignment.iden,scopeCount, ast->declaration_assignment.line);
 			if(isDecl!=-1){
@@ -668,6 +708,9 @@ int semantic_check( node *ast) {
 			left_exp = semantic_check(ast->const_declaration_assignment.type);
 			right_exp = semantic_check(ast->const_declaration_assignment.value);
 
+			if(right_exp==-1 || left_exp == -1)
+				return -1;
+
 			if(ast->const_declaration_assignment.type->kind == VAR_NODE){
 				type = getState(ast->const_declaration_assignment.type->variable_exp.identifier);
 				if(type == ATTRIBUTE || type == UNIFORM){
@@ -727,6 +770,9 @@ int semantic_check( node *ast) {
 			//printf("ARGUMENTS_COMMA_NODE %d\n", kind);
 			right_exp = semantic_check(ast->arguments_comma.arguments);
 			left_exp = semantic_check(ast->arguments_comma.expression);
+
+			if(right_exp==-1 || left_exp == -1)
+				return -1;
 
 			if(right_exp==left_exp){
 				return right_exp;

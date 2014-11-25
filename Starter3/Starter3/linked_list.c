@@ -131,7 +131,7 @@ int checkExists(char *name, int scope, int line){
     temp=listHead;
     while(temp!=NULL)
     {
-         if(strcmp(temp->name,name)==0 && (temp->scope==scope) && (line!=temp->lineNum))
+         if(strcmp(temp->name,name)==0 && (temp->scope==scope) && (line>temp->lineNum))
          {
       //  	 printf("found %s with scope %d \n", name, scope);
         	 return temp->type;

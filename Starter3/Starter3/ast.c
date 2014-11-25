@@ -451,7 +451,7 @@ void ast_print(node * ast) {
 			//printf("ENTER_SCOPE_NODE %d\n", kind);
 			printf("\n( SCOPE ");
 			ast_print(ast->enter_scope.scope);
-			printf(" )\n");
+			printf(")\n");
 
 			break;
 		case 2:
@@ -473,7 +473,7 @@ void ast_print(node * ast) {
 			//printf("STATEMENTS_NODE %d\n", kind);
 			ast_print(ast->statements.statements);
 			ast_print(ast->statements.statement);
-			printf(" )\n");
+			printf(")\n");
 			break;
 		case 5:
 			//printf("EXPRESSION_NODE No node %d\n", kind);
@@ -489,7 +489,7 @@ void ast_print(node * ast) {
 			//printf("UNARY_EXPRESION_NODE %d\n", kind);
 			//printf("Operator: %d\n", ast->unary_expr.op);
 			ast_print(ast->unary_expr.right);
-			printf(" )\n");
+			printf(")\n");
 			break;
 		case 8:
 			printf("(BINARY %s ", getOp(ast->binary_expr.op));
@@ -498,7 +498,7 @@ void ast_print(node * ast) {
 			
 			ast_print(ast->binary_expr.left);
 			ast_print(ast->binary_expr.right);
-			printf(" )\n");
+			printf(")\n");
 			break;
 		case 9:
 			printf("%d ", ast->int_literal.right);
@@ -536,14 +536,14 @@ void ast_print(node * ast) {
 			}
 			//printf("FUNCTION_NODE %d\n", kind);
 			ast_print(ast->function_exp.arguments);
-			printf(" )\n");
+			printf(")\n");
 			break;
 		case 16:
 			//printf("CONSTRUCTOR_NODE %d\n", kind);
 			printf("\n( CALL ");
 			ast_print(ast->constructor_exp.type);
 			ast_print(ast->constructor_exp.arguments);
-			printf(" )\n");
+			printf(")\n");
 			break;
 		case 17:
 			//TODO: add getType
@@ -557,14 +557,14 @@ void ast_print(node * ast) {
 			ast_print(ast->if_else_statement.condition);
 			ast_print(ast->if_else_statement.else_statement);
 			ast_print(ast->if_else_statement.then_statement);
-			printf(" )\n");
+			printf(")\n");
 			break;
 		case 19:
 			printf("\n( IF ");
 			//printf("IF_STATEMENT_NODE %d\n", kind);
 			ast_print(ast->if_statement.condition);
 			ast_print(ast->if_statement.then_statement);
-			printf(" )\n");
+			printf(")\n");
 			break;
 		case 20:
 			//printf("WHILE_STATEMENT_NODE No node %d\n", kind);
@@ -575,7 +575,7 @@ void ast_print(node * ast) {
 		//	printf("ASSIGNMENT_NODE %d\n", kind);
 			ast_print(ast->assignment.left);
 			ast_print(ast->assignment.right);
-			printf(" )\n");
+			printf(")\n");
 			break;
 		case 22:
 			printf("NESTED_SCOPE_NODE No node for %d\n", kind);
@@ -585,19 +585,19 @@ void ast_print(node * ast) {
 			//TODO: add type
 			printf("\n( DECLARATION %s ",ast->declaration.iden);
 			ast_print(ast->declaration.type);
-			printf(" )\n");
+			printf(")\n");
 			break;
 		case 24:
 			printf("\n( DECLARATION %s ", ast->declaration_assignment.iden);
 			ast_print(ast->declaration_assignment.type);
 			ast_print(ast->declaration_assignment.value);
-			printf(" )\n");
+			printf(")\n");
 			break;
 		case 25:
 			printf("\n( CONST DECLARATION %s ", ast->const_declaration_assignment.iden);
 			ast_print(ast->const_declaration_assignment.type);
 			ast_print(ast->const_declaration_assignment.value);
-			printf(" )\n");
+			printf(")\n");
 			break;
 		case 26:
 			//printf("ARGUMENTS_COMMA_NODE %d\n", kind);
