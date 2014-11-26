@@ -182,10 +182,10 @@ int genCode(node *ast) {
 			//printf("BOOL_NODE %d\n", kind);
 			//printf("Bool: %d", ast->bool_literal.right);
 			if(ast->bool_literal.right==1){
-				print("MOV tmpVar%d %f;\n", tmpCount, 1.0);
+				print("MOV tmpVar%d, %f;\n", tmpCount, 1.0);
 				tmpCount++;
 			}else if(ast->bool_literal.right==0){
-				print("MOV tmpVar%d %f;\n", tmpCount, -1.0);
+				print("MOV tmpVar%d, %f;\n", tmpCount, -1.0);
 				tmpCount++;
 			}
 			return tmpCount;
