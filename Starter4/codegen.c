@@ -195,15 +195,10 @@ int genCode(node *ast) {
 			// No IDENT_NODE
 			break;
 		case 13:
-			int type;
-			type = checkDeclaredInScope(ast->variable_exp.identifier,scopeCount);
-			//printf("VAR_NODE %d\n", kind);
-			if(type==-1){
-				printf("ERROR: Variable not declared in scope before it is used line:%d \n", ast->variable_exp.line );
-				return -1;
-			}else{
-				return type;
-			}
+			print("VAR_NODE %d\n", kind);
+
+			print("%s", ast->variable_exp.identifier);
+
 			break;
 		case 14:
 			print("#ARRAY_NODE %d\n", kind);
