@@ -186,6 +186,9 @@ int genCode(node *ast) {
 
 		left_exp = 0;
 		right_exp = 0;
+		val = tmpCount++;
+
+		print("TEMP tmpVar%d;\n", val);
 
 		if (ast->binary_expr.left->kind == BINARY_EXPRESSION_NODE) {
 			left_exp = genCode(ast->binary_expr.left);
@@ -237,12 +240,12 @@ int genCode(node *ast) {
 		}
 
 		//if (right_exp == 0 || left_exp == 0) {
-		print(", tmpVar%d;\n", tmpCount);
+		print(", tmpVar%d;\n", val);
 		//} else {
 		//	print("tmpVar%d , tmpVar%d, tmpVar%d;\n", left_exp, right_exp, tmpCount);
 		//}
 
-		val = tmpCount++;
+
 		return val;
 		break;
 	case 9:
@@ -281,15 +284,12 @@ int genCode(node *ast) {
 		break;
 	case 13:
 		//print("VAR_NODE %d\n", kind);
-		//val = tmpCount++;
-		//print("TEMP tmpVar%d;\n", val);
-		//print("%s", ast->variable_exp.identifier);
-
 		return printVar(ast);
 		return 0;
 
 		break;
 	case 14:
+		//print("ARRAY_NODE %d\n",kind);
 		return printArray(ast);
 		//return 0;
 		break;
@@ -343,7 +343,17 @@ int genCode(node *ast) {
 		}
 
 		print("#else\n");
-		genCode(ast->if_else_statement.else_statement);
+		right_exp = genCode(ast->if_else_statement.else_statement);
+		if(ast->if_else_statement.else_statement->kind == VAR_NODE){
+			if(right_exp == 0){
+				print("CMP %s;\n", ast->if_else_statement.else_statement->assignment.left->variable_exp.identifier);
+			}else{
+				print("CMP tmpVar%d;\n", right_exp);
+			}
+		}else{
+			print("CMP tmpVar%d;\n", right_exp);
+		}
+
 		print("#then\n");
 		genCode(ast->if_else_statement.then_statement);
 		print("#endif\n");
