@@ -110,8 +110,6 @@ int genCode(node *ast) {
 			//printf("BINARY_EXPRESSION_NODE %d\n", kind);
 			//printf("Operator: %d\n", ast->binary_expr.op);
 
-
-
 			if(ast->binary_expr.op==AND_OP){
 				print("AND ");
 			}
