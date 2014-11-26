@@ -226,21 +226,22 @@ int genCode(node *ast) {
 			print("POW ");
 		}
 
+		print("tmpVar%d, ", val);
 		if (left_exp == 0) {
 			left_exp = genCode(ast->binary_expr.left);
-			print(",");
 		} else {
-			print("tmpVar%d ,", left_exp);
+			print("tmpVar%d ", left_exp);
 		}
+		print(",");
 
 		if (right_exp == 0) {
 			right_exp = genCode(ast->binary_expr.right);
 		} else {
-			print("tmpVar%d ,", right_exp);
+			print("tmpVar%d ", right_exp);
 		}
 
 		//if (right_exp == 0 || left_exp == 0) {
-		print(", tmpVar%d;\n", val);
+		print(";\n", val);
 		//} else {
 		//	print("tmpVar%d , tmpVar%d, tmpVar%d;\n", left_exp, right_exp, tmpCount);
 		//}
@@ -261,7 +262,8 @@ int genCode(node *ast) {
 		//printf("Float: %f", ast->float_literal.right);
 		//print("MOV tmpVar%d, %d;\n", tmpCount, ast->float_literal.right);
 		//val = tmpCount++;
-		print("%d", ast->float_literal.right);
+
+		print("%f", ast->float_literal.right);
 		return 0;
 		break;
 	case 11:
@@ -297,20 +299,21 @@ int genCode(node *ast) {
 		//printf("FUNCTION_NODE %d\n", kind);
 		if (type == -1)
 			return -1;
+		//type = genCode(ast->function_exp.arguments);
 
-		type = genCode(ast->function_exp.arguments);
-
+		val = tmpCount++;
 		if (ast->function_exp.function_name == 2) { //rsq
-			print("rsq tmpVar%d", type);
+			print("rsq tmpVar%d, ", val);
 		} else if (ast->function_exp.function_name == 0) { //dp3
-			print("dp3 tmpVar%d", type);
+			print("dp3 tmpVar%d, ", val);
 		} else if (ast->function_exp.function_name == 1) { //lit
-			print("lit tmpVar%d", type);
+			print("lit tmpVar%d, ", val);
 		}
 
-		print("\n");
+		genCode(ast->function_exp.arguments);
+		print(";\n");
 
-		return 0;
+		return val;
 
 		break;
 	case 16:
@@ -320,7 +323,7 @@ int genCode(node *ast) {
 		val = tmpCount++;
 		print("TEMP tmpVar%d = {", val);
 		right_exp = genCode(ast->constructor_exp.arguments);
-		print("}\n");
+		print("};\n");
 
 		return val;
 
@@ -379,14 +382,14 @@ int genCode(node *ast) {
 	case 21:
 		//print("#ASSIGNMENT_NODE %d\n", kind);
 
-		if (ast->assignment.right->kind == BINARY_EXPRESSION_NODE) {
+		if (ast->assignment.right->kind == BINARY_EXPRESSION_NODE || ast->assignment.right->kind ==  FUNCTION_NODE) {
 			right_exp = genCode(ast->assignment.right);
 			print("MOV ");
 			left_exp = genCode(ast->assignment.left);
 			print(", ");
 			print("tmpVar%d", right_exp);
 			print(";\n");
-		} else {
+		}else {
 			print("MOV ");
 			left_exp = genCode(ast->assignment.left);
 			print(", ");
