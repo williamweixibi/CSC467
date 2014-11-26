@@ -108,7 +108,6 @@ int genCode(node *ast) {
 			//printf("BINARY_EXPRESSION_NODE %d\n", kind);
 			//printf("Operator: %d\n", ast->binary_expr.op);
 
-			printf("Operator: %d ", ast->binary_expr.op);
 			left_exp = genCode(ast->binary_expr.left);
 			print(",");
 			right_exp = genCode(ast->binary_expr.right);
@@ -255,8 +254,8 @@ int genCode(node *ast) {
 			}else{
 				val = tmpCount;
 				tmpCount++;
-				print("TEMP tmpVar%d\n", val);
-				print("MOV tmpVar%d, %s.%c\n", val, name, toChar(index));
+				print("TEMP tmpVar%d;\n", val);
+				print("MOV tmpVar%d, %s.%c;\n", val, name, toChar(index));
 			}
 
 			break;
