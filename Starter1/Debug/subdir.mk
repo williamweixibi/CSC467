@@ -3,29 +3,20 @@
 ################################################################################
 
 # Add inputs and outputs from these tool invocations to the build variables 
-O_SRCS += \
-../compiler467.o \
-../globalvars.o \
-../parser.o \
-../scanner.o 
-
 C_SRCS += \
 ../compiler467.c \
 ../file.c \
-../globalvars.c \
-../parser.c 
+../globalvars.c 
 
 OBJS += \
 ./compiler467.o \
 ./file.o \
-./globalvars.o \
-./parser.o 
+./globalvars.o 
 
 C_DEPS += \
 ./compiler467.d \
 ./file.d \
-./globalvars.d \
-./parser.d 
+./globalvars.d 
 
 
 # Each subdirectory must supply rules for building sources it contributes
