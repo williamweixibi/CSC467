@@ -7,6 +7,7 @@
 static int scopeCount;
 int tmpCount = 1;
 int prmCount = 1;
+int condCount = 1;
 
 char toChar(int n) {
 	switch (n) {
@@ -315,9 +316,13 @@ int genCode(node *ast) {
 	case 16:
 		//printf("CONSTRUCTOR_NODE %d\n", kind);
 		left_exp = genCode(ast->constructor_exp.type);
-		right_exp = genCode(ast->constructor_exp.arguments);
 
-		return 0;
+		val = tmpCount++;
+		print("TEMP tmpVar%d = {", val);
+		right_exp = genCode(ast->constructor_exp.arguments);
+		print("}\n");
+
+		return val;
 
 		break;
 	case 17:
@@ -325,18 +330,23 @@ int genCode(node *ast) {
 		return 0; //ast->type.type_name;
 		break;
 	case 18:
-		printf("#IF_ELSE_STATEMENT_NODE %d\n", kind);
-		left_exp = genCode(ast->if_else_statement.condition);
+		//printf("#IF_ELSE_STATEMENT_NODE %d\n", kind);
+		val = condCount++;
+		print("TEMP condVar%d;\n", val);
+		if (ast->if_else_statement.condition->kind == BINARY_EXPRESSION_NODE) {
+			left_exp = genCode(ast->if_else_statement.condition);
+			print("MOVE condVar%d, tmpVar%d;\n ", val, left_exp);
+		} else {
+			print("MOVE condVar%d, ", val);
+			genCode(ast->if_else_statement.condition);
+			print(";\n");
+		}
 
-		/*if(left_exp == -1)
-		 return -1;
-
-		 if(left_exp!=BOOL){
-		 printf("ERROR: Expression must evaluate to bool line: %d\n", ast->if_else_statement.line);
-		 return -1;
-		 }*/
+		print("#else\n");
 		genCode(ast->if_else_statement.else_statement);
+		print("#then\n");
 		genCode(ast->if_else_statement.then_statement);
+		print("#endif\n");
 		return 0;
 		break;
 	case 19:
@@ -357,7 +367,7 @@ int genCode(node *ast) {
 		//No WHILE_STATEMENT_NODE
 		break;
 	case 21:
-		print("#ASSIGNMENT_NODE %d\n", kind);
+		//print("#ASSIGNMENT_NODE %d\n", kind);
 
 		if (ast->assignment.right->kind == BINARY_EXPRESSION_NODE) {
 			right_exp = genCode(ast->assignment.right);
@@ -383,7 +393,7 @@ int genCode(node *ast) {
 		break;
 	case 23:
 		//printf("DECLARATION_NODE %d\n", kind);
-		print("#Declaration \n");
+		//print("#Declaration \n");
 		print("TEMP %s;\n", ast->declaration.iden);
 
 		return 0;
@@ -414,7 +424,13 @@ int genCode(node *ast) {
 			print("PARAM %s;\n", ast->declaration_assignment.iden);
 			print(
 					"MOV %s, tmpVar%d;\n", ast->declaration_assignment.iden, right_exp);
-		} else {
+		} else if(ast->declaration_assignment.value->kind == CONSTRUCTOR_NODE){
+			right_exp = genCode(ast->declaration_assignment.value);
+			//print("PARAM %s = tmpVar%d;\n", ast->declaration_assignment.iden,val);
+			print("PARAM %s;\n", ast->declaration_assignment.iden,right_exp);
+			print("MOV %s, tmpVar%d;\n", ast->declaration_assignment.iden, right_exp);
+
+		}else {
 			print("PARAM %s;\n", ast->declaration_assignment.iden);
 			print("MOV %s, ", ast->declaration_assignment.iden);
 			right_exp = genCode(ast->declaration_assignment.value);
@@ -424,15 +440,13 @@ int genCode(node *ast) {
 		break;
 	case 26:
 		//print("#ARGUMENTS_COMMA_NODE %d\n", kind);
-		val = tmpCount++;
 
-		print("TEMP tmpVar%d = {", val);
 		right_exp = genCode(ast->arguments_comma.arguments);
 		print(", ");
 		left_exp = genCode(ast->arguments_comma.expression);
-		print("}\n");
 
-		return val;
+
+		return 0;
 
 		break;
 	case 27:
