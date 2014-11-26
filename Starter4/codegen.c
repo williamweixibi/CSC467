@@ -95,11 +95,13 @@ int genCode(node *ast) {
 			switch ( ast->unary_expr.op){
 			case MINUS:
 				print("MULT tmpVar%d, tmpVar%d, -1.0;\n", tmpCount, right_exp);
-				return tmpCount++;
+				val =  tmpCount++;
+				return val;
 				break;
 			case NOT:
 				print("NOT tmpVar%d, tmpVar%d;\n", tmpCount, right_exp);
-				return tmpCount++;
+				val = tmpCount++;
+				return val;
 				break;
 			}
 
@@ -108,87 +110,83 @@ int genCode(node *ast) {
 			//printf("BINARY_EXPRESSION_NODE %d\n", kind);
 			//printf("Operator: %d\n", ast->binary_expr.op);
 
-			left_exp = genCode(ast->binary_expr.left);
-			print(",");
-			right_exp = genCode(ast->binary_expr.right);
-			print("\n");
-
 			if(ast->binary_expr.op==AND_OP){
-				print("AND tmpVar%d, tmpVar%d, tmpVar%d;\n", tmpCount, left_exp, right_exp);
-				return tmpCount++;
+				print("AND ");
 			}
 			else if(ast->binary_expr.op==OR_OP){
-				print("OR tmpVar%d, tmpVar%d, tmpVar%d;\n", tmpCount, left_exp, right_exp);
-				return tmpCount++;
+				print("OR ");
 			}
 			else if(ast->binary_expr.op==LT_OP){
-				print("SLT tmpVar%d, tmpVar%d, tmpVar%d;\n", tmpCount, left_exp, right_exp);
-				return tmpCount++;
+				print("SLT ");
 			}
 			else if(ast->binary_expr.op==LEQ_OP){
-				print("SLE tmpVar%d, tmpVar%d, tmpVar%d;\n", tmpCount, left_exp, right_exp);
-				return tmpCount++;
+				print("SLE ");
 			}
 			else if(ast->binary_expr.op==GT_OP){
-				print("SGT tmpVar%d, tmpVar%d, tmpVar%d;\n", tmpCount, left_exp, right_exp);
-				return tmpCount++;
+				print("SGT ");
 			}else if(ast->binary_expr.op==GEQ_OP){
-				print("SGE tmpVar%d, tmpVar%d, tmpVar%d;\n", tmpCount, left_exp, right_exp);
-				return tmpCount++;
+				print("SGE ");
 			}
 			else if(ast->binary_expr.op==EQ_OP){
-				print("SEQ tmpVar%d, tmpVar%d, tmpVar%d;\n", tmpCount, left_exp, right_exp);
-				return tmpCount++;
+				print("SEQ ");
 			}
 			else if(ast->binary_expr.op==NEQ_OP){
-				print("SNE tmpVar%d, tmpVar%d, tmpVar%d;\n", tmpCount, left_exp, right_exp);
-				return tmpCount++;
+				print("SNE ");
 			}else if(ast->binary_expr.op==ADD_OP){
-				print("ADD tmpVar%d, tmpVar%d, tmpVar%d;\n", tmpCount, left_exp, right_exp);
-				return tmpCount++;
+				print("ADD ");
 			}
 			else if(ast->binary_expr.op==SUB_OP){
-				print("SUB tmpVar%d, tmpVar%d, tmpVar%d;\n", tmpCount, left_exp, right_exp);
-				return tmpCount++;
+				print("SUB ");
 			}
 			else if(ast->binary_expr.op==MULT_OP){
-				print("MUL tmpVar%d, tmpVar%d, tmpVar%d;\n", tmpCount, left_exp, right_exp);
-				return tmpCount++;
+				print("MUL ");
 			}
 			else if(ast->binary_expr.op==DIV_OP){
-				print("DIV tmpVar%d, tmpVar%d, tmpVar%d;\n", tmpCount, left_exp, right_exp);
-				return tmpCount++;
+				print("DIV ");
 			}
 			else if(ast->binary_expr.op==POW_OP){
-				print("POW tmpVar%d, tmpVar%d, tmpVar%d;\n", tmpCount, left_exp, right_exp);
-				return tmpCount++;
+				print("POW ");
 			}
+
+			left_exp = genCode(ast->binary_expr.left);
+			if(left_exp==0){
+				print(",");
+			}
+
+			right_exp = genCode(ast->binary_expr.right);
+			if(right_exp == 0  || left_exp == 0){
+				print(", tmpVar%d;\n", tmpCount);
+			}else{
+				print("tmpVar%d , tmpVar%d, tmpVar%d;\n", left_exp, right_exp, tmpCount);
+			}
+			val = tmpCount++;
+			return val;
 			break;
 		case 9:
 			//printf("INT_NODE %d\n", kind);
 			//printf("Integer: %d\n",ast->int_literal.right);
 			print("MOV tmpVar%d, %d.0;\n", tmpCount, ast->int_literal.right);
-			tmpCount++;
-			return tmpCount;
+			val = tmpCount++;
+			return val;
 			break;
 		case 10:
 			//printf("FLOAT_NODE %d\n", kind);
 			//printf("Float: %f", ast->float_literal.right);
 			print("MOV tmpVar%d, %d;\n", tmpCount, ast->float_literal.right);
-			tmpCount++;
-			return tmpCount;
+			val = tmpCount++;
+			return val;
 			break;
 		case 11:
 			//printf("BOOL_NODE %d\n", kind);
 			//printf("Bool: %d", ast->bool_literal.right);
 			if(ast->bool_literal.right==1){
 				print("MOV tmpVar%d, %f;\n", tmpCount, 1.0);
-				tmpCount++;
+				val = tmpCount++;
 			}else if(ast->bool_literal.right==0){
 				print("MOV tmpVar%d, %f;\n", tmpCount, -1.0);
-				tmpCount++;
+				val = tmpCount++;
 			}
-			return tmpCount;
+			return val;
 			break;
 		case 12:
 			//printf("IDENT_NODE No node %d\n", kind);
@@ -201,7 +199,6 @@ int genCode(node *ast) {
 
 			break;
 		case 14:
-			print("#ARRAY_NODE %d\n", kind);
 			name = ast->array_exp.identifier;
 			type = getType(name);
 
@@ -209,49 +206,64 @@ int genCode(node *ast) {
 
 			if(strcmp(name,"gl_FragColor")==0){
 				print("result.color.%c", toChar(index));
+				return 0;
 
 			}else if(strcmp(name,"gl_FragDepth")==0){
 				print("result.depth.%c", toChar(index));
+				return 0;
 
 			}else if(strcmp(name,"gl_FragCoord")==0){
 				print("fragment.position.%c", toChar(index));
+				return 0;
 
 			}else if(strcmp(name,"gl_TexCoord")==0){
 				print("fragment.texcoord.%c", toChar(index));
+				return 0;
 
 			}else if(strcmp(name,"gl_Color")==0){
 				print("fragment.color.%c", toChar(index));
+				return 0;
 
 			}else if(strcmp(name,"gl_Secondary")==0){
 				print("fragment.color.secondary.%c", toChar(index));
+				return 0;
 
 			}else if(strcmp(name,"gl_FogFragCoord")==0){
 				print("fragment.fogcoord.%c", toChar(index));
+				return 0;
 
 			}else if(strcmp(name,"gl_Light_Half")==0){
 				print("state.light[0].half.%c", toChar(index));
+				return 0;
 
 			}else if(strcmp(name,"gl_Light_Ambient")==0){
 				print("state.lightmodel.ambient.%c", toChar(index));
+				return 0;
 
 			}else if(strcmp(name,"gl_Material_Shininess")==0){
 				print("state.material.shininess.%c", toChar(index));
+				return 0;
 
 			}else if(strcmp(name,"env1")==0){
 				print("program.env[1].%c", toChar(index));
+				return 0;
 
 			}else if(strcmp(name,"env2")==0){
 				print("program.env[2].%c", toChar(index));
+				return 0;
 
 			}else if(strcmp(name,"env3")==0){
 				print("program.env[3].%c", toChar(index));
+				return 0;
 
 			}else{
 				val = tmpCount;
 				tmpCount++;
-				print("TEMP tmpVar%d;\n", val);
-				print("MOV tmpVar%d, %s.%c;\n", val, name, toChar(index));
+				print("TEMP tmpVar%d\n", val);
+				print("MOV tmpVar%d, %s.%c\n", val, name, toChar(index));
+				return val;
 			}
+
 
 			break;
 		case 15:
