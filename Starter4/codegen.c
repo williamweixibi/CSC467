@@ -343,15 +343,13 @@ int genCode(node *ast) {
 		}
 
 		print("#else\n");
-		right_exp = genCode(ast->if_else_statement.else_statement);
-		if(ast->if_else_statement.else_statement->kind == VAR_NODE){
-			if(right_exp == 0){
-				print("CMP %s;\n", ast->if_else_statement.else_statement->assignment.left->variable_exp.identifier);
-			}else{
-				print("CMP tmpVar%d;\n", right_exp);
-			}
+		if(ast->if_else_statement.else_statement->kind == ASSIGNMENT_NODE){
+			right_exp = genCode(ast->if_else_statement.else_statement);
+			print("CMP;\n");
+
 		}else{
-			print("CMP tmpVar%d;\n", right_exp);
+			right_exp = genCode(ast->if_else_statement.else_statement);
+			print("%d\n",right_exp);
 		}
 
 		print("#then\n");
