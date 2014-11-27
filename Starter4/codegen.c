@@ -436,14 +436,18 @@ int genCode(node *ast) {
 		break;
 	case 19:
 		printf("#IF_STATEMENT_NODE %d\n", kind);
-		left_exp = genCode(ast->if_else_statement.condition);
-		/*if(left_exp == -1)
-		 return -1;
+		val = ++condCount;
+		print("TEMP condVar%d;\n", val);
+		if (ast->if_else_statement.condition->kind == BINARY_EXPRESSION_NODE) {
+			left_exp = genCode(ast->if_else_statement.condition);
+			print("MOV condVar%d, tmpVar%d;\n ", val, left_exp);
+		} else {
+			print("MOV condVar%d, ", val);
+			genCode(ast->if_else_statement.condition);
+			print(";\n");
+		}
 
-		 if(left_exp!=BOOL){
-		 printf("ERROR: Expression must evaluate to bool line: %d\n", ast->if_else_statement.line);
-		 return -1;
-		 }*/
+		if_state = IN_THEN;
 		genCode(ast->if_statement.then_statement);
 		return 0;
 		break;
@@ -465,7 +469,6 @@ int genCode(node *ast) {
 				print("condVar%d ,", condCount);
 				left_exp = genCode(ast->assignment.left);
 				print(", tmpVar%d", right_exp);
-				//double
 				print(";\n");
 			} else {
 				print("CMP ");
@@ -539,17 +542,64 @@ int genCode(node *ast) {
 		//printf("DECLARATION_ASSIGNMENT_NODE %d\n", kind);
 		left_exp = genCode(ast->declaration_assignment.type);
 
-		if (ast->declaration_assignment.value->kind == BINARY_EXPRESSION_NODE
-				|| ast->assignment.right->kind == FUNCTION_NODE) {
-			right_exp = genCode(ast->declaration_assignment.value);
-			print("TEMP %s;\n", ast->declaration_assignment.iden);
-			print(
-					"MOV %s, tmpVar%d;\n", ast->declaration_assignment.iden, right_exp);
+		if (if_state == IN_THEN) {
+			if (ast->declaration_assignment.value->kind
+					== BINARY_EXPRESSION_NODE
+					|| ast->assignment.right->kind == FUNCTION_NODE) {
+				right_exp = genCode(ast->declaration_assignment.value);
+				print("TEMP %s;\n", ast->declaration_assignment.iden);
+				print("CMP ");
+				print("%s ,", ast->declaration_assignment.iden);
+				print("condVar%d ,", condCount);
+				print("%s ,", ast->declaration_assignment.iden);
+				print("tmpVar%d ;\n", right_exp);
+
+			} else {
+				print("TEMP %s;\n", ast->declaration_assignment.iden);
+				print("CMP ");
+				print("%s ,", ast->declaration_assignment.iden);
+				print("condVar%d ,", condCount);
+				print(" %s ,", ast->declaration_assignment.iden);
+				right_exp = genCode(ast->declaration_assignment.value);
+				print(";\n");
+			}
+		} else if (if_state == IN_ELSE) {
+			if (ast->declaration_assignment.value->kind
+					== BINARY_EXPRESSION_NODE
+					|| ast->assignment.right->kind == FUNCTION_NODE) {
+				right_exp = genCode(ast->declaration_assignment.value);
+				print("TEMP %s;\n", ast->declaration_assignment.iden);
+				print("CMP ");
+				print("%s ,", ast->declaration_assignment.iden);
+				print("condVar%d ,", condCount);
+				print("tmpVar%d ,", right_exp);
+				print("%s;\n", ast->declaration_assignment.iden);
+
+			} else {
+				print("TEMP %s;\n", ast->declaration_assignment.iden);
+				print("CMP ");
+				print("%s ,", ast->declaration_assignment.iden);
+				print("condVar%d ,", condCount);
+				right_exp = genCode(ast->declaration_assignment.value);
+				print(", %s", ast->declaration_assignment.iden);
+				print(";\n");
+			}
+
 		} else {
-			print("TEMP %s;\n", ast->declaration_assignment.iden);
-			print("MOV %s, ", ast->declaration_assignment.iden);
-			right_exp = genCode(ast->declaration_assignment.value);
-			print(";\n");
+
+			if (ast->declaration_assignment.value->kind
+					== BINARY_EXPRESSION_NODE
+					|| ast->assignment.right->kind == FUNCTION_NODE) {
+				right_exp = genCode(ast->declaration_assignment.value);
+				print("TEMP %s;\n", ast->declaration_assignment.iden);
+				print(
+						"MOV %s, tmpVar%d;\n", ast->declaration_assignment.iden, right_exp);
+			} else {
+				print("TEMP %s;\n", ast->declaration_assignment.iden);
+				print("MOV %s, ", ast->declaration_assignment.iden);
+				right_exp = genCode(ast->declaration_assignment.value);
+				print(";\n");
+			}
 		}
 
 		return 0;
