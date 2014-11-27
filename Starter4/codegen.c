@@ -23,7 +23,70 @@ char toChar(int n) {
 }
 
 int printVar(node *ast) {
-	print("%s", ast->variable_exp.identifier);
+	char *name;
+	int type, index;
+
+	name = ast->array_exp.identifier;
+	type = getType(name);
+
+	index = ast->array_exp.index;
+
+	if (strcmp(name, "gl_FragColor") == 0) {
+		print("result.color");
+		return 0;
+
+	} else if (strcmp(name, "gl_FragDepth") == 0) {
+		print("result.depth");
+		return 0;
+
+	} else if (strcmp(name, "gl_FragCoord") == 0) {
+		print("fragment.position");
+		return 0;
+
+	} else if (strcmp(name, "gl_TexCoord") == 0) {
+		print("fragment.texcoord");
+		return 0;
+
+	} else if (strcmp(name, "gl_Color") == 0) {
+		print("fragment.color");
+		return 0;
+
+	} else if (strcmp(name, "gl_Secondary") == 0) {
+		print("fragment.color.secondary");
+		return 0;
+
+	} else if (strcmp(name, "gl_FogFragCoord") == 0) {
+		print("fragment.fogcoord");
+		return 0;
+
+	} else if (strcmp(name, "gl_Light_Half") == 0) {
+		print("state.light[0].half");
+		return 0;
+
+	} else if (strcmp(name, "gl_Light_Ambient") == 0) {
+		print("state.lightmodel.ambient");
+		return 0;
+
+	} else if (strcmp(name, "gl_Material_Shininess") == 0) {
+		print("state.material.shininess");
+		return 0;
+
+	} else if (strcmp(name, "env1") == 0) {
+		print("program.env[1]");
+		return 0;
+
+	} else if (strcmp(name, "env2") == 0) {
+		print("program.env[2]");
+		return 0;
+
+	} else if (strcmp(name, "env3") == 0) {
+		print("program.env[3]");
+		return 0;
+
+	} else {
+		print("%s", name);
+		return 0;
+	}
 	return 0;
 }
 
@@ -246,7 +309,6 @@ int genCode(node *ast) {
 		//	print("tmpVar%d , tmpVar%d, tmpVar%d;\n", left_exp, right_exp, tmpCount);
 		//}
 
-
 		return val;
 		break;
 	case 9:
@@ -302,12 +364,15 @@ int genCode(node *ast) {
 		//type = genCode(ast->function_exp.arguments);
 
 		val = tmpCount++;
+
+		print("TEMP tmpVar%d;\n", val);
+
 		if (ast->function_exp.function_name == 2) { //rsq
-			print("rsq tmpVar%d, ", val);
+			print("RSQ tmpVar%d, ", val);
 		} else if (ast->function_exp.function_name == 0) { //dp3
-			print("dp3 tmpVar%d, ", val);
+			print("DP3 tmpVar%d, ", val);
 		} else if (ast->function_exp.function_name == 1) { //lit
-			print("lit tmpVar%d, ", val);
+			print("LIT tmpVar%d, ", val);
 		}
 
 		genCode(ast->function_exp.arguments);
@@ -320,12 +385,13 @@ int genCode(node *ast) {
 		//printf("CONSTRUCTOR_NODE %d\n", kind);
 		left_exp = genCode(ast->constructor_exp.type);
 
-		val = tmpCount++;
-		print("TEMP tmpVar%d = {", val);
+		//val = tmpCount++;
+		//print("TEMP tmpVar%d = {", val);
+		print("{", val);
 		right_exp = genCode(ast->constructor_exp.arguments);
-		print("};\n");
+		print("}");
 
-		return val;
+		return 0;
 
 		break;
 	case 17:
@@ -338,22 +404,23 @@ int genCode(node *ast) {
 		print("TEMP condVar%d;\n", val);
 		if (ast->if_else_statement.condition->kind == BINARY_EXPRESSION_NODE) {
 			left_exp = genCode(ast->if_else_statement.condition);
-			print("MOVE condVar%d, tmpVar%d;\n ", val, left_exp);
+			print("MOV condVar%d, tmpVar%d;\n ", val, left_exp);
 		} else {
-			print("MOVE condVar%d, ", val);
+			print("MOV condVar%d, ", val);
 			genCode(ast->if_else_statement.condition);
 			print(";\n");
 		}
 
 		print("#else\n");
 		right_exp = genCode(ast->if_else_statement.else_statement);
-		if(ast->if_else_statement.else_statement->kind == VAR_NODE){
-			if(right_exp == 0){
-				print("CMP %s;\n", ast->if_else_statement.else_statement->assignment.left->variable_exp.identifier);
-			}else{
+		if (ast->if_else_statement.else_statement->kind == VAR_NODE) {
+			if (right_exp == 0) {
+				print(
+						"CMP %s;\n", ast->if_else_statement.else_statement->assignment.left->variable_exp.identifier);
+			} else {
 				print("CMP tmpVar%d;\n", right_exp);
 			}
-		}else{
+		} else {
 			print("CMP tmpVar%d;\n", right_exp);
 		}
 
@@ -382,14 +449,15 @@ int genCode(node *ast) {
 	case 21:
 		//print("#ASSIGNMENT_NODE %d\n", kind);
 
-		if (ast->assignment.right->kind == BINARY_EXPRESSION_NODE || ast->assignment.right->kind ==  FUNCTION_NODE) {
+		if (ast->assignment.right->kind == BINARY_EXPRESSION_NODE
+				|| ast->assignment.right->kind == FUNCTION_NODE) {
 			right_exp = genCode(ast->assignment.right);
 			print("MOV ");
 			left_exp = genCode(ast->assignment.left);
 			print(", ");
 			print("tmpVar%d", right_exp);
 			print(";\n");
-		}else {
+		} else {
 			print("MOV ");
 			left_exp = genCode(ast->assignment.left);
 			print(", ");
@@ -434,18 +502,18 @@ int genCode(node *ast) {
 		left_exp = genCode(ast->const_declaration_assignment.type);
 		if (ast->declaration_assignment.value->kind == BINARY_EXPRESSION_NODE) {
 			right_exp = genCode(ast->declaration_assignment.value);
-			print("PARAM %s;\n", ast->declaration_assignment.iden);
-			print(
-					"MOV %s, tmpVar%d;\n", ast->declaration_assignment.iden, right_exp);
-		} else if(ast->declaration_assignment.value->kind == CONSTRUCTOR_NODE){
-			right_exp = genCode(ast->declaration_assignment.value);
-			//print("PARAM %s = tmpVar%d;\n", ast->declaration_assignment.iden,val);
-			print("PARAM %s;\n", ast->declaration_assignment.iden,right_exp);
-			print("MOV %s, tmpVar%d;\n", ast->declaration_assignment.iden, right_exp);
+			print("PARAM %s = tmpVar%d;\n", ast->declaration_assignment.iden,right_exp);
 
-		}else {
-			print("PARAM %s;\n", ast->declaration_assignment.iden);
-			print("MOV %s, ", ast->declaration_assignment.iden);
+		} else if (ast->declaration_assignment.value->kind
+				== CONSTRUCTOR_NODE) {
+
+			//print("PARAM %s = tmpVar%d;\n", ast->declaration_assignment.iden,val);
+			print("PARAM %s = ", ast->declaration_assignment.iden,right_exp);
+			right_exp = genCode(ast->declaration_assignment.value);
+			print(";\n");
+
+		} else {
+			print("PARAM %s = ", ast->declaration_assignment.iden);
 			right_exp = genCode(ast->declaration_assignment.value);
 			print(";\n");
 		}
@@ -457,7 +525,6 @@ int genCode(node *ast) {
 		right_exp = genCode(ast->arguments_comma.arguments);
 		print(", ");
 		left_exp = genCode(ast->arguments_comma.expression);
-
 
 		return 0;
 

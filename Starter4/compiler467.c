@@ -107,8 +107,9 @@ int main (int argc, char *argv[]) {
   if (errorOccurred)
     fprintf(outputFile,"Failed to compile\n");
   else 
-	//print("!!ARBfp1.0\n");
+	printf("!!ARBfp1.0\n");
     genCode(ast);
+    printf("END\n");
     ;
 /***********************************************************************
  * Post Compilation Cleanup
