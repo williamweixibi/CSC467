@@ -200,9 +200,9 @@ int semantic_check( node *ast) {
 
 			if(ast->binary_expr.op==LT_OP ||ast->binary_expr.op==LEQ_OP || ast->binary_expr.op==GT_OP || ast->binary_expr.op==GEQ_OP){
 				if(left_exp==INT && right_exp==INT){
-					return INT;
+					return BOOL;
 				}else if(left_exp==FLOAT && right_exp == FLOAT){
-					return FLOAT;
+					return BOOL;
 				}else if(left_exp==BOOL || right_exp==BOOL){
 					printf("ERROR BINARY_EXPRESSION_NODE comparison operators should have artimetic operands line: %d\n", ast->binary_expr.line);
 					return -1;
@@ -234,6 +234,9 @@ int semantic_check( node *ast) {
 				if(left_exp==right_exp){
 					if(left_exp==BOOL || left_exp == BVEC2 || left_exp == BVEC3 || left_exp == BVEC4){
 						printf("ERROR BINARY_EXPRESSION_NODE comparison operators should have artimetic operands line: %d\n", ast->binary_expr.line);
+						return -1;
+					}else{
+						return BOOL;
 					}
 				}else{
 					printf("ERROR BINARY_EXPRESSION_NODE operands should be of same base type line: %d\n", ast->binary_expr.line);
