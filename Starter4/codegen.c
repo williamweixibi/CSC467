@@ -1,6 +1,7 @@
 #define print(...) printf(__VA_ARGS__)
 
 #include "codegen.h"
+#include "stack.h"
 
 #include "linked_list.h"
 #include "semantic.h"
@@ -10,6 +11,10 @@ int prmCount = 1;
 int condCount = 1;
 int if_state = 0;
 int maxTmpCount = 0;
+int initFlag = 0;
+
+int ifStack[256];
+int ifStackTop, ifStackElem;
 
 enum {
 	IN_NONE, IN_THEN, IN_ELSE, IN_COND
@@ -172,6 +177,14 @@ int printArray(node *ast) {
 
 }
 
+void initAll(){
+	if(initFlag==0){
+		s_init(&ifStackTop);
+
+	}
+	initFlag = 1;
+}
+
 int genCode(node *ast) {
 
 	if (ast == NULL) {
@@ -189,6 +202,9 @@ int genCode(node *ast) {
 	kind = ast->kind;
 	int isDecl = 0;
 	int val;
+
+	initAll();
+
 
 	switch (kind) {
 	case 1:
@@ -666,7 +682,7 @@ int genCode(node *ast) {
 
 		if (inPreEval(ast->if_else_statement.condition->kind)) {
 			left_exp = genCode(ast->if_else_statement.condition);
-			print("MOV condVar%d, tmpVar%d;\n ", val, left_exp);
+			print("MOV condVar%d, tmpVar%d;\n", val, left_exp);
 		} else {
 			print("MOV condVar%d, ", val);
 			genCode(ast->if_else_statement.condition);
@@ -676,13 +692,16 @@ int genCode(node *ast) {
 		print("#else\n");
 
 		if_state = IN_ELSE;
+		s_push(ifStack, &ifStackTop, if_state);
 		right_exp = genCode(ast->if_else_statement.else_statement);
+		s_pop(ifStack, &ifStackTop);
 
 		print("#then\n");
 
 		if_state = IN_THEN;
-
+		s_push(ifStack,&ifStackTop,if_state);
 		genCode(ast->if_else_statement.then_statement);
+		s_pop(ifStack, &ifStackTop);
 
 		print("#endif\n");
 		if_state = IN_NONE;
@@ -697,7 +716,7 @@ int genCode(node *ast) {
 		print("TEMP condVar%d;\n", val);
 		if (inPreEval(ast->if_else_statement.condition->kind)) {
 			left_exp = genCode(ast->if_else_statement.condition);
-			print("MOV condVar%d, tmpVar%d;\n ", val, left_exp);
+			print("MOV condVar%d, tmpVar%d;\n", val, left_exp);
 		} else {
 			print("MOV condVar%d, ", val);
 			genCode(ast->if_else_statement.condition);
@@ -705,7 +724,9 @@ int genCode(node *ast) {
 		}
 
 		if_state = IN_THEN;
+		s_push(ifStack,&ifStackTop,if_state);
 		genCode(ast->if_statement.then_statement);
+		s_pop(ifStack, &ifStackTop);
 		return 0;
 		break;
 	case 20:
@@ -714,6 +735,8 @@ int genCode(node *ast) {
 		break;
 	case 21:
 		//print("#ASSIGNMENT_NODE %d\n", kind);
+
+		if_state = s_peak(ifStack,&ifStackTop);
 
 		if (if_state == IN_THEN) {
 
@@ -795,6 +818,7 @@ int genCode(node *ast) {
 	case 24:
 		//printf("DECLARATION_ASSIGNMENT_NODE %d\n", kind);
 		left_exp = genCode(ast->declaration_assignment.type);
+		if_state = s_peak(ifStack,&ifStackTop);
 
 		if (if_state == IN_THEN) {
 			if (inPreEval(ast->declaration_assignment.value->kind)) {

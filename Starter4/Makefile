@@ -40,7 +40,7 @@ RM      = rm -f
 #LEXER_OBJ =handlex.o
 LEXER_OBJ =scanner.o
 PARSER_OBJ=parser.o
-AST_OBJ   =linked_list.o ast.o semantic.o symbol.o
+AST_OBJ   =linked_list.o stack.o ast.o semantic.o symbol.o
 CODE_OBJ  =codegen.o  
 OBJs      =compiler467.o globalvars.o $(LEXER_OBJ) \
            $(PARSER_OBJ) $(AST_OBJ)   
