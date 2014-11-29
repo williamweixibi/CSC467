@@ -9,6 +9,7 @@ int tmpCount = 1;
 int prmCount = 1;
 int condCount = 1;
 int if_state = 0;
+int maxTmpCount = 0;
 
 enum {
 	IN_NONE, IN_THEN, IN_ELSE, IN_COND
@@ -252,11 +253,14 @@ int genCode(node *ast) {
 		//printf("BINARY_EXPRESSION_NODE %d\n", kind);
 		//printf("Operator: %d\n", ast->binary_expr.op);
 
+		int t1, t2, t3, t4, t5, t6;
 		left_exp = 0;
 		right_exp = 0;
 		val = tmpCount++;
-
-		print("TEMP tmpVar%d;\n", val);
+		if (val > maxTmpCount) {
+			print("TEMP tmpVar%d;\n", val);
+			maxTmpCount++;
+		}
 
 		if (ast->binary_expr.left->kind == BINARY_EXPRESSION_NODE) {
 			left_exp = genCode(ast->binary_expr.left);
@@ -267,21 +271,225 @@ int genCode(node *ast) {
 		}
 
 		if (ast->binary_expr.op == AND_OP) {
-			print("AND ");
+			print("ADD ");
+			//
+			print("tmpVar%d, ", val);
+			if (left_exp == 0) {
+				left_exp = genCode(ast->binary_expr.left);
+			} else {
+				print("tmpVar%d ", left_exp);
+			}
+			print(",");
+
+			if (right_exp == 0) {
+				right_exp = genCode(ast->binary_expr.right);
+			} else {
+				print("tmpVar%d ", right_exp);
+			}
+			print(";\n", val);
+			print("SUB tmpVar%d, tmpVar%d, 1.0;\n", val, val);
+			val = tmpCount++;
+			if (val > maxTmpCount) {
+				print("TEMP tmpVar%d;\n", val);
+				maxTmpCount++;
+			}
+
+			print("CMP tmpVar%d, tmpVar%d, -1.0, 1.0;\n", val, val-1);
+			print("MOV tmpVar%d, tmpVar%d;\n", val-1, val);
+			tmpCount--;
+			return val - 1;
 		} else if (ast->binary_expr.op == OR_OP) {
-			print("OR ");
+			print("ADD ");
+			//
+			print("tmpVar%d, ", val);
+			if (left_exp == 0) {
+				left_exp = genCode(ast->binary_expr.left);
+			} else {
+				print("tmpVar%d ", left_exp);
+			}
+			print(",");
+
+			if (right_exp == 0) {
+				right_exp = genCode(ast->binary_expr.right);
+			} else {
+				print("tmpVar%d ", right_exp);
+			}
+			print(";\n", val);
+			print("ADD tmpVar%d, tmpVar%d, 1.0;\n", val, val);
+			val = tmpCount++;
+			if (val > maxTmpCount) {
+				print("TEMP tmpVar%d;\n", val);
+				maxTmpCount++;
+			}
+			print("CMP tmpVar%d, tmpVar%d, -1.0, 1.0;\n", val, val-1);
+			print("MOV tmpVar%d, tmpVar%d;\n", val-1, val);
+			tmpCount--;
+			return val - 1;
 		} else if (ast->binary_expr.op == LT_OP) {
 			print("SLT ");
 		} else if (ast->binary_expr.op == LEQ_OP) {
-			print("SLE ");
+			print("SGE ");
+			//
+			print("tmpVar%d, ", val);
+			if (left_exp == 0) {
+				left_exp = genCode(ast->binary_expr.left);
+			} else {
+				print("tmpVar%d ", left_exp);
+			}
+			print(",");
+
+			if (right_exp == 0) {
+				right_exp = genCode(ast->binary_expr.right);
+			} else {
+				print("tmpVar%d ", right_exp);
+			}
+			print(";\n", val);
+			t1 = val;
+			t2 = t1 + 1;
+			if (t2 > maxTmpCount) {
+				print("TEMP tmpVar%d;\n", t2);
+				maxTmpCount++;
+			}
+
+			print("SGE tmpVar%d,", t2);
+			if (right_exp == 0) {
+				right_exp = genCode(ast->binary_expr.right);
+			} else {
+				print("tmpVar%d ", right_exp);
+			}
+			print(",");
+
+			if (left_exp == 0) {
+				left_exp = genCode(ast->binary_expr.left);
+			} else {
+				print("tmpVar%d ", left_exp);
+			}
+			print(";\n", val);
+
+			print("ADD tmpVar%d, tmpVar%d, tmpVar%d;\n", t2, t2, t1);
+			print("SUB tmpVar%d, tmpVar%d, 2.0;\n", t2, t2);
+			print("CMP tmpVar%d, tmpVar%d, -1.0, 1.0;\n", t1, t2);
+			t3 = t2 + 1;
+			print("SUB tmpVar%d,", t2);
+			if (left_exp == 0) {
+				left_exp = genCode(ast->binary_expr.left);
+			} else {
+				print("tmpVar%d ", left_exp);
+			}
+			print(",");
+
+			if (right_exp == 0) {
+				right_exp = genCode(ast->binary_expr.right);
+			} else {
+				print("tmpVar%d ", right_exp);
+			}
+			print(";\n", val);
+			if (t3 > maxTmpCount) {
+				print("TEMP tmpVar%d;\n", t3);
+				maxTmpCount++;
+			}
+			print("SLT tmpVar%d, tmpVar%d, 0.0;\n", t3, t2);
+			print("ADD tmpVar%d, tmpVar%d, tmpVar%d;\n", t3, t3, t1);
+			print("SUB tmpVar%d, tmpVar%d,1.0;\n", t3, t3);
+			print("CMP tmpVar%d, tmpVar%d, -1.0, 1.0;\n", t1, t3);
+			tmpCount = t1 + 1;
+			return t1;
 		} else if (ast->binary_expr.op == GT_OP) {
 			print("SGT ");
+			//
+
 		} else if (ast->binary_expr.op == GEQ_OP) {
 			print("SGE ");
 		} else if (ast->binary_expr.op == EQ_OP) {
-			print("SEQ ");
+			print("SGE ");
+			//
+			print("tmpVar%d, ", val);
+			if (left_exp == 0) {
+				left_exp = genCode(ast->binary_expr.left);
+			} else {
+				print("tmpVar%d ", left_exp);
+			}
+			print(",");
+
+			if (right_exp == 0) {
+				right_exp = genCode(ast->binary_expr.right);
+			} else {
+				print("tmpVar%d ", right_exp);
+			}
+			print(";\n", val);
+			t1 = val;
+			t2 = t1 + 1;
+			if (t2 > maxTmpCount) {
+				print("TEMP tmpVar%d;\n", t2);
+				maxTmpCount++;
+			}
+
+			print("SGE tmpVar%d,", t2);
+			if (right_exp == 0) {
+				right_exp = genCode(ast->binary_expr.right);
+			} else {
+				print("tmpVar%d ", right_exp);
+			}
+			print(",");
+
+			if (left_exp == 0) {
+				left_exp = genCode(ast->binary_expr.left);
+			} else {
+				print("tmpVar%d ", left_exp);
+			}
+			print(";\n", val);
+
+			print("ADD tmpVar%d, tmpVar%d, tmpVar%d;\n", t2, t2, t1);
+			print("SUB tmpVar%d, tmpVar%d, 2.0;\n", t2, t2);
+			print("CMP tmpVar%d, tmpVar%d, -1.0, 1.0;\n", t1, t2);
+			tmpCount = t1 + 1;
+			return t1;
 		} else if (ast->binary_expr.op == NEQ_OP) {
-			print("SNE ");
+			print("SGE ");
+			//
+			print("tmpVar%d, ", val);
+			if (left_exp == 0) {
+				left_exp = genCode(ast->binary_expr.left);
+			} else {
+				print("tmpVar%d ", left_exp);
+			}
+			print(",");
+
+			if (right_exp == 0) {
+				right_exp = genCode(ast->binary_expr.right);
+			} else {
+				print("tmpVar%d ", right_exp);
+			}
+			print(";\n", val);
+			t1 = val;
+			t2 = t1 + 1;
+
+			if (t2 > maxTmpCount) {
+				print("TEMP tmpVar%d;\n", t2);
+				maxTmpCount++;
+			}
+
+			print("SGE tmpVar%d,", t2);
+			if (right_exp == 0) {
+				right_exp = genCode(ast->binary_expr.right);
+			} else {
+				print("tmpVar%d ", right_exp);
+			}
+			print(",");
+
+			if (left_exp == 0) {
+				left_exp = genCode(ast->binary_expr.left);
+			} else {
+				print("tmpVar%d ", left_exp);
+			}
+			print(";\n", val);
+
+			print("ADD tmpVar%d, tmpVar%d, tmpVar%d;\n", t2, t2, t1);
+			print("SUB tmpVar%d, tmpVar%d, 2.0;\n", t2, t2);
+			print("CMP tmpVar%d, tmpVar%d, 1.0, -1.0;\n", t1, t2);
+			tmpCount = t1 + 1;
+			return t1;
+
 		} else if (ast->binary_expr.op == ADD_OP) {
 			print("ADD ");
 		} else if (ast->binary_expr.op == SUB_OP) {
@@ -289,7 +497,27 @@ int genCode(node *ast) {
 		} else if (ast->binary_expr.op == MULT_OP) {
 			print("MUL ");
 		} else if (ast->binary_expr.op == DIV_OP) {
-			print("DIV ");
+			print("RCP ");
+			//
+			print("tmpVar%d, ", val);
+			if (right_exp == 0) {
+				right_exp = genCode(ast->binary_expr.right);
+			} else {
+				print("tmpVar%d ", right_exp);
+			}
+			print(";\n", val);
+
+			print("MUL tmpVar%d,", val);
+			if (left_exp == 0) {
+				left_exp = genCode(ast->binary_expr.left);
+			} else {
+				print("tmpVar%d ", left_exp);
+			}
+			print(",");
+			print("tmpVar%d;\n", val);
+			//tmpVar%d, tmpVar%d;\n", t1,t1,val);
+			tmpCount = val + 1;
+			return val;
 		} else if (ast->binary_expr.op == POW_OP) {
 			print("POW ");
 		}
@@ -370,7 +598,10 @@ int genCode(node *ast) {
 
 		val = tmpCount++;
 
-		print("TEMP tmpVar%d;\n", val);
+		if (val > maxTmpCount) {
+			print("TEMP tmpVar%d;\n", val);
+			maxTmpCount++;
+		}
 
 		if (ast->function_exp.function_name == 2) { //rsq
 			print("RSQ tmpVar%d, ", val);
@@ -407,6 +638,7 @@ int genCode(node *ast) {
 		//printf("#IF_ELSE_STATEMENT_NODE %d\n", kind);
 		val = ++condCount;
 		print("TEMP condVar%d;\n", val);
+
 		if (ast->if_else_statement.condition->kind == BINARY_EXPRESSION_NODE) {
 			left_exp = genCode(ast->if_else_statement.condition);
 			print("MOV condVar%d, tmpVar%d;\n ", val, left_exp);
