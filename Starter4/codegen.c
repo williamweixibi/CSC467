@@ -420,8 +420,75 @@ int genCode(node *ast) {
 			tmpCount = t1 + 1;
 			return t1;
 		} else if (ast->binary_expr.op == GT_OP) {
-			print("SGT ");
+			print("SGE ");
 			//
+			print("tmpVar%d, ", val);
+			if (left_exp == 0) {
+				left_exp = genCode(ast->binary_expr.left);
+			} else {
+				print("tmpVar%d ", left_exp);
+			}
+			print(",");
+
+			if (right_exp == 0) {
+				right_exp = genCode(ast->binary_expr.right);
+			} else {
+				print("tmpVar%d ", right_exp);
+			}
+			print(";\n", val);
+			t1 = val;
+			t2 = t1 + 1;
+
+			if (t2 > maxTmpCount) {
+				print("TEMP tmpVar%d;\n", t2);
+				maxTmpCount++;
+			}
+
+			print("SGE tmpVar%d,", t2);
+			if (right_exp == 0) {
+				right_exp = genCode(ast->binary_expr.right);
+			} else {
+				print("tmpVar%d ", right_exp);
+			}
+			print(",");
+
+			if (left_exp == 0) {
+				left_exp = genCode(ast->binary_expr.left);
+			} else {
+				print("tmpVar%d ", left_exp);
+			}
+			print(";\n", val);
+
+			print("ADD tmpVar%d, tmpVar%d, tmpVar%d;\n", t2, t2, t1);
+			print("SUB tmpVar%d, tmpVar%d, 2.0;\n", t2, t2);
+			print("CMP tmpVar%d, tmpVar%d, 1.0, 0;\n", t1, t2);
+			t3 = t2 + 1;
+
+			if (t3 > maxTmpCount) {
+				print("TEMP tmpVar%d;\n", t3);
+				maxTmpCount++;
+			}
+			print("SGE tmpVar%d,", t3);
+			if (left_exp == 0) {
+				left_exp = genCode(ast->binary_expr.left);
+			} else {
+				print("tmpVar%d ", left_exp);
+			}
+			print(",");
+
+			if (right_exp == 0) {
+				right_exp = genCode(ast->binary_expr.right);
+			} else {
+				print("tmpVar%d ", right_exp);
+			}
+			print(";\n", val);
+
+			print("SUB tmpVar%d, tmpVar%d, 2.0;\n",t3,t3);
+			print("CMP tmpVar%d, tmpVar%d, -1.0,1.0;\n", t1,t3);
+			tmpCount = t1 + 1;
+			return t1;
+
+			//------//
 
 		} else if (ast->binary_expr.op == GEQ_OP) {
 			print("SGE ");
