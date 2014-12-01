@@ -1,0 +1,23 @@
+How did you implement non-trivial math operations.
+We implemented non-trivial math operations by using combinations of available assembly instructions and temporary registers. E.g. DIV was changed to RCP and MUL.
+  
+How did you handle boolean types.
+We encoded true to 1.0 and false to -1.0.
+
+How did you implement if statements.
+We used a stack to keep track of "if" scope. If a node was a child of an "if" node then we handled it accordingly. 
+In the case of assignment nodes, we declared a condition variable and set its value to the boolean. In the "then" expression of the if the value was 1.0 we used CMP to set the value to the appropriate variable. In the "else" expression we used the same CMP expression with the inputs to the CMP instruction flipped.
+
+How did you implement constants.
+We placed constants in PARAM rather than temporary registers. We also assigned the values to these right at instantiation.
+
+How was the code for each type of node was generated.
+We generated the assembly for each node recursively. At each node, we print a part of the required assembly instructions and call its children nodes to print the remaining instruction. Refer to code for details on which node prints which part.
+
+Breakdown of work:
+Zaara: Assembly for some nodes, logic and arithmetic operators, recycling temporary registers
+Umar: Assembly for some nodes, if statements, if else statements, array de-references, printing appropriate predefined variable names, 
+
+Challenges faced/Novelties:
+We faced challenges when trying to implement the binary operators for which no instructions were available. We were novel in our implementation of these by breaking down the operators to use a combination of existing instructions to fulfil the required functionality.
+For nested if statements it was difficult to figure out if the current node was in the "then" scope of the "else" scope. We fixed this problem by using a stack, this allowed us to keep track of the latest scope without losing the previous scopes.
