@@ -1,4 +1,4 @@
-#define print(...) printf(__VA_ARGS__)
+#define print(...) fprintf(fragFile,__VA_ARGS__)
 
 #include "codegen.h"
 #include "stack.h"
@@ -15,6 +15,8 @@ int initFlag = 0;
 
 int ifStack[256];
 int ifStackTop, ifStackElem;
+
+FILE * fragFile;
 
 enum {
 	IN_NONE, IN_THEN, IN_ELSE, IN_COND
@@ -177,12 +179,18 @@ int printArray(node *ast) {
 
 }
 
-void initAll(){
+int initAll(node *ast){
 	if(initFlag==0){
 		s_init(&ifStackTop);
 
+		fragFile = fopen ("frag.txt","w");
 	}
 	initFlag = 1;
+	
+	print("!!ARBfp1.0\n");
+	int tmp = genCode(ast);
+	print("END\n"); 
+	return tmp;
 }
 
 int genCode(node *ast) {
@@ -202,8 +210,6 @@ int genCode(node *ast) {
 	kind = ast->kind;
 	int isDecl = 0;
 	int val;
-
-	initAll();
 
 
 	switch (kind) {
